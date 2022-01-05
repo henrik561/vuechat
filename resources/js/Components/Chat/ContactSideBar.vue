@@ -2,7 +2,7 @@
     <div class="w-1/4 bg-transparent max-viewport-height flex flex-col contact-sidebar">
         <Search @searchInUsers="searchInUsers"></Search>
         <perfect-scrollbar class="overflow-y-scroll w-full">
-            <template v-for="user in allUsers">
+            <template v-for="user in getAllUsers">
                 <User :user="user"></User>
             </template>
                 <div class="flex w-full min-h-full py-6 justify-center items-center" v-if="!hasUsers">
@@ -30,14 +30,8 @@ export default {
     computed: {
         ...mapGetters(['getAllUsers']),
 
-        allUsers() {
-            return _.filter(this.getAllUsers, (user) => {
-                return  _.includes(user.email.toLowerCase(), this.filterWord.toLowerCase());
-            });
-        },
-
         hasUsers() {
-            return !_.isEmpty(this.allUsers);
+            return !_.isEmpty(this.getAllUsers);
         }
     },
 

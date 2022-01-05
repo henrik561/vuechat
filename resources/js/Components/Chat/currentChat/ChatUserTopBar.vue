@@ -7,7 +7,7 @@
                 </div>
                 <div class="ml-4 flex flex-col">
                     <span class="text-xl text-white">{{ getNewChatUser.username || getNewChatUser.email }}</span>
-                    <span class="text-sm text-gray-400">{{ getNewChatUser.online_visibility }}</span>
+                    <span class="text-sm text-gray-400">{{ formatUserOnlineVisibility }}</span>
                 </div>
             </div>
         </div>
@@ -21,12 +21,47 @@
 <script>
 
 import {mapGetters} from "vuex";
+import moment from 'moment';
+import db from "../../../server/database";
 
 export default {
     name: "ChatUserTopBar",
 
+    data() {
+        return {
+            userStatus: ''
+        }
+    },
+
+    async created() {
+        this.userStatus = this.getNewChatUser.online_visibility
+        await db.database().ref('onlineStatus').on('child_changed', async snapshot => {
+            this.userStatus = snapshot.val().online_visibility
+        })
+    },
+
     computed: {
         ...mapGetters(['getNewChatUser']),
+
+        formatUserOnlineVisibility() {
+            let userLastSeen = this.userStatus
+
+            if(userLastSeen === 'online') {
+                return userLastSeen;
+            }else if(moment(userLastSeen).isValid()) {
+                return moment(userLastSeen).fromNow();
+            }else {
+                return '';
+            }
+        },
+    },
+
+    watch: {
+        getNewChatUser: {
+            handler: function(user) {
+                this.userStatus = user.online_visibility
+            }
+        }
     }
 }
 </script>

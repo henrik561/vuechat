@@ -9,7 +9,10 @@ const store = new createStore({
             pageLoading: true,
             authTypeLogin: true,
             users: [],
-            newChatUser: null,
+            chat: {
+                user: null,
+                chatKey: null,
+            }
         }
     },
 
@@ -20,7 +23,13 @@ const store = new createStore({
 
         getPageIsLoading: state => state.pageLoading,
 
-        getNewChatUser: state => state.newChatUser,
+        getNewChatUser: state => state.chat.user,
+
+        getCurrentChatKey: state => state.chat.chatKey,
+
+        getUserHasChat: state => {
+            return !_.isNil(state.chat.user)
+        },
 
         getCurrentUser: state => state.currentUser,
 
@@ -45,12 +54,16 @@ const store = new createStore({
             state.users = users;
         },
 
-        SET_NEW_CHAT(state, user) {
-            state.newChatUser = user;
+        SET_NEW_CHAT(state, user, chatKey) {
+            state.chat.user = user;
+        },
+
+        SET_NEW_CHAT_KEY(state, chatKey) {
+            state.chat.chatKey = chatKey
         },
 
         SET_CHAT_STOP(state) {
-            state.newChatUser = null;
+            state.chat = {};
         },
     },
 
@@ -73,6 +86,10 @@ const store = new createStore({
 
         setNewChat({commit}, user) {
             commit('SET_NEW_CHAT', user);
+        },
+
+        setNewChatKey({commit}, chatKey) {
+            commit('SET_NEW_CHAT_KEY', chatKey)
         },
 
         setChatStop({commit}) {

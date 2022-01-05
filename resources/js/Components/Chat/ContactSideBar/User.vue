@@ -1,14 +1,14 @@
 <template>
-    <div @click="startNewChat" class="flex justify-center items-center" :class="userIsSelected && hasChatWithUser.uid === user.uid ? 'border-b border-t border-r-2 border-white bg-transparant text-white' : 'border-b border-t border-blue-800 bg-white text-black'">
+    <div @click="startNewChat" class="flex cursor-pointer justify-center items-center" :class="getUserHasChat && getNewChatUser.uid === userData.uid ? 'bg-transparant text-white' : 'bg-white text-black'">
         <div class="w-11/12 h-16 flex items-center justify-center gap-2">
             <div class="w-12 relative h-12 flex justify-center items-center">
-                <img class="object-cover h-12 w-12 rounded-full" width="100" height="100" :src="user.profilePicture ? user.profilePicture : '/Uploads/Profiles/profile.jpeg'" alt="user profile picture">
+                <img class="object-cover h-12 w-12 rounded-full" width="100" height="100" :src="userData.profilePicture ? userData.profilePicture : '/Uploads/Profiles/profile.jpeg'" alt="user profile picture">
             </div>
             <div class="w-64 h-full flex flex-col ml-2 justify-center">
-                <span class="text-base">{{ user.username || user.email }}</span>
+                <span class="text-base">{{ userData.username || userData.email }}</span>
             </div>
             <div class="relative h-full flex items-center">
-                <div v-if="hasNewMessages" class="newMessageNotification w-6 h-6 absolute bg-green-500 rounded-full text-white flex justify-center items-center">
+                <div v-if="hasNewMessages" class="newMessageNotification w-6 h-6 right-1 absolute bg-green-500 rounded-full text-white flex justify-center items-center">
                     <span class="-ml-px">{{ getNewMessageAmount }}</span>
                 </div>
             </div>
@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import {getUserOnlineStatus, markMessagesAsRead} from "../../../server/firebaseChat";
-import {mapActions} from "vuex";
+import {getUserOnlineStatus, markMessagesAsRead, getUserData, createNewChat} from "../../../server/firebaseChat";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "User",
@@ -26,11 +26,14 @@ export default {
 
     data() {
         return {
-            userStatus: 'online'
+            userStatus: 'online',
+            userData: {}
         }
     },
 
     computed: {
+        ...mapGetters(['getNewChatUser', 'getUserHasChat', 'getCurrentUser']),
+
         hasNewMessages() {
             return Math.round(Math.random()) > 0;
         },
@@ -38,27 +41,29 @@ export default {
         getNewMessageAmount() {
             return Math.floor(Math.random() * (3 - 1 + 1)) + 1;
         },
+    },
 
-        hasChatWithUser() {
-            return this.$store.state.newChatUser;
-        },
-
-        userIsSelected() {
-            return this.$store.state.newChatUser !== null;
-        }
+    async created() {
+        this.userData = await getUserData(this.user.receiver_id)
     },
 
     methods: {
-        ...mapActions(['setCurrentUser', 'setNewChat']),
+        ...mapActions(['setCurrentUser', 'setNewChat', 'setNewChatKey']),
 
         async startNewChat() {
-            console.log(this.user);
-            console.log(await getUserOnlineStatus(this.user))
-            this.setNewChat({
-                ...this.user
+            if(this.getNewChatUser && this.getNewChatUser.uid === this.user.receiver_id) {
+                return
+            }
+
+            console.log(this.user.chatKey)
+            await this.setNewChat({
+                ...this.userData,
+                'online_visibility' : await getUserOnlineStatus(this.userData)
             });
-            await markMessagesAsRead(this.$store.state.currentUser.uid, this.user.uid);
-        }
+            await this.setNewChatKey(this.user.chatKey)
+            await createNewChat(this.getCurrentUser.uid, this.userData.uid, this.user.chatKey);
+            await markMessagesAsRead(this.getCurrentUser.uid, this.userData.uid);
+        },
     }
 }
 </script>

@@ -29,7 +29,7 @@ import ChatPreRender from "../Components/base/ChatPreRender";
 import Register from "../Components/Auth/Register";
 import Login from "../Components/Auth/Login";
 import db from "../server/database";
-import {getUserKey, updateUserOnlineVisibility} from "../server/firebaseChat";
+import {getUserOnlineStatusKey, updateUserOnlineVisibility} from "../server/firebaseChat";
 import {mapGetters, mapActions} from 'vuex';
 
 export default {
@@ -41,35 +41,32 @@ export default {
         ...mapGetters(['getUserIsLoggedIn', 'getPageIsLoading', 'getCurrentUser', 'getAuthType']),
     },
 
-    async mounted() {
-        let self = this;
-        window.onbeforeunload = function(e){
-            self.leaving();
-        };
-    },
-
-    async created() {
-
-        await db.database().ref('users').on("value", snapshot => {
-            this.setAllUsers(snapshot.val());
-        })
-
-        if(this.userIsLoggedIn) {
-            await db.database().ref('onlineStatus/' + await getUserKey(this.getCurrentUser().uid)).onDisconnect().set(new Date().getTime())
-        }
-
-        await db.database().ref('onlineStatus').on('value', (snapshot) => {
-            // console.log(snapshot.val());
-        })
-    },
-
     methods: {
         ...mapActions(['setAllUsers']),
 
-        leaving(){
-            updateUserOnlineVisibility(this.getCurrentUser(), new Date().getTime());
+        async leaving(){
+            await updateUserOnlineVisibility(this.getCurrentUser, new Date().getTime());
+        },
+
+        async getAllChats() {
+            await db.database().ref('chats').orderByChild('chatter_id').equalTo(this.getCurrentUser.uid).once('value', async (snapshot) => {
+                let users = _.filter(snapshot.val(), member => {
+                    return !member.blocked && !member.deleted;
+                })
+                this.setAllUsers(users)
+            })
         }
     },
+
+    watch: {
+        getCurrentUser: {
+            handler: async function (user) {
+                let userKey = await getUserOnlineStatusKey(user)
+                await this.getAllChats();
+                await db.database().ref(`onlineStatus/${userKey}`).onDisconnect().update({'online_visibility': new Date().getTime()})
+            }
+        }
+    }
 }
 </script>
 

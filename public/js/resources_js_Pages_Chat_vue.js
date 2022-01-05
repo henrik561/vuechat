@@ -28,7 +28,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     startNewChat: function startNewChat() {
-      console.log('new chat started with: ' + this.userData.username);
+      .log('new chat started with: ' + this.userData.username);
       this.$emit('startNewChat', this.userData);
     }
   }

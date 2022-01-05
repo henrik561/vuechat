@@ -47,6 +47,7 @@ export default {
             })
 
             updateUserOnlineVisibility(user, 'online');
+
             this.progressStatus = 100;
 
             setTimeout(() => {
