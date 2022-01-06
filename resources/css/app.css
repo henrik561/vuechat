@@ -2,3 +2,6 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+.h-maxscreen {
+    height: calc(100vh - 4rem);
+}

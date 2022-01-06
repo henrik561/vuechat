@@ -1,8 +1,8 @@
 <template>
-    <div @click="startNewChat" class="flex cursor-pointer justify-center items-center" :class="getUserHasChat && getNewChatUser.uid === userData.uid ? 'bg-transparant text-white' : 'bg-white text-black'">
+    <div @click="startNewChat" class="flex hover:bg-opacity-80 transition-all duration-350 cursor-pointer border-2 border-t-0 border-b-2 border-blue-800 justify-center items-center bg-white" :class="getUserHasChat && getNewChatUser.uid === userData.uid ? 'bg-opacity-30 text-white' : 'text-black'">
         <div class="w-11/12 h-16 flex items-center justify-center gap-2">
             <div class="w-12 relative h-12 flex justify-center items-center">
-                <img class="object-cover h-12 w-12 rounded-full" width="100" height="100" :src="userData.profilePicture ? userData.profilePicture : '/Uploads/Profiles/profile.jpeg'" alt="user profile picture">
+                <img class="object-cover h-12 border border-gray-300 w-12 rounded-full" width="100" height="100" :src="userData.profilePicture ? userData.profilePicture : '/Uploads/Profiles/profile.jpeg'" alt="user profile picture">
             </div>
             <div class="w-64 h-full flex flex-col ml-2 justify-center">
                 <span class="text-base">{{ userData.username || userData.email }}</span>

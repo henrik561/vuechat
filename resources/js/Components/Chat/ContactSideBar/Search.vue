@@ -1,7 +1,9 @@
 <template>
-    <div class="w-full h-12 flex border-b-2 relative border-blue-800">
+    <div class="w-full h-12 flex relative border-b border-blue-500">
         <input v-model="searchKeyWord" class="pl-2 w-full outline-none border-none" type="text" name="searchKeyWord" id="searchKeyWord" placeholder="Zoeken..." />
-        <div @click="emptySearchbar" class="absolute cursor-pointer text-black z-10 top-2 right-6">X</div>
+        <div class="bg-white w-12 h-full flex justify-center items-center absolute right-0 top-0">
+            <i class="fas fa-search"></i>
+        </div>
     </div>
 </template>
 

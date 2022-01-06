@@ -1,6 +1,9 @@
 <template>
     <div class="w-1/4 bg-transparent max-viewport-height flex flex-col contact-sidebar">
-        <Search @searchInUsers="searchInUsers"></Search>
+        <div class="flex flex-col w-full border-2 border-blue-800">
+            <Search @searchInUsers="searchInUsers"></Search>
+            <AddFriends></AddFriends>
+        </div>
         <perfect-scrollbar class="overflow-y-scroll w-full">
             <template v-for="user in getAllUsers">
                 <User :user="user"></User>
@@ -16,10 +19,11 @@
 import User from "./ContactSideBar/User";
 import Search from "./ContactSideBar/Search";
 import {mapGetters} from "vuex";
+import AddFriends from "./ContactSideBar/AddFriends";
 
 export default {
     name: "ContactSideBar",
-    components: {Search, User},
+    components: {AddFriends, Search, User},
 
     data() {
         return {

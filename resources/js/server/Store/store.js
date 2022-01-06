@@ -10,7 +10,7 @@ const store = new createStore({
             chat: {
                 user: null,
                 chatKey: null,
-            }
+            },
         }
     },
 
@@ -33,7 +33,7 @@ const store = new createStore({
 
         getAllUsers: state => state.users,
 
-        getAuthType: state => state.authTypeLogin
+        getAuthType: state => state.authTypeLogin,
     },
     mutations: {
         SET_CURRENT_USER(state, user) {
@@ -92,7 +92,7 @@ const store = new createStore({
 
         setChatStop({commit}) {
             commit('SET_CHAT_STOP')
-        }
+        },
     }
 })
 

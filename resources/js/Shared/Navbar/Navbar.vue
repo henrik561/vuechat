@@ -5,6 +5,7 @@
         </div>
         <div class="flex mr-6">
             <NavLink href="/chat" :active="$page.component === 'Chat'">Chat</NavLink>
+<!--            <NavLink href="/friends" :active="$page.component === 'Friends'">Friends</NavLink>-->
 <!--            <NavLink href="/logout" method="post" as="button">Logout</NavLink>-->
         </div>
     </nav>

@@ -38,9 +38,9 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -209,9 +209,9 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -343,12 +343,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _ContactSideBar_User__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ContactSideBar/User */ "./resources/js/Components/Chat/ContactSideBar/User.vue");
 /* harmony import */ var _ContactSideBar_Search__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ContactSideBar/Search */ "./resources/js/Components/Chat/ContactSideBar/Search.vue");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
+/* harmony import */ var _ContactSideBar_AddFriends__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ContactSideBar/AddFriends */ "./resources/js/Components/Chat/ContactSideBar/AddFriends.vue");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -356,6 +358,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ContactSideBar",
   components: {
+    AddFriends: _ContactSideBar_AddFriends__WEBPACK_IMPORTED_MODULE_2__["default"],
     Search: _ContactSideBar_Search__WEBPACK_IMPORTED_MODULE_1__["default"],
     User: _ContactSideBar_User__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
@@ -364,7 +367,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       filterWord: ''
     };
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)(['getAllUsers'])), {}, {
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)(['getAllUsers'])), {}, {
     hasUsers: function hasUsers() {
       return !_.isEmpty(this.getAllUsers);
     }
@@ -374,6 +377,72 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.filterWord = keyword;
     }
   }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Chat/ContactSideBar/AddFriends.vue?vue&type=script&lang=js":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Chat/ContactSideBar/AddFriends.vue?vue&type=script&lang=js ***!
+  \************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
+/* harmony import */ var _server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../server/firebaseChat */ "./resources/js/server/firebaseChat.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "AddFriends",
+  data: function data() {
+    return {
+      friendEmail: ''
+    };
+  },
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)(['getAddFriendsPopupState', 'getCurrentUser'])),
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)(['setAddFriendsPopupState'])), {}, {
+    findFriend: function findFriend() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserByEmail)(_this.friendEmail);
+
+              case 2:
+                response = _context.sent;
+
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    }
+  })
 });
 
 /***/ }),
@@ -434,9 +503,9 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -556,9 +625,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _server_database__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../server/database */ "./resources/js/server/database.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -660,9 +729,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _server_firebaseChat__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../server/firebaseChat */ "./resources/js/server/firebaseChat.js");
 /* harmony import */ var _server_database__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../server/database */ "./resources/js/server/database.js");
 /* harmony import */ var _ChatUserTopBar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ChatUserTopBar */ "./resources/js/Components/Chat/currentChat/ChatUserTopBar.vue");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -861,9 +930,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../server/firebaseChat */ "./resources/js/server/firebaseChat.js");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -955,9 +1024,9 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -1571,11 +1640,14 @@ var _hoisted_1 = {
   "class": "w-1/4 bg-transparent max-viewport-height flex flex-col contact-sidebar"
 };
 var _hoisted_2 = {
+  "class": "flex flex-col w-full border-2 border-blue-800"
+};
+var _hoisted_3 = {
   key: 0,
   "class": "flex w-full min-h-full py-6 justify-center items-center"
 };
 
-var _hoisted_3 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_4 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
     "class": "text-white"
   }, "Geen contacten gevonden!", -1
@@ -1583,19 +1655,21 @@ var _hoisted_3 = /*#__PURE__*/_withScopeId(function () {
   );
 });
 
-var _hoisted_4 = [_hoisted_3];
+var _hoisted_5 = [_hoisted_4];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Search = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Search");
+
+  var _component_AddFriends = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("AddFriends");
 
   var _component_User = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("User");
 
   var _component_perfect_scrollbar = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("perfect-scrollbar");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Search, {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Search, {
     onSearchInUsers: $options.searchInUsers
   }, null, 8
   /* PROPS */
-  , ["onSearchInUsers"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_perfect_scrollbar, {
+  , ["onSearchInUsers"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_AddFriends)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_perfect_scrollbar, {
     "class": "overflow-y-scroll w-full"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -1607,12 +1681,58 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         , ["user"]);
       }), 256
       /* UNKEYED_FRAGMENT */
-      )), !$options.hasUsers ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, _hoisted_4)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
+      )), !$options.hasUsers ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_3, _hoisted_5)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
     }),
     _: 1
     /* STABLE */
 
   })]);
+}
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Chat/ContactSideBar/AddFriends.vue?vue&type=template&id=6017abbb":
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Chat/ContactSideBar/AddFriends.vue?vue&type=template&id=6017abbb ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+var _hoisted_1 = {
+  "class": "w-full h-12 flex border-t border-blue-800 relative"
+};
+
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  "class": "fas fa-user-plus"
+}, null, -1
+/* HOISTED */
+);
+
+var _hoisted_3 = [_hoisted_2];
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
+      return $data.friendEmail = $event;
+    }),
+    "class": "pl-2 w-full outline-none border-none",
+    type: "text",
+    name: "searchKeyWord",
+    id: "searchKeyWord",
+    placeholder: "Vriend toevoegen..."
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.friendEmail]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    onClick: _cache[1] || (_cache[1] = function () {
+      return $options.findFriend && $options.findFriend.apply($options, arguments);
+    }),
+    "class": "bg-white w-12 h-full flex justify-center items-center absolute right-0 top-0"
+  }, _hoisted_3)]);
 }
 
 /***/ }),
@@ -1631,8 +1751,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
-  "class": "w-full h-12 flex border-b-2 relative border-blue-800"
+  "class": "w-full h-12 flex relative border-b border-blue-500"
 };
+
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "bg-white w-12 h-full flex justify-center items-center absolute right-0 top-0"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  "class": "fas fa-search"
+})], -1
+/* HOISTED */
+);
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
@@ -1645,12 +1774,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     placeholder: "Zoeken..."
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.searchKeyWord]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-    onClick: _cache[1] || (_cache[1] = function () {
-      return $options.emptySearchbar && $options.emptySearchbar.apply($options, arguments);
-    }),
-    "class": "absolute cursor-pointer text-black z-10 top-2 right-6"
-  }, "X")]);
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.searchKeyWord]]), _hoisted_2]);
 }
 
 /***/ }),
@@ -1696,9 +1820,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[0] || (_cache[0] = function () {
       return $options.startNewChat && $options.startNewChat.apply($options, arguments);
     }),
-    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["flex cursor-pointer justify-center items-center", _ctx.getUserHasChat && _ctx.getNewChatUser.uid === $data.userData.uid ? 'bg-transparant text-white' : 'bg-white text-black'])
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["flex hover:bg-opacity-80 transition-all duration-350 cursor-pointer border-2 border-t-0 border-b-2 border-blue-800 justify-center items-center bg-white", _ctx.getUserHasChat && _ctx.getNewChatUser.uid === $data.userData.uid ? 'bg-opacity-30 text-white' : 'text-black'])
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-    "class": "object-cover h-12 w-12 rounded-full",
+    "class": "object-cover h-12 border border-gray-300 w-12 rounded-full",
     width: "100",
     height: "100",
     src: $data.userData.profilePicture ? $data.userData.profilePicture : '/Uploads/Profiles/profile.jpeg',
@@ -2135,7 +2259,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }, 8
   /* PROPS */
-  , ["active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            <NavLink href=\"/logout\" method=\"post\" as=\"button\">Logout</NavLink>")])]);
+  , ["active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            <NavLink href=\"/friends\" :active=\"$page.component === 'Friends'\">Friends</NavLink>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            <NavLink href=\"/logout\" method=\"post\" as=\"button\">Logout</NavLink>")])]);
 }
 
 /***/ }),
@@ -2415,6 +2539,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "logUserInGoogle": () => (/* binding */ logUserInGoogle),
 /* harmony export */   "addUserToRLDb": () => (/* binding */ addUserToRLDb),
 /* harmony export */   "userExists": () => (/* binding */ userExists),
+/* harmony export */   "getUserByEmail": () => (/* binding */ getUserByEmail),
+/* harmony export */   "userIsAlreadyFriended": () => (/* binding */ userIsAlreadyFriended),
 /* harmony export */   "userHasOnlineStatus": () => (/* binding */ userHasOnlineStatus),
 /* harmony export */   "getUserOnlineStatusKey": () => (/* binding */ getUserOnlineStatusKey),
 /* harmony export */   "getUserOnlineStatus": () => (/* binding */ getUserOnlineStatus),
@@ -2427,6 +2553,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _database__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./database */ "./resources/js/server/database.js");
 /* harmony import */ var firebase_compat_firestore__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! firebase/compat/firestore */ "./node_modules/firebase/compat/firestore/dist/index.esm.js");
 /* harmony import */ var firebase_auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! firebase/auth */ "./node_modules/firebase/auth/dist/index.esm.js");
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! express */ "./node_modules/express/index.js");
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_4__);
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -2444,6 +2572,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -2515,7 +2644,7 @@ function _hasChat() {
                 }, _callee2);
               }));
 
-              return function (_x34) {
+              return function (_x38) {
                 return _ref.apply(this, arguments);
               };
             }());
@@ -2578,18 +2707,32 @@ function _addNewChat() {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
+            _context5.next = 2;
+            return userIsAlreadyFriended(chatter_id, receiver_id);
+
+          case 2:
+            if (!_context5.sent) {
+              _context5.next = 5;
+              break;
+            }
+
+            console.log('already friend | addnew chat');
+            return _context5.abrupt("return");
+
+          case 5:
             newChat = chatsRef.push({
               chatter_id: chatter_id,
               receiver_id: receiver_id,
               deleted: false,
               blocked: false
             });
-            _context5.next = 3;
+            console.log('user is added as friend');
+            _context5.next = 9;
             return chatsRef.child(newChat.key).update({
               'chatKey': newChat.key
             });
 
-          case 3:
+          case 9:
           case "end":
             return _context5.stop();
         }
@@ -2691,7 +2834,7 @@ function _getActiveChatKey() {
                   }, _callee8);
                 }));
 
-                return function (_x35, _x36) {
+                return function (_x39, _x40) {
                   return _ref2.apply(this, arguments);
                 };
               }());
@@ -2762,7 +2905,7 @@ function _markMessagesAsRead() {
                             }, _callee10);
                           }));
 
-                          return function (_x38, _x39) {
+                          return function (_x42, _x43) {
                             return _ref4.apply(this, arguments);
                           };
                         }());
@@ -2775,7 +2918,7 @@ function _markMessagesAsRead() {
                 }, _callee11);
               }));
 
-              return function (_x37) {
+              return function (_x41) {
                 return _ref3.apply(this, arguments);
               };
             }());
@@ -2847,7 +2990,7 @@ function _logUserIn() {
                 }, _callee14);
               }));
 
-              return function (_x40) {
+              return function (_x44) {
                 return _ref5.apply(this, arguments);
               };
             }())["catch"](function (error) {
@@ -2894,7 +3037,7 @@ function _logUserInGoogle() {
                 }, _callee16);
               }));
 
-              return function (_x41) {
+              return function (_x45) {
                 return _ref6.apply(this, arguments);
               };
             }())["catch"](function (error) {
@@ -2958,7 +3101,7 @@ function _userExists() {
                 }, _callee18);
               }));
 
-              return function (_x42) {
+              return function (_x46) {
                 return _ref7.apply(this, arguments);
               };
             }());
@@ -2976,26 +3119,114 @@ function _userExists() {
   return _userExists.apply(this, arguments);
 }
 
-function userHasOnlineStatus(_x28) {
-  return _userHasOnlineStatus.apply(this, arguments);
+function getUserByEmail(_x28, _x29) {
+  return _getUserByEmail.apply(this, arguments);
 }
 
-function _userHasOnlineStatus() {
-  _userHasOnlineStatus = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee21(user) {
+function _getUserByEmail() {
+  _getUserByEmail = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee21(email, chatter_id) {
+    var response;
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee21$(_context21) {
       while (1) {
         switch (_context21.prev = _context21.next) {
           case 0:
-            _context21.next = 2;
+            response = false;
+            console.log('get user by email');
+            _context21.next = 4;
+            return usersRef.orderByChild('email').equalTo(email).once('value', function (snapshot) {
+              _.forEach(snapshot.val().slice(0, 1), /*#__PURE__*/function () {
+                var _ref8 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee20(user) {
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee20$(_context20) {
+                    while (1) {
+                      switch (_context20.prev = _context20.next) {
+                        case 0:
+                          console.log('add new user as friend');
+                          _context20.next = 3;
+                          return addNewChat(chatter_id, user.uid);
+
+                        case 3:
+                        case "end":
+                          return _context20.stop();
+                      }
+                    }
+                  }, _callee20);
+                }));
+
+                return function (_x47) {
+                  return _ref8.apply(this, arguments);
+                };
+              }());
+            });
+
+          case 4:
+            return _context21.abrupt("return", response);
+
+          case 5:
+          case "end":
+            return _context21.stop();
+        }
+      }
+    }, _callee21);
+  }));
+  return _getUserByEmail.apply(this, arguments);
+}
+
+function userIsAlreadyFriended(_x30, _x31) {
+  return _userIsAlreadyFriended.apply(this, arguments);
+}
+
+function _userIsAlreadyFriended() {
+  _userIsAlreadyFriended = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee22(chatter_id, receiver_id) {
+    var response;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee22$(_context22) {
+      while (1) {
+        switch (_context22.prev = _context22.next) {
+          case 0:
+            response = false;
+            console.log('checking if already friends');
+            _context22.next = 4;
+            return chatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', function (snapshot) {
+              _.forEach(snapshot.val(), function (chat, key) {
+                if (chat.receiver_id === receiver_id) {
+                  console.log('response = true | already friends');
+                  response = true;
+                }
+              });
+            });
+
+          case 4:
+            return _context22.abrupt("return", response);
+
+          case 5:
+          case "end":
+            return _context22.stop();
+        }
+      }
+    }, _callee22);
+  }));
+  return _userIsAlreadyFriended.apply(this, arguments);
+}
+
+function userHasOnlineStatus(_x32) {
+  return _userHasOnlineStatus.apply(this, arguments);
+}
+
+function _userHasOnlineStatus() {
+  _userHasOnlineStatus = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee24(user) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee24$(_context24) {
+      while (1) {
+        switch (_context24.prev = _context24.next) {
+          case 0:
+            _context24.next = 2;
             return usersVRef.orderByChild('uid').equalTo(user.uid).once('value', /*#__PURE__*/function () {
-              var _ref8 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee20(snapshot) {
+              var _ref9 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee23(snapshot) {
                 var userData;
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee20$(_context20) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee23$(_context23) {
                   while (1) {
-                    switch (_context20.prev = _context20.next) {
+                    switch (_context23.prev = _context23.next) {
                       case 0:
                         if (snapshot.exists()) {
-                          _context20.next = 4;
+                          _context23.next = 4;
                           break;
                         }
 
@@ -3003,73 +3234,10 @@ function _userHasOnlineStatus() {
                           "uid": user.uid,
                           "online_visibility": new Date().getTime()
                         };
-                        _context20.next = 4;
+                        _context23.next = 4;
                         return usersVRef.push(userData);
 
                       case 4:
-                      case "end":
-                        return _context20.stop();
-                    }
-                  }
-                }, _callee20);
-              }));
-
-              return function (_x43) {
-                return _ref8.apply(this, arguments);
-              };
-            }());
-
-          case 2:
-          case "end":
-            return _context21.stop();
-        }
-      }
-    }, _callee21);
-  }));
-  return _userHasOnlineStatus.apply(this, arguments);
-}
-
-function getUserOnlineStatusKey(_x29) {
-  return _getUserOnlineStatusKey.apply(this, arguments);
-}
-
-function _getUserOnlineStatusKey() {
-  _getUserOnlineStatusKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee24(user) {
-    var userKey;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee24$(_context24) {
-      while (1) {
-        switch (_context24.prev = _context24.next) {
-          case 0:
-            userKey = null;
-            _context24.next = 3;
-            return usersVRef.orderByChild("uid").equalTo(user.uid).once('value', /*#__PURE__*/function () {
-              var _ref9 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee23(snapshot) {
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee23$(_context23) {
-                  while (1) {
-                    switch (_context23.prev = _context23.next) {
-                      case 0:
-                        _.filter(snapshot.val(), /*#__PURE__*/function () {
-                          var _ref10 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee22(value, key) {
-                            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee22$(_context22) {
-                              while (1) {
-                                switch (_context22.prev = _context22.next) {
-                                  case 0:
-                                    userKey = key;
-
-                                  case 1:
-                                  case "end":
-                                    return _context22.stop();
-                                }
-                              }
-                            }, _callee22);
-                          }));
-
-                          return function (_x45, _x46) {
-                            return _ref10.apply(this, arguments);
-                          };
-                        }());
-
-                      case 1:
                       case "end":
                         return _context23.stop();
                     }
@@ -3077,132 +3245,195 @@ function _getUserOnlineStatusKey() {
                 }, _callee23);
               }));
 
-              return function (_x44) {
+              return function (_x48) {
                 return _ref9.apply(this, arguments);
               };
             }());
 
-          case 3:
-            return _context24.abrupt("return", userKey);
-
-          case 4:
+          case 2:
           case "end":
             return _context24.stop();
         }
       }
     }, _callee24);
   }));
+  return _userHasOnlineStatus.apply(this, arguments);
+}
+
+function getUserOnlineStatusKey(_x33) {
   return _getUserOnlineStatusKey.apply(this, arguments);
 }
 
-function getUserOnlineStatus(_x30) {
-  return _getUserOnlineStatus.apply(this, arguments);
-}
-
-function _getUserOnlineStatus() {
-  _getUserOnlineStatus = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee26(user) {
-    var snapshotVal;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee26$(_context26) {
-      while (1) {
-        switch (_context26.prev = _context26.next) {
-          case 0:
-            snapshotVal = {};
-            _context26.next = 3;
-            return userHasOnlineStatus(user);
-
-          case 3:
-            _context26.next = 5;
-            return usersVRef.orderByChild('uid').equalTo(user.uid).once('value', /*#__PURE__*/function () {
-              var _ref11 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee25(snapshot) {
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee25$(_context25) {
-                  while (1) {
-                    switch (_context25.prev = _context25.next) {
-                      case 0:
-                        snapshotVal = snapshot.val();
-
-                      case 1:
-                      case "end":
-                        return _context25.stop();
-                    }
-                  }
-                }, _callee25);
-              }));
-
-              return function (_x47) {
-                return _ref11.apply(this, arguments);
-              };
-            }());
-
-          case 5:
-            return _context26.abrupt("return", snapshotVal[Object.keys(snapshotVal)[0]].online_visibility);
-
-          case 6:
-          case "end":
-            return _context26.stop();
-        }
-      }
-    }, _callee26);
-  }));
-  return _getUserOnlineStatus.apply(this, arguments);
-}
-
-function getUserData(_x31) {
-  return _getUserData.apply(this, arguments);
-}
-
-function _getUserData() {
-  _getUserData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee27(user_uid) {
-    var userData;
+function _getUserOnlineStatusKey() {
+  _getUserOnlineStatusKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee27(user) {
+    var userKey;
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee27$(_context27) {
       while (1) {
         switch (_context27.prev = _context27.next) {
           case 0:
-            userData = {};
+            userKey = null;
             _context27.next = 3;
-            return usersRef.orderByChild('uid').equalTo(user_uid).once('value', function (snapshot) {
-              userData = snapshot.val();
-            });
+            return usersVRef.orderByChild("uid").equalTo(user.uid).once('value', /*#__PURE__*/function () {
+              var _ref10 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee26(snapshot) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee26$(_context26) {
+                  while (1) {
+                    switch (_context26.prev = _context26.next) {
+                      case 0:
+                        _.filter(snapshot.val(), /*#__PURE__*/function () {
+                          var _ref11 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee25(value, key) {
+                            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee25$(_context25) {
+                              while (1) {
+                                switch (_context25.prev = _context25.next) {
+                                  case 0:
+                                    userKey = key;
+
+                                  case 1:
+                                  case "end":
+                                    return _context25.stop();
+                                }
+                              }
+                            }, _callee25);
+                          }));
+
+                          return function (_x50, _x51) {
+                            return _ref11.apply(this, arguments);
+                          };
+                        }());
+
+                      case 1:
+                      case "end":
+                        return _context26.stop();
+                    }
+                  }
+                }, _callee26);
+              }));
+
+              return function (_x49) {
+                return _ref10.apply(this, arguments);
+              };
+            }());
 
           case 3:
-            _context27.next = 5;
-            return userData[Object.keys(userData)[0]];
+            return _context27.abrupt("return", userKey);
 
-          case 5:
-            return _context27.abrupt("return", _context27.sent);
-
-          case 6:
+          case 4:
           case "end":
             return _context27.stop();
         }
       }
     }, _callee27);
   }));
-  return _getUserData.apply(this, arguments);
+  return _getUserOnlineStatusKey.apply(this, arguments);
 }
 
-function updateUserOnlineVisibility(_x32, _x33) {
-  return _updateUserOnlineVisibility.apply(this, arguments);
+function getUserOnlineStatus(_x34) {
+  return _getUserOnlineStatus.apply(this, arguments);
 }
 
-function _updateUserOnlineVisibility() {
-  _updateUserOnlineVisibility = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee29(user, appearance) {
+function _getUserOnlineStatus() {
+  _getUserOnlineStatus = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee29(user) {
+    var snapshotVal;
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee29$(_context29) {
       while (1) {
         switch (_context29.prev = _context29.next) {
           case 0:
-            _context29.next = 2;
+            snapshotVal = {};
+            _context29.next = 3;
+            return userHasOnlineStatus(user);
+
+          case 3:
+            _context29.next = 5;
+            return usersVRef.orderByChild('uid').equalTo(user.uid).once('value', /*#__PURE__*/function () {
+              var _ref12 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee28(snapshot) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee28$(_context28) {
+                  while (1) {
+                    switch (_context28.prev = _context28.next) {
+                      case 0:
+                        snapshotVal = snapshot.val();
+
+                      case 1:
+                      case "end":
+                        return _context28.stop();
+                    }
+                  }
+                }, _callee28);
+              }));
+
+              return function (_x52) {
+                return _ref12.apply(this, arguments);
+              };
+            }());
+
+          case 5:
+            return _context29.abrupt("return", snapshotVal[Object.keys(snapshotVal)[0]].online_visibility);
+
+          case 6:
+          case "end":
+            return _context29.stop();
+        }
+      }
+    }, _callee29);
+  }));
+  return _getUserOnlineStatus.apply(this, arguments);
+}
+
+function getUserData(_x35) {
+  return _getUserData.apply(this, arguments);
+}
+
+function _getUserData() {
+  _getUserData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee30(user_uid) {
+    var userData;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee30$(_context30) {
+      while (1) {
+        switch (_context30.prev = _context30.next) {
+          case 0:
+            userData = {};
+            _context30.next = 3;
+            return usersRef.orderByChild('uid').equalTo(user_uid).once('value', function (snapshot) {
+              userData = snapshot.val();
+            });
+
+          case 3:
+            _context30.next = 5;
+            return userData[Object.keys(userData)[0]];
+
+          case 5:
+            return _context30.abrupt("return", _context30.sent);
+
+          case 6:
+          case "end":
+            return _context30.stop();
+        }
+      }
+    }, _callee30);
+  }));
+  return _getUserData.apply(this, arguments);
+}
+
+function updateUserOnlineVisibility(_x36, _x37) {
+  return _updateUserOnlineVisibility.apply(this, arguments);
+}
+
+function _updateUserOnlineVisibility() {
+  _updateUserOnlineVisibility = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee32(user, appearance) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee32$(_context32) {
+      while (1) {
+        switch (_context32.prev = _context32.next) {
+          case 0:
+            _context32.next = 2;
             return userHasOnlineStatus(user);
 
           case 2:
-            _context29.next = 4;
+            _context32.next = 4;
             return usersVRef.orderByChild("uid").equalTo(user.uid).once("value", function (snapshot) {
               _.filter(snapshot.val(), /*#__PURE__*/function () {
-                var _ref12 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee28(userValue, key) {
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee28$(_context28) {
+                var _ref13 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee31(userValue, key) {
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee31$(_context31) {
                     while (1) {
-                      switch (_context28.prev = _context28.next) {
+                      switch (_context31.prev = _context31.next) {
                         case 0:
-                          _context28.next = 2;
+                          _context31.next = 2;
                           return _database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref("onlineStatus/".concat(key)).set({
                             "uid": userValue.uid,
                             "online_visibility": appearance
@@ -3210,24 +3441,24 @@ function _updateUserOnlineVisibility() {
 
                         case 2:
                         case "end":
-                          return _context28.stop();
+                          return _context31.stop();
                       }
                     }
-                  }, _callee28);
+                  }, _callee31);
                 }));
 
-                return function (_x48, _x49) {
-                  return _ref12.apply(this, arguments);
+                return function (_x53, _x54) {
+                  return _ref13.apply(this, arguments);
                 };
               }());
             });
 
           case 4:
           case "end":
-            return _context29.stop();
+            return _context32.stop();
         }
       }
-    }, _callee29);
+    }, _callee32);
   }));
   return _updateUserOnlineVisibility.apply(this, arguments);
 }
@@ -3307,6 +3538,24 @@ ___CSS_LOADER_EXPORT___.push([module.id, "\n.current-chat-main-section-newchat[d
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
+
+/***/ }),
+
+/***/ "./node_modules/express/lib sync recursive":
+/*!****************************************!*\
+  !*** ./node_modules/express/lib/ sync ***!
+  \****************************************/
+/***/ ((module) => {
+
+function webpackEmptyContext(req) {
+	var e = new Error("Cannot find module '" + req + "'");
+	e.code = 'MODULE_NOT_FOUND';
+	throw e;
+}
+webpackEmptyContext.keys = () => ([]);
+webpackEmptyContext.resolve = webpackEmptyContext;
+webpackEmptyContext.id = "./node_modules/express/lib sync recursive";
+module.exports = webpackEmptyContext;
 
 /***/ }),
 
@@ -3829,6 +4078,34 @@ if (false) {}
 
 /***/ }),
 
+/***/ "./resources/js/Components/Chat/ContactSideBar/AddFriends.vue":
+/*!********************************************************************!*\
+  !*** ./resources/js/Components/Chat/ContactSideBar/AddFriends.vue ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _AddFriends_vue_vue_type_template_id_6017abbb__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AddFriends.vue?vue&type=template&id=6017abbb */ "./resources/js/Components/Chat/ContactSideBar/AddFriends.vue?vue&type=template&id=6017abbb");
+/* harmony import */ var _AddFriends_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AddFriends.vue?vue&type=script&lang=js */ "./resources/js/Components/Chat/ContactSideBar/AddFriends.vue?vue&type=script&lang=js");
+/* harmony import */ var _Users_henrik_Projects_vueChat2_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+
+
+
+;
+const __exports__ = /*#__PURE__*/(0,_Users_henrik_Projects_vueChat2_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_AddFriends_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_AddFriends_vue_vue_type_template_id_6017abbb__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Components/Chat/ContactSideBar/AddFriends.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
 /***/ "./resources/js/Components/Chat/ContactSideBar/Search.vue":
 /*!****************************************************************!*\
   !*** ./resources/js/Components/Chat/ContactSideBar/Search.vue ***!
@@ -4207,6 +4484,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/Components/Chat/ContactSideBar/AddFriends.vue?vue&type=script&lang=js":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/Components/Chat/ContactSideBar/AddFriends.vue?vue&type=script&lang=js ***!
+  \********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_AddFriends_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_AddFriends_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./AddFriends.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Chat/ContactSideBar/AddFriends.vue?vue&type=script&lang=js");
+ 
+
+/***/ }),
+
 /***/ "./resources/js/Components/Chat/ContactSideBar/Search.vue?vue&type=script&lang=js":
 /*!****************************************************************************************!*\
   !*** ./resources/js/Components/Chat/ContactSideBar/Search.vue?vue&type=script&lang=js ***!
@@ -4443,6 +4736,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ContactSideBar_vue_vue_type_template_id_d863e990_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ContactSideBar_vue_vue_type_template_id_d863e990_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./ContactSideBar.vue?vue&type=template&id=d863e990&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Chat/ContactSideBar.vue?vue&type=template&id=d863e990&scoped=true");
+
+
+/***/ }),
+
+/***/ "./resources/js/Components/Chat/ContactSideBar/AddFriends.vue?vue&type=template&id=6017abbb":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/Components/Chat/ContactSideBar/AddFriends.vue?vue&type=template&id=6017abbb ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_AddFriends_vue_vue_type_template_id_6017abbb__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_AddFriends_vue_vue_type_template_id_6017abbb__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./AddFriends.vue?vue&type=template&id=6017abbb */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Chat/ContactSideBar/AddFriends.vue?vue&type=template&id=6017abbb");
 
 
 /***/ }),
@@ -4692,6 +5001,36 @@ webpackContext.keys = function webpackContextKeys() {
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
 webpackContext.id = "./resources/js/Pages sync recursive ^\\.\\/.*$";
+
+/***/ }),
+
+/***/ "?6273":
+/*!*******************************!*\
+  !*** ./extend-node (ignored) ***!
+  \*******************************/
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ "?f74b":
+/*!***************************!*\
+  !*** ./streams (ignored) ***!
+  \***************************/
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ "?6b86":
+/*!**********************!*\
+  !*** http (ignored) ***!
+  \**********************/
+/***/ (() => {
+
+/* (ignored) */
 
 /***/ }),
 

@@ -32137,6 +32137,10 @@ select {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.h-maxscreen {
+  height: calc(100vh - 4rem);
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;
@@ -188576,5 +188580,3 @@ select {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
-
-
