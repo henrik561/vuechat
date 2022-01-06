@@ -43,6 +43,12 @@ export default {
         ...mapActions(['setAddFriendsPopupState']),
 
         async findFriend() {
+
+            const regex = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+            if(!this.friendEmail.match(regex)) {
+                return this.addFriend.error = 'The email address is not valid!'
+            }
+
             let response = await getUserByEmail(this.friendEmail, this.getCurrentUser.uid)
             this.friendEmail = ''
             if(response === 'DoesNotExists') {

@@ -11,7 +11,7 @@
                 </div>
             </div>
         </div>
-        <div>
+        <div @click="handleClick">
             <i class="fas fa-cog text-2xl text-white"></i>
         </div>
     </div>
@@ -54,6 +54,12 @@ export default {
                 return '';
             }
         },
+    },
+
+    methods: {
+        handleClick() {
+            this.$emit('handleTopBarClick')
+        }
     },
 
     watch: {
