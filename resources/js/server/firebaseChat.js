@@ -64,20 +64,23 @@ export async function createNewChat(chatter_id, receiver_id, chatKey) {
     })
 }
 
-export async function markMessagesAsRead(chatter_id, receiver_id) {
-    let messagesNotRead = [];
-    await messagesRef.orderByChild('receiver_id').equalTo(receiver_id).once('value', async (snapshot) => {
-        messagesNotRead = _.filter(snapshot.val(), async function(value, key) {
-            if(value.chatter_id === chatter_id && !value.message_seen) {
-                return [{
+export async function markMessagesAsRead(user_uid, chatKey, current_user_uid) {
+    await messagesRef.orderByChild('chatKey').equalTo(chatKey).once('value', async (snapshot) => {
+        _.forEach(snapshot.val(), async (value, key) => {
+            if(value.chatter_id === user_uid && !value.message_seen) {
+                let seenBy = [];
+                if(value.seen_by) {
+                    seenBy = [...value.seen_by, current_user_uid];
+                }else {
+                    seenBy = [current_user_uid];
+                }
+                await messagesRef.child(key).update({
                     "seen_at" : `${(new Date()).toTimeString().substr(0,5)}`,
                     "message_seen" : true,
-                }, key]
+                    "seen_by": seenBy,
+                })
             }
         })
-    })
-    _.forEach(messagesNotRead, async message => {
-        await db.database().ref(`messages/${message[1]}`).update(message[0]);
     })
 }
 

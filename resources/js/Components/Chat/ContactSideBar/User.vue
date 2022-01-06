@@ -55,14 +55,13 @@ export default {
                 return
             }
 
-            console.log(this.user.chatKey)
             await this.setNewChat({
                 ...this.userData,
                 'online_visibility' : await getUserOnlineStatus(this.userData)
             });
             await this.setNewChatKey(this.user.chatKey)
             await createNewChat(this.getCurrentUser.uid, this.userData.uid, this.user.chatKey);
-            await markMessagesAsRead(this.getCurrentUser.uid, this.userData.uid);
+            await markMessagesAsRead(this.userData.uid, this.user.chatKey, this.getCurrentUser.uid);
         },
     }
 }
