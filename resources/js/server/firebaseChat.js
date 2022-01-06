@@ -1,7 +1,6 @@
 import db from './database';
 import "firebase/compat/firestore";
 import { getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider } from "firebase/auth";
-import {response} from "express";
 
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
@@ -46,9 +45,8 @@ export async function hasExistingConnection(chatKey, receiver_id, chatter_id) {
 }
 
 export async function addNewChat(chatter_id, receiver_id) {
-    if(await userIsAlreadyFriended(chatter_id, receiver_id)) {
-        console.log('already friend | addnew chat')
-        return
+    if(await userIsAlreadyFriended(chatter_id, receiver_id) === 'AlreadyFriended') {
+        return 'AlreadyFriended'
     }
     let newChat = chatsRef.push({
         chatter_id,
@@ -56,8 +54,15 @@ export async function addNewChat(chatter_id, receiver_id) {
         deleted: false,
         blocked: false,
     })
-    console.log('user is added as friend')
     await chatsRef.child(newChat.key).update({ 'chatKey' : newChat.key })
+    chatsRef.push({
+        chatter_id: receiver_id,
+        receiver_id: chatter_id,
+        chatKey: newChat.key,
+        deleted: false,
+        blocked: false,
+    })
+    return 'AddedAsFriend'
 }
 //Create new active chat
 export async function createNewChat(chatter_id, receiver_id, chatKey) {
@@ -164,27 +169,28 @@ export async function userExists(uid, user) {
 }
 
 export async function getUserByEmail(email, chatter_id) {
-    let response = false;
-    console.log('get user by email')
+    let response = 'DoesNotExists'
     await usersRef.orderByChild('email').equalTo(email).once('value', snapshot => {
-        _.forEach(snapshot.val().slice(0, 1), async user => {
-            console.log('add new user as friend')
-            await addNewChat(chatter_id, user.uid)
-        })
+        if(snapshot.exists()) {
+            _.forEach(snapshot.val(), async user => {
+                response = user.uid
+            })
+        }
     })
     return response;
 }
 
 export async function userIsAlreadyFriended(chatter_id, receiver_id) {
-    let response = false;
-    console.log('checking if already friends')
+    let response = 'NotFriended';
     await chatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', snapshot => {
-        _.forEach(snapshot.val(), (chat, key) => {
-            if(chat.receiver_id === receiver_id) {
-                console.log('response = true | already friends');
-                response = true
-            }
-        })
+        if(snapshot.exists()) {
+            _.forEach(snapshot.val(), (chat, key) => {
+                if(chat.receiver_id === receiver_id) {
+                    response = 'AlreadyFriended'
+                }
+            })
+        }
+
     })
     return response;
 }

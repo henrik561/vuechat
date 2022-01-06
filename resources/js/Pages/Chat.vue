@@ -49,7 +49,7 @@ export default {
         },
 
         async getAllChats() {
-            await db.database().ref('chats').orderByChild('chatter_id').equalTo(this.getCurrentUser.uid).once('value', async (snapshot) => {
+            await db.database().ref('chats').orderByChild('chatter_id').equalTo(this.getCurrentUser.uid).on('value', async (snapshot) => {
                 let users = _.filter(snapshot.val(), member => {
                     return !member.blocked && !member.deleted;
                 })
