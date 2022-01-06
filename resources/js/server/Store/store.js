@@ -1,6 +1,4 @@
 import { createStore } from 'vuex'
-import createPersistedState from 'vuex-persistedstate'
-import Cookies from 'js-cookie'
 
 const store = new createStore({
     state() {

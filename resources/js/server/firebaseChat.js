@@ -54,7 +54,7 @@ export async function addNewChat(chatter_id, receiver_id) {
 
     await chatsRef.child(newChat.key).update({ 'chatKey' : newChat.key })
 }
-
+//Create new active chat
 export async function createNewChat(chatter_id, receiver_id, chatKey) {
     await stopActiveChat(chatter_id, receiver_id, chatKey)
     await activeChatsRef.push({
@@ -62,6 +62,28 @@ export async function createNewChat(chatter_id, receiver_id, chatKey) {
         receiver_id,
         chatKey,
     })
+}
+
+export async function stopActiveChat(chatter_id, receiver_id, chatKey) {
+    await activeChatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', snapshot => {
+        _.filter(snapshot.val(), (chat, key) => {
+            if(chat.receiver_id === receiver_id && chat.chatKey === chatKey) {
+                activeChatsRef.child(key).set(null)
+            }
+        })
+    })
+}
+
+export async function getActiveChatKey(chatKey, chatter_id) {
+    let response = null;
+    await activeChatsRef.orderByChild('chatKey').equalTo(chatKey).once('value', snapshot => {
+        _.forEach(snapshot.val(), async (chat, key) => {
+            if(chat.chatter_id === chatter_id) {
+                response = key;
+            }
+        })
+    })
+    return response;
 }
 
 export async function markMessagesAsRead(user_uid, chatKey, current_user_uid) {
@@ -79,16 +101,6 @@ export async function markMessagesAsRead(user_uid, chatKey, current_user_uid) {
                     "message_seen" : true,
                     "seen_by": seenBy,
                 })
-            }
-        })
-    })
-}
-
-export async function stopActiveChat(chatter_id, receiver_id, chatKey) {
-    await activeChatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', snapshot => {
-        _.filter(snapshot.val(), (chat, key) => {
-            if(chat.receiver_id === receiver_id && chat.chatKey === chatKey) {
-                activeChatsRef.child(key).set(null)
             }
         })
     })
@@ -116,14 +128,15 @@ export async function logUserIn(email, password) {
         });
 }
 
-export async function getUserOnlineStatusKey(user) {
-    let userKey = null;
-    await usersVRef.orderByChild("uid").equalTo(user.uid).once('value', async (snapshot) => {
-        _.filter(snapshot.val(), async function(value, key) {
-            userKey = key
-        })
-    })
-    return userKey;
+export async function logUserInGoogle() {
+    return signInWithPopup(auth, provider)
+        .then(async (result) => {
+            await userExists(result.user.uid, result.user);
+            return result;
+        }).catch((error) => {
+            console.log(error);
+            return error;
+        });
 }
 
 export function addUserToRLDb(user) {
@@ -134,17 +147,6 @@ export function addUserToRLDb(user) {
         "profilePicture" : user.photoURL,
         "uid" : user.uid,
     });
-}
-
-export async function logUserInGoogle() {
-    return signInWithPopup(auth, provider)
-        .then(async (result) => {
-            await userExists(result.user.uid, result.user);
-            return result;
-        }).catch((error) => {
-            console.log(error);
-            return error;
-        });
 }
 
 export async function userExists(uid, user) {
@@ -167,6 +169,16 @@ export async function userHasOnlineStatus(user) {
             await usersVRef.push(userData)
         }
     })
+}
+
+export async function getUserOnlineStatusKey(user) {
+    let userKey = null;
+    await usersVRef.orderByChild("uid").equalTo(user.uid).once('value', async (snapshot) => {
+        _.filter(snapshot.val(), async function(value, key) {
+            userKey = key
+        })
+    })
+    return userKey;
 }
 
 export async function getUserOnlineStatus(user) {

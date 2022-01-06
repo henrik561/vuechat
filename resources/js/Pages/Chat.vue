@@ -29,7 +29,7 @@ import ChatPreRender from "../Components/base/ChatPreRender";
 import Register from "../Components/Auth/Register";
 import Login from "../Components/Auth/Login";
 import db from "../server/database";
-import {getUserOnlineStatusKey, updateUserOnlineVisibility} from "../server/firebaseChat";
+import {getUserOnlineStatusKey, updateUserOnlineVisibility, getActiveChatKey} from "../server/firebaseChat";
 import {mapGetters, mapActions} from 'vuex';
 
 export default {
@@ -38,7 +38,7 @@ export default {
     components: {Register, Login, ChatPreRender, AuthLayout, CurrentChat, ContactSideBar},
 
     computed: {
-        ...mapGetters(['getUserIsLoggedIn', 'getPageIsLoading', 'getCurrentUser', 'getAuthType']),
+        ...mapGetters(['getUserIsLoggedIn', 'getPageIsLoading', 'getCurrentUser', 'getNewChatUser', 'getAuthType', 'getCurrentChatKey']),
     },
 
     methods: {
@@ -64,6 +64,15 @@ export default {
                 let userKey = await getUserOnlineStatusKey(user)
                 await this.getAllChats();
                 await db.database().ref(`onlineStatus/${userKey}`).onDisconnect().update({'online_visibility': new Date().getTime()})
+            }
+        },
+
+        getNewChatUser: {
+            handler: async function(user) {
+                setTimeout(async () => {
+                    let activeChatKey = await getActiveChatKey(this.getCurrentChatKey, this.getCurrentUser.uid);
+                    await db.database().ref(`activeChats/${activeChatKey}`).onDisconnect().set(null)
+                }, 10)
             }
         }
     }
