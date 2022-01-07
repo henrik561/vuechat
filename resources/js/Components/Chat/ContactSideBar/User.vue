@@ -49,7 +49,6 @@ export default {
 
     methods: {
         ...mapActions(['setCurrentUser', 'setNewChat', 'setNewChatKey']),
-
         async startNewChat() {
             if(this.getNewChatUser && this.getNewChatUser.uid === this.user.receiver_id) {
                 return
@@ -63,6 +62,7 @@ export default {
             await createNewChat(this.getCurrentUser.uid, this.userData.uid, this.user.chatKey);
             await markMessagesAsRead(this.userData.uid, this.user.chatKey, this.getCurrentUser.uid);
         },
+
     }
 }
 </script>

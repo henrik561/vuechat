@@ -1,6 +1,7 @@
 import db from './database';
 import "firebase/compat/firestore";
 import { getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider } from "firebase/auth";
+import {ref} from "vue";
 
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
@@ -10,6 +11,7 @@ const messagesRef = db.database().ref('messages');
 const chatsRef = db.database().ref('chats');
 const activeChatsRef = db.database().ref('activeChats');
 const usersVRef = db.database().ref('onlineStatus');
+const friendRequestsRef = db.database().ref('friendRequests')
 
 //Chat functions
 export async function sendMessage(chatter_id, chatKey, message, message_seen) {
@@ -44,10 +46,38 @@ export async function hasExistingConnection(chatKey, receiver_id, chatter_id) {
     return response;
 }
 
-export async function addNewChat(chatter_id, receiver_id) {
+export async function addAsFriend(chatter_id, receiver_id) {
     if(await userIsAlreadyFriended(chatter_id, receiver_id) === 'AlreadyFriended') {
         return 'AlreadyFriended'
     }
+
+    friendRequestsRef.push({
+        chatter_id,
+        receiver_id,
+    })
+    return 'AddedAsFriend'
+}
+
+export async function getFriendRequestKey(chatter_id, receiver_id) {
+    let response
+    await friendRequestsRef.orderByChild('chatter_id').equalTo(receiver_id).once('value', snapshot => {
+        _.forEach(snapshot.val(), (request, key) => {
+            if(request.receiver_id === chatter_id) {
+                response = key
+            }
+        })
+    })
+    return response
+}
+
+export async function rejectFriendRequest(chatter_id, receiver_id) {
+    let requestKey = await getFriendRequestKey(chatter_id, receiver_id);
+    await friendRequestsRef.child(requestKey).set(null);
+}
+
+export async function addNewChat(chatter_id, receiver_id) {
+    let requestKey = await getFriendRequestKey(chatter_id, receiver_id);
+    await friendRequestsRef.child(requestKey).set(null);
     let newChat = chatsRef.push({
         chatter_id,
         receiver_id,
@@ -64,9 +94,10 @@ export async function addNewChat(chatter_id, receiver_id) {
     })
     return 'AddedAsFriend'
 }
+
 //Create new active chat
 export async function createNewChat(chatter_id, receiver_id, chatKey) {
-    await stopActiveChat(chatter_id, receiver_id, chatKey)
+    await stopActiveChat(chatter_id)
     await activeChatsRef.push({
         chatter_id,
         receiver_id,
@@ -74,12 +105,10 @@ export async function createNewChat(chatter_id, receiver_id, chatKey) {
     })
 }
 
-export async function stopActiveChat(chatter_id, receiver_id, chatKey) {
+export async function stopActiveChat(chatter_id) {
     await activeChatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', snapshot => {
-        _.filter(snapshot.val(), (chat, key) => {
-            if(chat.receiver_id === receiver_id && chat.chatKey === chatKey) {
-                activeChatsRef.child(key).set(null)
-            }
+        _.forEach(snapshot.val(), (chat, key) => {
+            activeChatsRef.child(key).set(null)
         })
     })
 }
@@ -89,6 +118,18 @@ export async function getActiveChatKey(chatKey, chatter_id) {
     await activeChatsRef.orderByChild('chatKey').equalTo(chatKey).once('value', snapshot => {
         _.forEach(snapshot.val(), async (chat, key) => {
             if(chat.chatter_id === chatter_id) {
+                response = key;
+            }
+        })
+    })
+    return response;
+}
+
+export async function getChatKey(chatter_id, receiver_id) {
+    let response = null;
+    await chatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', snapshot => {
+        _.forEach(snapshot.val(), async (chat, key) => {
+            if(chat.receiver_id === receiver_id) {
                 response = key;
             }
         })
@@ -168,7 +209,7 @@ export async function userExists(uid, user) {
     })
 }
 
-export async function getUserByEmail(email, chatter_id) {
+export async function getUserByEmail(email) {
     let response = 'DoesNotExists'
     await usersRef.orderByChild('email').equalTo(email).once('value', snapshot => {
         if(snapshot.exists()) {
@@ -196,14 +237,15 @@ export async function userIsAlreadyFriended(chatter_id, receiver_id) {
 }
 
 export async function userHasOnlineStatus(user) {
+    if(!user || !user.uid) {
+        return '';
+    }
     await usersVRef.orderByChild('uid').equalTo(user.uid).once('value', async (snapshot) => {
         if(!snapshot.exists()) {
-            let userData = {
+            await usersVRef.push({
                 "uid": user.uid,
                 "online_visibility" : new Date().getTime()
-            }
-
-            await usersVRef.push(userData)
+            })
         }
     })
 }
@@ -219,6 +261,9 @@ export async function getUserOnlineStatusKey(user) {
 }
 
 export async function getUserOnlineStatus(user) {
+    if(!user || !user.uid) {
+        return '';
+    }
     let snapshotVal = {}
     await userHasOnlineStatus(user)
     await usersVRef.orderByChild('uid').equalTo(user.uid).once('value', async (snapshot) => {

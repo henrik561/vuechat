@@ -65,7 +65,7 @@ export default {
 
         hasValidEmail() {
             const regex = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
-            return this.canRegister = this.email.match(regex);
+            return this.canRegister = this.email.match(regex) && this.email.length > 6;
         }
 
     },
@@ -99,7 +99,7 @@ export default {
             const response = await logUserInGoogle();
 
             if(!response.user) {
-                this.form.loginFailed = true;
+                this.form_errors = true;
                 return;
             }
 

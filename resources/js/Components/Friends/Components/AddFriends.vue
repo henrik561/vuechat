@@ -1,14 +1,18 @@
 <template>
-    <div class="w-full h-12 flex border-t border-blue-800 relative">
-        <input v-model="friendEmail" class="pl-2 w-full outline-none border-none" type="text" name="searchKeyWord" id="searchKeyWord" placeholder="Vriend toevoegen..." />
-        <div @click="findFriend" class="bg-white w-12 h-full flex justify-center items-center absolute right-0 top-0">
-            <i class="fas fa-user-plus"></i>
+    <div class="w-full flex flex-col gap-2 border-t rounded border-blue-800 relative">
+        <div class="flex flex-col text-white">
+            <h1 class="text-xl font-bold">Add Friend</h1>
+            <span>You can add a friend with their email address. It's cAsE sEnSitIvE!</span>
         </div>
-    </div>
-    <div v-if="addFriend.error" :class="addFriend.color" class="w-full relative border-t-2 border-blue-800 h-12 flex justify-start pl-2 items-center">
-        {{addFriend.error}}
-        <div @click="addFriend.error = null" class="absolute w-12 right-0 h-full items-center flex justify-center">
-            <i class="fas fa-times text-white"></i>
+        <form @submit.prevent="" action="" class="w-full h-16 bg-white rounded flex">
+            <input id="friendEmail" v-model="friendEmail" class="pl-2 rounded w-9/12 outline-none border-none" type="text" placeholder="Enter a Email@email.example" />
+            <div @click="findFriend" class="bg-white cursor-pointer w-3/12 h-full flex pr-4 justify-end items-center">
+                <button :class="canSubmitFriendRequest ? 'bg-blue-800' : 'bg-blue-300'" type="submit" class="text-white rounded px-4 p-2">Send Friend Request</button>
+            </div>
+        </form>
+        <div v-if="addFriend.error" class="w-full flex rounded justify-between items-center h-12 text-white px-4" :class="addFriend.color">
+            <span>{{addFriend.error}}</span>
+            <i @click="addFriend.error=null" class="fas fa-times"></i>
         </div>
     </div>
 </template>
@@ -16,7 +20,7 @@
 <script>
 
 import {mapGetters, mapActions} from "vuex";
-import {addNewChat, getUserByEmail} from "../../../server/firebaseChat";
+import {addAsFriend, addNewChat, getUserByEmail} from "../../../server/firebaseChat";
 
 export default {
     name: "AddFriends",
@@ -36,6 +40,11 @@ export default {
 
         addFriendError() {
             return this.addFriend.error
+        },
+
+        canSubmitFriendRequest() {
+            const regex = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+            return this.friendEmail.match(regex)
         }
     },
 
@@ -49,14 +58,14 @@ export default {
                 return this.addFriend.error = 'The email address is not valid!'
             }
 
-            let response = await getUserByEmail(this.friendEmail, this.getCurrentUser.uid)
+            let response = await getUserByEmail(this.friendEmail)
             this.friendEmail = ''
             if(response === 'DoesNotExists') {
                 this.addFriend.color = 'bg-red-500'
                 return this.addFriend.error = 'The user does not exists!'
             }
 
-            response = await addNewChat(this.getCurrentUser.uid, response)
+            response = await addAsFriend(this.getCurrentUser.uid, response)
 
             if(response === 'AddedAsFriend') {
                 this.addFriend.color = 'bg-green-500'
@@ -73,7 +82,7 @@ export default {
             handler: function (error) {
                 setTimeout(() => {
                     this.addFriend.error = null;
-                },2500)
+                },5000)
             }
         }
     }

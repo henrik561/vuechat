@@ -11,6 +11,10 @@ const store = new createStore({
                 user: null,
                 chatKey: null,
             },
+            friends: {
+                addFriends: false,
+                listType: 'online',
+            }
         }
     },
 
@@ -18,6 +22,10 @@ const store = new createStore({
         getUserIsLoggedIn: state => {
             return !_.isNil(state.currentUser);
         },
+
+        getFriendsListType: state => state.friends.listType,
+
+        getAddFriends: state => state.friends.addFriends,
 
         getPageIsLoading: state => state.pageLoading,
 
@@ -45,23 +53,31 @@ const store = new createStore({
         },
 
         SET_PAGE_STATUS(state) {
-            state.pageLoading = !state.pageLoading
+            state.pageLoading = !state.pageLoading;
         },
 
         SET_ALL_USERS(state, users) {
             state.users = users;
         },
 
-        SET_NEW_CHAT(state, user, chatKey) {
+        SET_NEW_CHAT(state, user) {
             state.chat.user = user;
         },
 
         SET_NEW_CHAT_KEY(state, chatKey) {
-            state.chat.chatKey = chatKey
+            state.chat.chatKey = chatKey;
         },
 
         SET_CHAT_STOP(state) {
             state.chat = {};
+        },
+
+        SET_ADD_FRIENDS(state) {
+            state.friends.addFriends = !state.friends.addFriends;
+        },
+
+        SET_FRIENDS_LIST_TYPE(state, type) {
+            state.friends.listType = type;
         },
     },
 
@@ -87,12 +103,20 @@ const store = new createStore({
         },
 
         setNewChatKey({commit}, chatKey) {
-            commit('SET_NEW_CHAT_KEY', chatKey)
+            commit('SET_NEW_CHAT_KEY', chatKey);
         },
 
         setChatStop({commit}) {
-            commit('SET_CHAT_STOP')
+            commit('SET_CHAT_STOP');
         },
+
+        setAddFriends({commit}) {
+            commit('SET_ADD_FRIENDS');
+        },
+
+        setFriendsListType({commit}, type) {
+            commit('SET_FRIENDS_LIST_TYPE', type);
+        }
     }
 })
 
