@@ -1,23 +1,81 @@
 <template class="overflow-y-hidden">
-    <div class="bg-gradient-to-br from-blue-800 to-purple-700">
+    <div v-if="!getPageIsLoading && getUserIsLoggedIn" class="bg-gradient-to-br from-blue-800 to-purple-700">
         <Navbar></Navbar>
 
-        <slot></slot>
+        <div class="flex h-full layout-wrapper">
+            <ContactSideBar></ContactSideBar>
+            <slot></slot>
+        </div>
 
         <Footer></Footer>
     </div>
-
+    <div v-else class="absolute top-0 left-0 w-screen">
+        <AuthLayout>
+            <template v-if="getPageIsLoading">
+                <ChatPreRender></ChatPreRender>
+            </template>
+            <template v-else>
+                <template v-if="getAuthType">
+                    <Login></Login>
+                </template>
+                <template v-else>
+                    <Register></Register>
+                </template>
+            </template>
+        </AuthLayout>
+    </div>
 </template>
 
 <script>
+
 import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer/Footer";
+import AuthLayout from "../Components/Auth/AuthLayout";
+import ChatPreRender from "../Components/base/ChatPreRender";
+import Login from "../Components/Auth/Login";
+import Register from "../Components/Auth/Register";
+import {mapActions, mapGetters} from "vuex";
+import {updateUserOnlineVisibility, getUserOnlineStatusKey} from "../server/firebaseChat";
+import db from "../server/database";
+import ContactSideBar from "../Components/Chat/ContactSideBar";
+
 export default {
     name: "Layout",
-    components: {Footer, Navbar}
+    components: {ContactSideBar, Register, Login, ChatPreRender, AuthLayout, Footer, Navbar},
+
+    computed: {
+        ...mapGetters(['getUserIsLoggedIn', 'getPageIsLoading', 'getCurrentUser', 'getAuthType']),
+    },
+
+    methods: {
+        ...mapActions(['setAllUsers']),
+
+        async getAllChats() {
+            await db.database().ref('chats').orderByChild('chatter_id').equalTo(this.getCurrentUser.uid).on('value', async (snapshot) => {
+                let users = _.filter(snapshot.val(), member => {
+                    return !member.blocked && !member.deleted;
+                })
+                this.setAllUsers(users)
+            })
+        }
+    },
+
+    watch: {
+        getCurrentUser: {
+            handler: async function(user) {
+                await this.getAllChats()
+                await updateUserOnlineVisibility(this.getCurrentUser, 'online')
+                let userKey = await getUserOnlineStatusKey(user)
+                await db.database().ref(`onlineStatus/${userKey}`).onDisconnect().update({'online_visibility': new Date().getTime()})
+            }
+        }
+    }
+
 }
 </script>
 
 <style scoped>
-
+    .layout-wrapper {
+        height: calc(100% - 4rem);
+    }
 </style>
