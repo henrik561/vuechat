@@ -25,6 +25,10 @@ Route::get('/chat', function () {
     return inertia('Chat');
 });
 
+Route::get('/friends', function () {
+    return inertia('Friends');
+});
+
 Route::get('/login', function () {
     return inertia('Auth/Login');
 });
