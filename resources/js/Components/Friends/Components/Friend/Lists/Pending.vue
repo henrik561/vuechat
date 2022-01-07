@@ -6,7 +6,7 @@
 
 <script>
 import db from "../../../../../server/database";
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import Friend from "../Friend";
 
 export default {
@@ -22,9 +22,16 @@ export default {
         ...mapGetters(['getCurrentUser']),
     },
 
+    methods: {
+        ...mapActions(['setPendingRequests']),
+    },
+
     created() {
         db.database().ref('friendRequests').orderByChild('receiver_id').equalTo(this.getCurrentUser.uid).on('value', async snapshot => {
-            this.friends = snapshot.val();
+            if(snapshot.exists()) {
+                this.setPendingRequests(Object.keys(snapshot.val()).length)
+                this.friends = snapshot.val();
+            }
         })
     }
 }

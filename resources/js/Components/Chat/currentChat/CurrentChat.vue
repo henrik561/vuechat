@@ -37,7 +37,13 @@
 import { Link } from "@inertiajs/inertia-vue3";
 import {mapActions, mapGetters} from "vuex";
 import NewMessage from "./newMessage";
-import {sendMessage, hasExistingConnection} from '../../../server/firebaseChat';
+import {
+    sendMessage,
+    hasExistingConnection,
+    markMessagesAsRead,
+    createNewChat,
+    getActiveChatKey
+} from '../../../server/firebaseChat';
 import db from '../../../server/database';
 import ChatUserTopBar from "./ChatUserTopBar";
 import UserProfile from "./UserProfile/UserProfile";
@@ -87,9 +93,6 @@ export default {
 
     },
 
-    unmounted() {
-        this.setChatStop();
-    },
 
     methods: {
         ...mapActions(['setChatStop']),

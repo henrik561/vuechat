@@ -11,8 +11,9 @@
                 <div @click="typeClickHandler('all')" :class="getFriendsListType === 'all' ? 'bg-white' : 'text-white'" class="cursor-pointer py-0.5 w-20 text-center px-1 rounded">
                     <span>All</span>
                 </div>
-                <div @click="typeClickHandler('pending')" :class="{ 'bg-yellow-500' : getFriendsListType === 'pending' }" class="cursor-pointer w-20 text-center text-white py-0.5 px-1 rounded">
+                <div @click="typeClickHandler('pending')" :class="{ 'bg-yellow-500' : getFriendsListType === 'pending' }" class="relative cursor-pointer w-20 text-center text-white py-0.5 px-1 rounded">
                     <span>Pending</span>
+                    <div v-if="getNewPendingRequests" :class="getFriendsListType === 'pending' ? 'bg-white text-yellow-500' : 'bg-yellow-500 text-white' " class="w-4 absolute h-4 top-0 right-0 rounded-full text-xs">{{ getPendingRequests }}</div>
                 </div>
                 <div @click="typeClickHandler('blocked')" :class="{ 'bg-red-500' : getFriendsListType === 'blocked' }" class="cursor-pointer w-20 text-center text-white py-0.5 px-1 rounded">
                     <span>Blocked</span>
@@ -27,17 +28,18 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import db from "../../server/database";
 
 export default {
     name: "FriendsNavbar",
 
 
     computed: {
-      ...mapGetters(['getAddFriends', 'getFriendsListType'])
+      ...mapGetters(['getAddFriends', 'getCurrentUser', 'getFriendsListType', 'getPendingRequests', 'getNewPendingRequests'])
     },
 
     methods: {
-        ...mapActions(['setAddFriends', 'setFriendsListType']),
+        ...mapActions(['setAddFriends', 'setFriendsListType', 'setPendingRequests']),
 
         typeClickHandler(type) {
             if(this.getAddFriends) {
@@ -50,6 +52,14 @@ export default {
         addFriendHandler() {
             this.setAddFriends();
         }
+    },
+
+    created() {
+        db.database().ref('friendRequests').orderByChild('receiver_id').equalTo(this.getCurrentUser.uid).on('value', async snapshot => {
+            if(snapshot.exists()) {
+                this.setPendingRequests(Object.keys(snapshot.val()).length)
+            }
+        })
     }
 }
 </script>

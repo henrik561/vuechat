@@ -7,7 +7,7 @@
 import ContactSideBar from "../Components/Chat/ContactSideBar";
 import CurrentChat from "../Components/Chat/currentChat/CurrentChat";
 import db from "../server/database";
-import {getActiveChatKey} from "../server/firebaseChat";
+import {getActiveChatKey, markMessagesAsRead} from "../server/firebaseChat";
 import {mapGetters, mapActions} from 'vuex';
 
 export default {
@@ -20,14 +20,15 @@ export default {
     },
 
     methods: {
-        ...mapActions(['setAllUsers']),
+        ...mapActions(['setAllUsers', 'setActiveChatKey']),
     },
 
     watch: {
         getNewChatUser: {
             handler: async function(user) {
                 setTimeout(async () => {
-                    let activeChatKey = await getActiveChatKey(this.getCurrentChatKey, this.getCurrentUser.uid);
+                    let activeChatKey = await getActiveChatKey(this.getCurrentChatKey, this.getCurrentUser.uid)
+                    this.setActiveChatKey(activeChatKey)
                     await db.database().ref(`activeChats/${activeChatKey}`).onDisconnect().set(null)
                 }, 10)
             }

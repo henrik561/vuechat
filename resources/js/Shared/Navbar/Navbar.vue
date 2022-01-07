@@ -5,7 +5,10 @@
         </div>
         <div class="flex mr-6">
             <NavLink href="/chat" :active="$page.component === 'Chat'">Chat</NavLink>
-            <NavLink href="/friends" :active="$page.component === 'Friends'">Friends</NavLink>
+            <NavLink href="/friends" :active="$page.component === 'Friends'">
+                <span>Friends</span>
+                <div v-if="getNewPendingRequests" class="w-4 absolute h-4 bg-yellow-500 top-1 flex items-center justify-center right-9 rounded-full text-xs">{{ getPendingRequests }}</div>
+            </NavLink>
 <!--            <NavLink href="/logout" method="post" as="button">Logout</NavLink>-->
         </div>
     </nav>
@@ -13,10 +16,15 @@
 
 <script>
 import NavLink from "./NavLink";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "Navbar",
     components: {NavLink},
     props: ['userIsLoggedIn'],
+
+    computed: {
+        ...mapGetters(['getPendingRequests', 'getNewPendingRequests']),
+    },
 }
 </script>

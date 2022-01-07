@@ -11,7 +11,7 @@
         </div>
         <div v-if="getFriendsListType !== 'pending'" class="flex gap-2">
             <div class="w-10 h-10 flex items-center bg-white rounded-full justify-center">
-                <NavLink :notNavbarLink="true" @click="setNewChatUser" href="/chat"><i class="fas fa-comment-alt text-purple-800"></i></NavLink>
+                <NavLink :notNavbarLink="true" href="/chat" @click="setNewChatUser"><i class="fas fa-comment-alt text-purple-800"></i></NavLink>
             </div>
             <div class="w-10 h-10 flex items-center bg-white rounded-full justify-center">
                 <i class="fas fa-ellipsis-v text-purple-800"></i>
@@ -35,10 +35,11 @@ import {
     addNewChat,
     getUserOnlineStatus,
     rejectFriendRequest,
-    createNewChat, markMessagesAsRead
+    createNewChat, markMessagesAsRead,
+    getChatKey,
 } from "../../../../server/firebaseChat";
 import moment from "moment";
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import NavLink from "../../../../Shared/Navbar/NavLink";
 
 export default {
@@ -53,7 +54,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters(['getCurrentUser', 'getFriendsListType']),
+        ...mapGetters(['getCurrentUser', 'getFriendsListType', 'getCurrentChatKey']),
 
         formatUserOnlineVisibility() {
             let userLastSeen = this.friendData.online_visibility
@@ -80,9 +81,13 @@ export default {
 
         }
         this.friendData['online_visibility'] = await getUserOnlineStatus({ uid: this.friendData.uid })
+        //getchat key for this user and set the chatkey instantly
+        //
     },
 
     methods: {
+        ...mapActions(['setNewChat', 'setNewChatKey']),
+
         async acceptFriendRequest() {
             await addNewChat(this.getCurrentUser.uid, this.friendData.uid);
         },
@@ -97,10 +102,10 @@ export default {
                 'online_visibility' : await getUserOnlineStatus(this.friendData)
             });
             let chatKey = await getChatKey(this.getCurrentUser.uid, this.friendData.uid)
-            await this.setNewChatKey(this.friendData.chatKey)
-            await createNewChat(this.getCurrentUser.uid, this.userData.uid, this.user.chatKey);
-            await markMessagesAsRead(this.userData.uid, this.user.chatKey, this.getCurrentUser.uid);
-        }
+            await this.setNewChatKey(chatKey)
+            await markMessagesAsRead(this.friendData.uid, chatKey, this.getCurrentUser.uid);
+            await createNewChat(this.getCurrentUser.uid, this.friendData.uid, chatKey);
+        },
     }
 }
 </script>

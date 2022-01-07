@@ -27,6 +27,7 @@ import Pending from "../Components/Friends/Components/Friend/Lists/Pending";
 import Blocked from "../Components/Friends/Components/Friend/Lists/Blocked";
 
 import {mapActions, mapGetters} from 'vuex';
+import {stopActiveChat} from "../server/firebaseChat";
 
 export default {
     name: "Friends",
@@ -38,9 +39,14 @@ export default {
         ...mapGetters(['getAddFriends', 'getFriendsListType', 'getCurrentUser']),
     },
 
+    async created() {
+        await stopActiveChat(this.getCurrentUser.uid);
+        await this.setChatStop();
+    },
+
     methods: {
-        ...mapActions(['setFriendsListType']),
-    }
+        ...mapActions(['setFriendsListType', 'setChatStop']),
+    },
 }
 </script>
 

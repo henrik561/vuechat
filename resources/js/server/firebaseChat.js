@@ -58,9 +58,20 @@ export async function addAsFriend(chatter_id, receiver_id) {
     return 'AddedAsFriend'
 }
 
+export async function getPendingRequests(chatter_id) {
+    let response = 0;
+    await friendRequestsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', snapshot => {
+        if(snapshot.exists()) {
+            response = Object.keys(snapshot.val()).length
+        }
+    })
+    return response;
+}
+
 export async function getFriendRequestKey(chatter_id, receiver_id) {
     let response
     await friendRequestsRef.orderByChild('chatter_id').equalTo(receiver_id).once('value', snapshot => {
+        console.log(snapshot.val())
         _.forEach(snapshot.val(), (request, key) => {
             if(request.receiver_id === chatter_id) {
                 response = key
@@ -116,11 +127,13 @@ export async function stopActiveChat(chatter_id) {
 export async function getActiveChatKey(chatKey, chatter_id) {
     let response = null;
     await activeChatsRef.orderByChild('chatKey').equalTo(chatKey).once('value', snapshot => {
-        _.forEach(snapshot.val(), async (chat, key) => {
-            if(chat.chatter_id === chatter_id) {
-                response = key;
-            }
-        })
+        if(snapshot.exists()) {
+            _.forEach(snapshot.val(), async (chat, key) => {
+                if(chat.chatter_id === chatter_id) {
+                    response = key;
+                }
+            })
+        }
     })
     return response;
 }

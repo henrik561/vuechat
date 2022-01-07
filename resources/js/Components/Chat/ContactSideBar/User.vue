@@ -1,5 +1,5 @@
 <template>
-    <div @click="startNewChat" class="flex hover:bg-opacity-80 transition-all duration-350 cursor-pointer border-2 border-t-0 border-b-2 border-blue-800 justify-center items-center bg-white" :class="getUserHasChat && getNewChatUser.uid === userData.uid ? 'bg-opacity-30 text-white' : 'text-black'">
+    <NavLink :notNavbarLink="true" :href="$page.component !== 'Chat'? '/chat' : ''" @click="startNewChat" class="flex hover:bg-opacity-80 transition-all duration-350 cursor-pointer border-2 border-t-0 border-b-2 border-blue-800 justify-center items-center bg-white" :class="getUserHasChat && getNewChatUser.uid === userData.uid ? 'bg-opacity-30 text-white' : 'text-black'">
         <div class="w-11/12 h-16 flex items-center justify-center gap-2">
             <div class="w-12 relative h-12 flex justify-center items-center">
                 <img class="object-cover h-12 border border-gray-300 w-12 rounded-full" width="100" height="100" :src="userData.profilePicture ? userData.profilePicture : '/Uploads/Profiles/profile.jpeg'" alt="user profile picture">
@@ -13,15 +13,17 @@
                 </div>
             </div>
         </div>
-    </div>
+    </NavLink>
 </template>
 
 <script>
 import {getUserOnlineStatus, markMessagesAsRead, getUserData, createNewChat} from "../../../server/firebaseChat";
 import {mapActions, mapGetters} from "vuex";
+import NavLink from "../../../Shared/Navbar/NavLink";
 
 export default {
     name: "User",
+    components: {NavLink},
     props: ["user"],
 
     data() {
@@ -48,12 +50,11 @@ export default {
     },
 
     methods: {
-        ...mapActions(['setCurrentUser', 'setNewChat', 'setNewChatKey']),
+        ...mapActions(['setNewChat', 'setNewChatKey']),
         async startNewChat() {
             if(this.getNewChatUser && this.getNewChatUser.uid === this.user.receiver_id) {
                 return
             }
-
             await this.setNewChat({
                 ...this.userData,
                 'online_visibility' : await getUserOnlineStatus(this.userData)

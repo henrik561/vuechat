@@ -1,5 +1,5 @@
 <template>
-    <Link :class="{ 'text-white transition duration-300 rounded-xl py-2 px-12 font-bold hover:underline hover:bg-white hover:text-blue-800' : !notNavbarLink, 'font-bold underline' : active }">
+    <Link :class="{ 'text-white transition relative duration-300 rounded-xl py-2 px-12 font-bold hover:underline hover:bg-white hover:text-blue-800' : !notNavbarLink, 'font-bold underline' : active }">
         <slot></slot>
     </Link>
 </template>

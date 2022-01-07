@@ -10,10 +10,12 @@ const store = new createStore({
             chat: {
                 user: null,
                 chatKey: null,
+                activeChatKey: null,
             },
             friends: {
                 addFriends: false,
                 listType: 'online',
+                pendingRequests: 0,
             }
         }
     },
@@ -22,6 +24,14 @@ const store = new createStore({
         getUserIsLoggedIn: state => {
             return !_.isNil(state.currentUser);
         },
+
+        getActiveChatKey: state => state.chat.activeChatKey,
+
+        getNewPendingRequests: state => {
+            return state.friends.pendingRequests > 0
+        },
+
+        getPendingRequests: state => state.friends.pendingRequests,
 
         getFriendsListType: state => state.friends.listType,
 
@@ -79,11 +89,23 @@ const store = new createStore({
         SET_FRIENDS_LIST_TYPE(state, type) {
             state.friends.listType = type;
         },
+
+        SET_PENDING_REQUESTS(state, amount) {
+            state.friends.pendingRequests = amount;
+        },
+
+        SET_ACTIVE_CHAT_KEY(state, key) {
+            state.chat.activeChatKey = key;
+        }
     },
 
     actions: {
         setCurrentUser({commit}, user) {
             commit('SET_CURRENT_USER', user);
+        },
+
+        setActiveChatKey({commit}, key) {
+            commit('SET_ACTIVE_CHAT_KEY', key);
         },
 
         setAuthType({commit}) {
@@ -116,6 +138,10 @@ const store = new createStore({
 
         setFriendsListType({commit}, type) {
             commit('SET_FRIENDS_LIST_TYPE', type);
+        },
+
+        setPendingRequests({commit}, amount) {
+            commit('SET_PENDING_REQUESTS', amount);
         }
     }
 })
