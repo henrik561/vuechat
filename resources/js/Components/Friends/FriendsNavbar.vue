@@ -39,7 +39,7 @@ export default {
     },
 
     methods: {
-        ...mapActions(['setAddFriends', 'setFriendsListType', 'setPendingRequests']),
+        ...mapActions(['setAddFriends', 'setFriendsListType']),
 
         typeClickHandler(type) {
             if(this.getAddFriends) {
@@ -54,13 +54,7 @@ export default {
         }
     },
 
-    created() {
-        db.database().ref('friendRequests').orderByChild('receiver_id').equalTo(this.getCurrentUser.uid).on('value', async snapshot => {
-            if(snapshot.exists()) {
-                this.setPendingRequests(Object.keys(snapshot.val()).length)
-            }
-        })
-    }
+
 }
 </script>
 

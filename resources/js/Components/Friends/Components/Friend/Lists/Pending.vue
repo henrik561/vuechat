@@ -1,5 +1,5 @@
 <template>
-    <template v-for="friend in friends">
+    <template v-for="friend in friends" :key="friend.uid">
         <Friend :friend="friend"></Friend>
     </template>
 </template>
@@ -31,6 +31,9 @@ export default {
             if(snapshot.exists()) {
                 this.setPendingRequests(Object.keys(snapshot.val()).length)
                 this.friends = snapshot.val();
+            }else {
+                this.friends = {};
+                this.setPendingRequests(0)
             }
         })
     }

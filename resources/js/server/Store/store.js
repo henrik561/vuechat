@@ -16,6 +16,9 @@ const store = new createStore({
                 addFriends: false,
                 listType: 'online',
                 pendingRequests: 0,
+                popup: {
+                    user_uid: null,
+                }
             }
         }
     },
@@ -24,6 +27,8 @@ const store = new createStore({
         getUserIsLoggedIn: state => {
             return !_.isNil(state.currentUser);
         },
+
+        getFriendPopupUser: state => state.friends.popup.user_uid,
 
         getActiveChatKey: state => state.chat.activeChatKey,
 
@@ -96,7 +101,11 @@ const store = new createStore({
 
         SET_ACTIVE_CHAT_KEY(state, key) {
             state.chat.activeChatKey = key;
-        }
+        },
+
+        SET_FRIEND_POPUP_USER(state, user) {
+            state.friends.popup.user_uid = user
+        },
     },
 
     actions: {
@@ -142,8 +151,12 @@ const store = new createStore({
 
         setPendingRequests({commit}, amount) {
             commit('SET_PENDING_REQUESTS', amount);
-        }
-    }
+        },
+
+        setFriendPopupUser({commit}, user) {
+          commit('SET_FRIEND_POPUP_USER', user)
+        },
+     }
 })
 
 export default store;

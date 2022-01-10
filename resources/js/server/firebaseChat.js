@@ -46,6 +46,7 @@ export async function hasExistingConnection(chatKey, receiver_id, chatter_id) {
     return response;
 }
 
+//TODO Check if receiver_id has blocked current user
 export async function addAsFriend(chatter_id, receiver_id) {
     if(await userIsAlreadyFriended(chatter_id, receiver_id) === 'AlreadyFriended') {
         return 'AlreadyFriended'
@@ -56,6 +57,32 @@ export async function addAsFriend(chatter_id, receiver_id) {
         receiver_id,
     })
     return 'AddedAsFriend'
+}
+
+export async function removeFriend(chatter_id, receiver_id) {
+    await chatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', snapshot => {
+        if(snapshot.exists()) {
+            _.forEach(snapshot.val(), async (friend, key) => {
+                if(friend.receiver_id === receiver_id) {
+                    console.log('removeFriend')
+                    console.log(friend)
+                    await chatsRef.child(key).set(null)
+                }
+            })
+        }
+    })
+}
+
+export async function blockFriend(chatter_id, receiver_id) {
+    await chatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', snapshot => {
+        if(snapshot.exists()) {
+            _.forEach(snapshot.val(), (chat, key) => {
+                if(chat.receiver_id === receiver_id && !chat.blocked) {
+                    chatsRef.child(key).update({blocked: true})
+                }
+            })
+        }
+    })
 }
 
 export async function getPendingRequests(chatter_id) {
@@ -92,7 +119,6 @@ export async function addNewChat(chatter_id, receiver_id) {
     let newChat = chatsRef.push({
         chatter_id,
         receiver_id,
-        deleted: false,
         blocked: false,
     })
     await chatsRef.child(newChat.key).update({ 'chatKey' : newChat.key })
@@ -100,7 +126,6 @@ export async function addNewChat(chatter_id, receiver_id) {
         chatter_id: receiver_id,
         receiver_id: chatter_id,
         chatKey: newChat.key,
-        deleted: false,
         blocked: false,
     })
     return 'AddedAsFriend'

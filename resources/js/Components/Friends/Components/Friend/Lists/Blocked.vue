@@ -1,5 +1,5 @@
 <template>
-    <template v-for="friend in friends">
+    <template v-for="friend in friends" :key="friend.uid">
         <Friend :friend="friend"></Friend>
     </template>
 </template>

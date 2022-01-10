@@ -40,7 +40,10 @@ export default {
     },
 
     async created() {
+        //Database chat data
         await stopActiveChat(this.getCurrentUser.uid);
+
+        //Local chat data
         await this.setChatStop();
     },
 

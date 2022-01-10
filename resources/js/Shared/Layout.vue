@@ -48,29 +48,27 @@ export default {
     },
 
     methods: {
-        ...mapActions(['setAllUsers']),
-
-        async getAllChats() {
-            await db.database().ref('chats').orderByChild('chatter_id').equalTo(this.getCurrentUser.uid).on('value', async (snapshot) => {
-                let users = _.filter(snapshot.val(), member => {
-                    return !member.blocked && !member.deleted;
-                })
-                this.setAllUsers(users)
-            })
-        }
+        ...mapActions(['setPendingRequests']),
     },
 
     watch: {
         getCurrentUser: {
             handler: async function(user) {
-                await this.getAllChats()
                 await updateUserOnlineVisibility(this.getCurrentUser, 'online')
                 let userKey = await getUserOnlineStatusKey(user)
+
+                //TODO status does not always goes to offline
                 await db.database().ref(`onlineStatus/${userKey}`).onDisconnect().update({'online_visibility': new Date().getTime()})
+                await db.database().ref('friendRequests').orderByChild('receiver_id').equalTo(this.getCurrentUser.uid).on('value', async snapshot => {
+                    if(snapshot.exists()) {
+                        this.setPendingRequests(Object.keys(snapshot.val()).length)
+                    }else {
+                        this.setPendingRequests(0)
+                    }
+                })
             }
         }
     }
-
 }
 </script>
 

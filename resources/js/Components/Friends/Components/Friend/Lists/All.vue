@@ -1,5 +1,5 @@
 <template>
-    <template v-for="friend in friends">
+    <template v-for="friend in friends" :key="friend.uid">
         <Friend :friend="friend"></Friend>
     </template>
 </template>
@@ -22,8 +22,12 @@ export default {
         ...mapGetters(['getCurrentUser']),
     },
 
-    created() {
-        db.database().ref('chats').orderByChild('chatter_id').equalTo(this.getCurrentUser.uid).on('value', async snapshot => {
+    async created() {
+        await db.database().ref('chats').on('value', snapshot => {
+            console.log(snapshot.val())
+        })
+
+        await db.database().ref('chats').orderByChild('chatter_id').equalTo(this.getCurrentUser.uid).on('value', async snapshot => {
             this.friends = snapshot.val();
         })
     }

@@ -341,9 +341,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _ContactSideBar_User__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ContactSideBar/User */ "./resources/js/Components/Chat/ContactSideBar/User.vue");
-/* harmony import */ var _ContactSideBar_Search__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ContactSideBar/Search */ "./resources/js/Components/Chat/ContactSideBar/Search.vue");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _ContactSideBar_User__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ContactSideBar/User */ "./resources/js/Components/Chat/ContactSideBar/User.vue");
+/* harmony import */ var _ContactSideBar_Search__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ContactSideBar/Search */ "./resources/js/Components/Chat/ContactSideBar/Search.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
+/* harmony import */ var _server_database__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../server/database */ "./resources/js/server/database.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -353,27 +362,66 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ContactSideBar",
   components: {
-    Search: _ContactSideBar_Search__WEBPACK_IMPORTED_MODULE_1__["default"],
-    User: _ContactSideBar_User__WEBPACK_IMPORTED_MODULE_0__["default"]
+    Search: _ContactSideBar_Search__WEBPACK_IMPORTED_MODULE_2__["default"],
+    User: _ContactSideBar_User__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
       filterWord: ''
     };
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)(['getAllUsers'])), {}, {
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)(['getAllUsers', 'getCurrentUser'])), {}, {
     hasUsers: function hasUsers() {
       return !_.isEmpty(this.getAllUsers);
     }
   }),
-  methods: {
+  created: function created() {
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return _server_database__WEBPACK_IMPORTED_MODULE_3__["default"].database().ref('chats').orderByChild('chatter_id').equalTo(_this.getCurrentUser.uid).on('value', /*#__PURE__*/function () {
+                var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(snapshot) {
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+                    while (1) {
+                      switch (_context.prev = _context.next) {
+                        case 0:
+                          _this.setAllUsers(snapshot.val());
+
+                        case 1:
+                        case "end":
+                          return _context.stop();
+                      }
+                    }
+                  }, _callee);
+                }));
+
+                return function (_x) {
+                  return _ref.apply(this, arguments);
+                };
+              }());
+
+            case 2:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }))();
+  },
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)(['setAllUsers'])), {}, {
     searchInUsers: function searchInUsers(keyword) {
       this.filterWord = keyword;
     }
-  }
+  })
 });
 
 /***/ }),
@@ -715,6 +763,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              //TODO make for all eventlisteners a function
               _server_database__WEBPACK_IMPORTED_MODULE_4__["default"].database().ref('messages').on('value', function (snapshot) {
                 _this.messages = snapshot.val();
 
@@ -1066,7 +1115,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       friendData: []
     };
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)(['getCurrentUser', 'getFriendsListType', 'getCurrentChatKey'])), {}, {
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)(['getCurrentUser', 'getFriendsListType', 'getCurrentChatKey', 'getFriendPopupUser'])), {}, {
+    usersPopupIsOpen: function usersPopupIsOpen() {
+      return this.getFriendPopupUser === this.friendData.uid;
+    },
     formatUserOnlineVisibility: function formatUserOnlineVisibility() {
       var userLastSeen = this.friendData.online_visibility;
 
@@ -1089,36 +1141,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (!(_this.getFriendsListType === 'pending')) {
-                _context.next = 6;
-                break;
-              }
+              _context.next = 2;
+              return _this.getFriendsData();
 
-              _context.next = 3;
-              return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserData)(_this.friend.chatter_id);
-
-            case 3:
-              _this.friendData = _context.sent;
-              _context.next = 9;
-              break;
-
-            case 6:
-              _context.next = 8;
-              return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserData)(_this.friend.receiver_id);
-
-            case 8:
-              _this.friendData = _context.sent;
-
-            case 9:
-              _context.next = 11;
-              return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserOnlineStatus)({
-                uid: _this.friendData.uid
-              });
-
-            case 11:
-              _this.friendData['online_visibility'] = _context.sent;
-
-            case 12:
+            case 2:
             case "end":
               return _context.stop();
           }
@@ -1126,8 +1152,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, _callee);
     }))();
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)(['setNewChat', 'setNewChatKey'])), {}, {
-    acceptFriendRequest: function acceptFriendRequest() {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)(['setNewChat', 'setNewChatKey', 'setFriendPopupUser'])), {}, {
+    getFriendsData: function getFriendsData() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -1135,10 +1161,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.addNewChat)(_this2.getCurrentUser.uid, _this2.friendData.uid);
+                if (!(_this2.getFriendsListType === 'pending')) {
+                  _context2.next = 6;
+                  break;
+                }
 
-              case 2:
+                _context2.next = 3;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserData)(_this2.friend.chatter_id);
+
+              case 3:
+                _this2.friendData = _context2.sent;
+                _context2.next = 9;
+                break;
+
+              case 6:
+                _context2.next = 8;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserData)(_this2.friend.receiver_id);
+
+              case 8:
+                _this2.friendData = _context2.sent;
+
+              case 9:
+                _context2.next = 11;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserOnlineStatus)({
+                  uid: _this2.friendData.uid
+                });
+
+              case 11:
+                _this2.friendData['online_visibility'] = _context2.sent;
+
+              case 12:
               case "end":
                 return _context2.stop();
             }
@@ -1146,7 +1198,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }, _callee2);
       }))();
     },
-    rejectFriendRequest: function rejectFriendRequest() {
+    acceptFriendRequest: function acceptFriendRequest() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
@@ -1155,7 +1207,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.rejectFriendRequest)(_this3.getCurrentUser.uid, _this3.friendData.uid);
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.addNewChat)(_this3.getCurrentUser.uid, _this3.friendData.uid);
 
               case 2:
               case "end":
@@ -1165,54 +1217,135 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }, _callee3);
       }))();
     },
-    setNewChatUser: function setNewChatUser() {
+    rejectFriendRequest: function rejectFriendRequest() {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
-        var chatKey;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                _context4.t0 = _this4;
-                _context4.t1 = _objectSpread;
-                _context4.t2 = _objectSpread({}, _this4.friendData);
-                _context4.t3 = {};
-                _context4.next = 6;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserOnlineStatus)(_this4.friendData);
+                _context4.next = 2;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.rejectFriendRequest)(_this4.getCurrentUser.uid, _this4.friendData.uid);
 
-              case 6:
-                _context4.t4 = _context4.sent;
-                _context4.t5 = {
-                  'online_visibility': _context4.t4
-                };
-                _context4.t6 = (0, _context4.t1)(_context4.t2, _context4.t3, _context4.t5);
-                _context4.next = 11;
-                return _context4.t0.setNewChat.call(_context4.t0, _context4.t6);
-
-              case 11:
-                _context4.next = 13;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getChatKey)(_this4.getCurrentUser.uid, _this4.friendData.uid);
-
-              case 13:
-                chatKey = _context4.sent;
-                _context4.next = 16;
-                return _this4.setNewChatKey(chatKey);
-
-              case 16:
-                _context4.next = 18;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.markMessagesAsRead)(_this4.friendData.uid, chatKey, _this4.getCurrentUser.uid);
-
-              case 18:
-                _context4.next = 20;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.createNewChat)(_this4.getCurrentUser.uid, _this4.friendData.uid, chatKey);
-
-              case 20:
+              case 2:
               case "end":
                 return _context4.stop();
             }
           }
         }, _callee4);
+      }))();
+    },
+    setNewChatUser: function setNewChatUser() {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+        var chatKey;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.t0 = _this5;
+                _context5.t1 = _objectSpread;
+                _context5.t2 = _objectSpread({}, _this5.friendData);
+                _context5.t3 = {};
+                _context5.next = 6;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserOnlineStatus)(_this5.friendData);
+
+              case 6:
+                _context5.t4 = _context5.sent;
+                _context5.t5 = {
+                  'online_visibility': _context5.t4
+                };
+                _context5.t6 = (0, _context5.t1)(_context5.t2, _context5.t3, _context5.t5);
+                _context5.next = 11;
+                return _context5.t0.setNewChat.call(_context5.t0, _context5.t6);
+
+              case 11:
+                _context5.next = 13;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getChatKey)(_this5.getCurrentUser.uid, _this5.friendData.uid);
+
+              case 13:
+                chatKey = _context5.sent;
+                _context5.next = 16;
+                return _this5.setNewChatKey(chatKey);
+
+              case 16:
+                _context5.next = 18;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.markMessagesAsRead)(_this5.friendData.uid, chatKey, _this5.getCurrentUser.uid);
+
+              case 18:
+                _context5.next = 20;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.createNewChat)(_this5.getCurrentUser.uid, _this5.friendData.uid, chatKey);
+
+              case 20:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }))();
+    },
+    toggleOptionsPopup: function toggleOptionsPopup() {
+      if (this.usersPopupIsOpen) {
+        this.setFriendPopupUser(null);
+      } else {
+        this.setFriendPopupUser(this.friendData.uid);
+      }
+    },
+    closePopup: function closePopup() {
+      this.setFriendPopupUser(null);
+    },
+    removeFriend: function removeFriend() {
+      var _this6 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _context6.next = 2;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.removeFriend)(_this6.getCurrentUser.uid, _this6.friendData.uid);
+
+              case 2:
+                _context6.next = 4;
+                return _this6.getFriendsData();
+
+              case 4:
+                _this6.closePopup();
+
+              case 5:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
+      }))();
+    },
+    blockFriend: function blockFriend() {
+      var _this7 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _context7.next = 2;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.blockFriend)(_this7.getCurrentUser.uid, _this7.getFriendPopupUser);
+
+              case 2:
+                _context7.next = 4;
+                return _this7.getFriendsData();
+
+              case 4:
+                _this7.closePopup();
+
+              case 5:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7);
       }))();
     }
   })
@@ -1265,26 +1398,46 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   created: function created() {
     var _this = this;
 
-    _server_database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref('chats').orderByChild('chatter_id').equalTo(this.getCurrentUser.uid).on('value', /*#__PURE__*/function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(snapshot) {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _this.friends = snapshot.val();
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return _server_database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref('chats').on('value', function (snapshot) {
+                console.log(snapshot.val());
+              });
 
-              case 1:
-              case "end":
-                return _context.stop();
-            }
+            case 2:
+              _context2.next = 4;
+              return _server_database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref('chats').orderByChild('chatter_id').equalTo(_this.getCurrentUser.uid).on('value', /*#__PURE__*/function () {
+                var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(snapshot) {
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+                    while (1) {
+                      switch (_context.prev = _context.next) {
+                        case 0:
+                          _this.friends = snapshot.val();
+
+                        case 1:
+                        case "end":
+                          return _context.stop();
+                      }
+                    }
+                  }, _callee);
+                }));
+
+                return function (_x) {
+                  return _ref.apply(this, arguments);
+                };
+              }());
+
+            case 4:
+            case "end":
+              return _context2.stop();
           }
-        }, _callee);
-      }));
-
-      return function (_x) {
-        return _ref.apply(this, arguments);
-      };
-    }());
+        }
+      }, _callee2);
+    }))();
   }
 });
 
@@ -1526,6 +1679,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   _this.setPendingRequests(Object.keys(snapshot.val()).length);
 
                   _this.friends = snapshot.val();
+                } else {
+                  _this.friends = {};
+
+                  _this.setPendingRequests(0);
                 }
 
               case 1:
@@ -1556,16 +1713,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
-/* harmony import */ var _server_database__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../server/database */ "./resources/js/server/database.js");
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
+/* harmony import */ var _server_database__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../server/database */ "./resources/js/server/database.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -1576,8 +1725,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "FriendsNavbar",
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)(['getAddFriends', 'getCurrentUser', 'getFriendsListType', 'getPendingRequests', 'getNewPendingRequests'])),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)(['setAddFriends', 'setFriendsListType', 'setPendingRequests'])), {}, {
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)(['getAddFriends', 'getCurrentUser', 'getFriendsListType', 'getPendingRequests', 'getNewPendingRequests'])),
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapActions)(['setAddFriends', 'setFriendsListType'])), {}, {
     typeClickHandler: function typeClickHandler(type) {
       if (this.getAddFriends) {
         this.setAddFriends();
@@ -1588,33 +1737,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     addFriendHandler: function addFriendHandler() {
       this.setAddFriends();
     }
-  }),
-  created: function created() {
-    var _this = this;
-
-    _server_database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref('friendRequests').orderByChild('receiver_id').equalTo(this.getCurrentUser.uid).on('value', /*#__PURE__*/function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(snapshot) {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (snapshot.exists()) {
-                  _this.setPendingRequests(Object.keys(snapshot.val()).length);
-                }
-
-              case 1:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }));
-
-      return function (_x) {
-        return _ref.apply(this, arguments);
-      };
-    }());
-  }
+  })
 });
 
 /***/ }),
@@ -1961,87 +2084,68 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     Navbar: _Navbar_Navbar__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapGetters)(['getUserIsLoggedIn', 'getPageIsLoading', 'getCurrentUser', 'getAuthType'])),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapActions)(['setAllUsers'])), {}, {
-    getAllChats: function getAllChats() {
-      var _this = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return _server_database__WEBPACK_IMPORTED_MODULE_8__["default"].database().ref('chats').orderByChild('chatter_id').equalTo(_this.getCurrentUser.uid).on('value', /*#__PURE__*/function () {
-                  var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(snapshot) {
-                    var users;
-                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-                      while (1) {
-                        switch (_context.prev = _context.next) {
-                          case 0:
-                            users = _.filter(snapshot.val(), function (member) {
-                              return !member.blocked && !member.deleted;
-                            });
-
-                            _this.setAllUsers(users);
-
-                          case 2:
-                          case "end":
-                            return _context.stop();
-                        }
-                      }
-                    }, _callee);
-                  }));
-
-                  return function (_x) {
-                    return _ref.apply(this, arguments);
-                  };
-                }());
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
-    }
-  }),
+  methods: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapActions)(['setPendingRequests'])),
   watch: {
     getCurrentUser: {
       handler: function () {
-        var _handler = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(user) {
-          var userKey;
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
-            while (1) {
-              switch (_context3.prev = _context3.next) {
-                case 0:
-                  _context3.next = 2;
-                  return this.getAllChats();
+        var _handler = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(user) {
+          var _this = this;
 
-                case 2:
-                  _context3.next = 4;
+          var userKey;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+            while (1) {
+              switch (_context2.prev = _context2.next) {
+                case 0:
+                  _context2.next = 2;
                   return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_7__.updateUserOnlineVisibility)(this.getCurrentUser, 'online');
 
-                case 4:
-                  _context3.next = 6;
+                case 2:
+                  _context2.next = 4;
                   return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_7__.getUserOnlineStatusKey)(user);
 
-                case 6:
-                  userKey = _context3.sent;
-                  _context3.next = 9;
+                case 4:
+                  userKey = _context2.sent;
+                  _context2.next = 7;
                   return _server_database__WEBPACK_IMPORTED_MODULE_8__["default"].database().ref("onlineStatus/".concat(userKey)).onDisconnect().update({
                     'online_visibility': new Date().getTime()
                   });
 
+                case 7:
+                  _context2.next = 9;
+                  return _server_database__WEBPACK_IMPORTED_MODULE_8__["default"].database().ref('friendRequests').orderByChild('receiver_id').equalTo(this.getCurrentUser.uid).on('value', /*#__PURE__*/function () {
+                    var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(snapshot) {
+                      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+                        while (1) {
+                          switch (_context.prev = _context.next) {
+                            case 0:
+                              if (snapshot.exists()) {
+                                _this.setPendingRequests(Object.keys(snapshot.val()).length);
+                              } else {
+                                _this.setPendingRequests(0);
+                              }
+
+                            case 1:
+                            case "end":
+                              return _context.stop();
+                          }
+                        }
+                      }, _callee);
+                    }));
+
+                    return function (_x2) {
+                      return _ref.apply(this, arguments);
+                    };
+                  }());
+
                 case 9:
                 case "end":
-                  return _context3.stop();
+                  return _context2.stop();
               }
             }
-          }, _callee3, this);
+          }, _callee2, this);
         }));
 
-        function handler(_x2) {
+        function handler(_x) {
           return _handler.apply(this, arguments);
         }
 
@@ -2988,7 +3092,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
-  "class": "w-full px-4 h-16 flex mb-4 justify-between items-center border-t borer-white"
+  "class": "w-full px-4 h-16 flex mb-4 justify-between items-center relative border-t borer-white"
 };
 var _hoisted_2 = {
   "class": "flex gap-2"
@@ -3014,34 +3118,37 @@ var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 /* HOISTED */
 );
 
-var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "w-10 h-10 flex items-center bg-white rounded-full justify-center"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "fas fa-ellipsis-v text-purple-800"
-})], -1
+}, null, -1
 /* HOISTED */
 );
 
-var _hoisted_10 = {
+var _hoisted_10 = [_hoisted_9];
+var _hoisted_11 = {
   key: 1,
   "class": "flex gap-2"
 };
 
-var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "fas fa-check text-green-500"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_12 = [_hoisted_11];
+var _hoisted_13 = [_hoisted_12];
 
-var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "fas fa-times text-red-500"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_14 = [_hoisted_13];
+var _hoisted_15 = [_hoisted_14];
+var _hoisted_16 = {
+  key: 2,
+  "class": "w-auto absolute flex flex-col justify-center gap-3 p-2 h-auto bg-white right-4 top-full w-40 h-24 rounded-2xl z-20"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_NavLink = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("NavLink");
 
@@ -3070,17 +3177,32 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }, 8
   /* PROPS */
-  , ["onClick"])]), _hoisted_9])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  , ["onClick"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     onClick: _cache[0] || (_cache[0] = function () {
+      return $options.toggleOptionsPopup && $options.toggleOptionsPopup.apply($options, arguments);
+    }),
+    "class": "w-10 h-10 flex items-center bg-white rounded-full justify-center"
+  }, _hoisted_10)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    onClick: _cache[1] || (_cache[1] = function () {
       return $options.acceptFriendRequest && $options.acceptFriendRequest.apply($options, arguments);
     }),
     "class": "w-10 h-10 flex items-center bg-white rounded-full justify-center"
-  }, _hoisted_12), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-    onClick: _cache[1] || (_cache[1] = function () {
+  }, _hoisted_13), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    onClick: _cache[2] || (_cache[2] = function () {
       return $options.rejectFriendRequest && $options.rejectFriendRequest.apply($options, arguments);
     }),
     "class": "w-10 h-10 flex bg-white rounded-full items-center justify-center"
-  }, _hoisted_14)]))]);
+  }, _hoisted_15)])), $options.usersPopupIsOpen ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+    onClick: _cache[3] || (_cache[3] = function () {
+      return $options.removeFriend && $options.removeFriend.apply($options, arguments);
+    }),
+    "class": "text-yellow-500 cursor-pointer p-2 transition-all duration-300 rounded-2xl hover:bg-yellow-500 hover:text-white"
+  }, "Vriend verwijderen"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+    onClick: _cache[4] || (_cache[4] = function () {
+      return $options.blockFriend && $options.blockFriend.apply($options, arguments);
+    }),
+    "class": "text-red-500 cursor-pointer p-2 transition-all duration-300 rounded-2xl hover:bg-red-500 hover:text-white"
+  }, "Vriend Blokkeren")])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
 }
 
 /***/ }),
@@ -3103,12 +3225,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.friends, function (friend) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Friend, {
+      key: friend.uid,
       friend: friend
     }, null, 8
     /* PROPS */
     , ["friend"]);
-  }), 256
-  /* UNKEYED_FRAGMENT */
+  }), 128
+  /* KEYED_FRAGMENT */
   );
 }
 
@@ -3132,12 +3255,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.friends, function (friend) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Friend, {
+      key: friend.uid,
       friend: friend
     }, null, 8
     /* PROPS */
     , ["friend"]);
-  }), 256
-  /* UNKEYED_FRAGMENT */
+  }), 128
+  /* KEYED_FRAGMENT */
   );
 }
 
@@ -3161,12 +3285,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.friends, function (friend) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Friend, {
+      key: friend.uid,
       friend: friend
     }, null, 8
     /* PROPS */
     , ["friend"]);
-  }), 256
-  /* UNKEYED_FRAGMENT */
+  }), 128
+  /* KEYED_FRAGMENT */
   );
 }
 
@@ -3190,12 +3315,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.friends, function (friend) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Friend, {
+      key: friend.uid,
       friend: friend
     }, null, 8
     /* PROPS */
     , ["friend"]);
-  }), 256
-  /* UNKEYED_FRAGMENT */
+  }), 128
+  /* KEYED_FRAGMENT */
   );
 }
 
@@ -3748,13 +3874,19 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__.createStore({
       friends: {
         addFriends: false,
         listType: 'online',
-        pendingRequests: 0
+        pendingRequests: 0,
+        popup: {
+          user_uid: null
+        }
       }
     };
   },
   getters: {
     getUserIsLoggedIn: function getUserIsLoggedIn(state) {
       return !_.isNil(state.currentUser);
+    },
+    getFriendPopupUser: function getFriendPopupUser(state) {
+      return state.friends.popup.user_uid;
     },
     getActiveChatKey: function getActiveChatKey(state) {
       return state.chat.activeChatKey;
@@ -3826,6 +3958,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__.createStore({
     },
     SET_ACTIVE_CHAT_KEY: function SET_ACTIVE_CHAT_KEY(state, key) {
       state.chat.activeChatKey = key;
+    },
+    SET_FRIEND_POPUP_USER: function SET_FRIEND_POPUP_USER(state, user) {
+      state.friends.popup.user_uid = user;
     }
   },
   actions: {
@@ -3872,6 +4007,10 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__.createStore({
     setPendingRequests: function setPendingRequests(_ref11, amount) {
       var commit = _ref11.commit;
       commit('SET_PENDING_REQUESTS', amount);
+    },
+    setFriendPopupUser: function setFriendPopupUser(_ref12, user) {
+      var commit = _ref12.commit;
+      commit('SET_FRIEND_POPUP_USER', user);
     }
   }
 });
@@ -3922,6 +4061,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "hasChat": () => (/* binding */ hasChat),
 /* harmony export */   "hasExistingConnection": () => (/* binding */ hasExistingConnection),
 /* harmony export */   "addAsFriend": () => (/* binding */ addAsFriend),
+/* harmony export */   "removeFriend": () => (/* binding */ removeFriend),
+/* harmony export */   "blockFriend": () => (/* binding */ blockFriend),
 /* harmony export */   "getPendingRequests": () => (/* binding */ getPendingRequests),
 /* harmony export */   "getFriendRequestKey": () => (/* binding */ getFriendRequestKey),
 /* harmony export */   "rejectFriendRequest": () => (/* binding */ rejectFriendRequest),
@@ -4041,7 +4182,7 @@ function _hasChat() {
                 }, _callee2);
               }));
 
-              return function (_x44) {
+              return function (_x48) {
                 return _ref.apply(this, arguments);
               };
             }());
@@ -4061,7 +4202,7 @@ function _hasChat() {
 
 function hasExistingConnection(_x6, _x7, _x8) {
   return _hasExistingConnection.apply(this, arguments);
-}
+} //TODO Check if receiver_id has blocked current user
 
 function _hasExistingConnection() {
   _hasExistingConnection = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(chatKey, receiver_id, chatter_id) {
@@ -4133,19 +4274,106 @@ function _addAsFriend() {
   return _addAsFriend.apply(this, arguments);
 }
 
-function getPendingRequests(_x11) {
+function removeFriend(_x11, _x12) {
+  return _removeFriend.apply(this, arguments);
+}
+
+function _removeFriend() {
+  _removeFriend = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7(chatter_id, receiver_id) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
+      while (1) {
+        switch (_context7.prev = _context7.next) {
+          case 0:
+            _context7.next = 2;
+            return chatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', function (snapshot) {
+              if (snapshot.exists()) {
+                _.forEach(snapshot.val(), /*#__PURE__*/function () {
+                  var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6(friend, key) {
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+                      while (1) {
+                        switch (_context6.prev = _context6.next) {
+                          case 0:
+                            if (!(friend.receiver_id === receiver_id)) {
+                              _context6.next = 5;
+                              break;
+                            }
+
+                            console.log('removeFriend');
+                            console.log(friend);
+                            _context6.next = 5;
+                            return chatsRef.child(key).set(null);
+
+                          case 5:
+                          case "end":
+                            return _context6.stop();
+                        }
+                      }
+                    }, _callee6);
+                  }));
+
+                  return function (_x49, _x50) {
+                    return _ref2.apply(this, arguments);
+                  };
+                }());
+              }
+            });
+
+          case 2:
+          case "end":
+            return _context7.stop();
+        }
+      }
+    }, _callee7);
+  }));
+  return _removeFriend.apply(this, arguments);
+}
+
+function blockFriend(_x13, _x14) {
+  return _blockFriend.apply(this, arguments);
+}
+
+function _blockFriend() {
+  _blockFriend = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee8(chatter_id, receiver_id) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee8$(_context8) {
+      while (1) {
+        switch (_context8.prev = _context8.next) {
+          case 0:
+            _context8.next = 2;
+            return chatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', function (snapshot) {
+              if (snapshot.exists()) {
+                _.forEach(snapshot.val(), function (chat, key) {
+                  if (chat.receiver_id === receiver_id && !chat.blocked) {
+                    chatsRef.child(key).update({
+                      blocked: true
+                    });
+                  }
+                });
+              }
+            });
+
+          case 2:
+          case "end":
+            return _context8.stop();
+        }
+      }
+    }, _callee8);
+  }));
+  return _blockFriend.apply(this, arguments);
+}
+
+function getPendingRequests(_x15) {
   return _getPendingRequests.apply(this, arguments);
 }
 
 function _getPendingRequests() {
-  _getPendingRequests = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6(chatter_id) {
+  _getPendingRequests = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee9(chatter_id) {
     var response;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee9$(_context9) {
       while (1) {
-        switch (_context6.prev = _context6.next) {
+        switch (_context9.prev = _context9.next) {
           case 0:
             response = 0;
-            _context6.next = 3;
+            _context9.next = 3;
             return friendRequestsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', function (snapshot) {
               if (snapshot.exists()) {
                 response = Object.keys(snapshot.val()).length;
@@ -4153,30 +4381,30 @@ function _getPendingRequests() {
             });
 
           case 3:
-            return _context6.abrupt("return", response);
+            return _context9.abrupt("return", response);
 
           case 4:
           case "end":
-            return _context6.stop();
+            return _context9.stop();
         }
       }
-    }, _callee6);
+    }, _callee9);
   }));
   return _getPendingRequests.apply(this, arguments);
 }
 
-function getFriendRequestKey(_x12, _x13) {
+function getFriendRequestKey(_x16, _x17) {
   return _getFriendRequestKey.apply(this, arguments);
 }
 
 function _getFriendRequestKey() {
-  _getFriendRequestKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7(chatter_id, receiver_id) {
+  _getFriendRequestKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee10(chatter_id, receiver_id) {
     var response;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee10$(_context10) {
       while (1) {
-        switch (_context7.prev = _context7.next) {
+        switch (_context10.prev = _context10.next) {
           case 0:
-            _context7.next = 2;
+            _context10.next = 2;
             return friendRequestsRef.orderByChild('chatter_id').equalTo(receiver_id).once('value', function (snapshot) {
               console.log(snapshot.val());
 
@@ -4188,74 +4416,73 @@ function _getFriendRequestKey() {
             });
 
           case 2:
-            return _context7.abrupt("return", response);
+            return _context10.abrupt("return", response);
 
           case 3:
           case "end":
-            return _context7.stop();
+            return _context10.stop();
         }
       }
-    }, _callee7);
+    }, _callee10);
   }));
   return _getFriendRequestKey.apply(this, arguments);
 }
 
-function rejectFriendRequest(_x14, _x15) {
+function rejectFriendRequest(_x18, _x19) {
   return _rejectFriendRequest.apply(this, arguments);
 }
 
 function _rejectFriendRequest() {
-  _rejectFriendRequest = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee8(chatter_id, receiver_id) {
+  _rejectFriendRequest = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee11(chatter_id, receiver_id) {
     var requestKey;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee8$(_context8) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee11$(_context11) {
       while (1) {
-        switch (_context8.prev = _context8.next) {
+        switch (_context11.prev = _context11.next) {
           case 0:
-            _context8.next = 2;
+            _context11.next = 2;
             return getFriendRequestKey(chatter_id, receiver_id);
 
           case 2:
-            requestKey = _context8.sent;
-            _context8.next = 5;
+            requestKey = _context11.sent;
+            _context11.next = 5;
             return friendRequestsRef.child(requestKey).set(null);
 
           case 5:
           case "end":
-            return _context8.stop();
+            return _context11.stop();
         }
       }
-    }, _callee8);
+    }, _callee11);
   }));
   return _rejectFriendRequest.apply(this, arguments);
 }
 
-function addNewChat(_x16, _x17) {
+function addNewChat(_x20, _x21) {
   return _addNewChat.apply(this, arguments);
 } //Create new active chat
 
 function _addNewChat() {
-  _addNewChat = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee9(chatter_id, receiver_id) {
+  _addNewChat = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee12(chatter_id, receiver_id) {
     var requestKey, newChat;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee9$(_context9) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee12$(_context12) {
       while (1) {
-        switch (_context9.prev = _context9.next) {
+        switch (_context12.prev = _context12.next) {
           case 0:
-            _context9.next = 2;
+            _context12.next = 2;
             return getFriendRequestKey(chatter_id, receiver_id);
 
           case 2:
-            requestKey = _context9.sent;
-            _context9.next = 5;
+            requestKey = _context12.sent;
+            _context12.next = 5;
             return friendRequestsRef.child(requestKey).set(null);
 
           case 5:
             newChat = chatsRef.push({
               chatter_id: chatter_id,
               receiver_id: receiver_id,
-              deleted: false,
               blocked: false
             });
-            _context9.next = 8;
+            _context12.next = 8;
             return chatsRef.child(newChat.key).update({
               'chatKey': newChat.key
             });
@@ -4265,36 +4492,35 @@ function _addNewChat() {
               chatter_id: receiver_id,
               receiver_id: chatter_id,
               chatKey: newChat.key,
-              deleted: false,
               blocked: false
             });
-            return _context9.abrupt("return", 'AddedAsFriend');
+            return _context12.abrupt("return", 'AddedAsFriend');
 
           case 10:
           case "end":
-            return _context9.stop();
+            return _context12.stop();
         }
       }
-    }, _callee9);
+    }, _callee12);
   }));
   return _addNewChat.apply(this, arguments);
 }
 
-function createNewChat(_x18, _x19, _x20) {
+function createNewChat(_x22, _x23, _x24) {
   return _createNewChat.apply(this, arguments);
 }
 
 function _createNewChat() {
-  _createNewChat = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee10(chatter_id, receiver_id, chatKey) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee10$(_context10) {
+  _createNewChat = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee13(chatter_id, receiver_id, chatKey) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee13$(_context13) {
       while (1) {
-        switch (_context10.prev = _context10.next) {
+        switch (_context13.prev = _context13.next) {
           case 0:
-            _context10.next = 2;
+            _context13.next = 2;
             return stopActiveChat(chatter_id);
 
           case 2:
-            _context10.next = 4;
+            _context13.next = 4;
             return activeChatsRef.push({
               chatter_id: chatter_id,
               receiver_id: receiver_id,
@@ -4303,25 +4529,25 @@ function _createNewChat() {
 
           case 4:
           case "end":
-            return _context10.stop();
+            return _context13.stop();
         }
       }
-    }, _callee10);
+    }, _callee13);
   }));
   return _createNewChat.apply(this, arguments);
 }
 
-function stopActiveChat(_x21) {
+function stopActiveChat(_x25) {
   return _stopActiveChat.apply(this, arguments);
 }
 
 function _stopActiveChat() {
-  _stopActiveChat = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee11(chatter_id) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee11$(_context11) {
+  _stopActiveChat = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee14(chatter_id) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee14$(_context14) {
       while (1) {
-        switch (_context11.prev = _context11.next) {
+        switch (_context14.prev = _context14.next) {
           case 0:
-            _context11.next = 2;
+            _context14.next = 2;
             return activeChatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', function (snapshot) {
               _.forEach(snapshot.val(), function (chat, key) {
                 activeChatsRef.child(key).set(null);
@@ -4330,34 +4556,34 @@ function _stopActiveChat() {
 
           case 2:
           case "end":
-            return _context11.stop();
+            return _context14.stop();
         }
       }
-    }, _callee11);
+    }, _callee14);
   }));
   return _stopActiveChat.apply(this, arguments);
 }
 
-function getActiveChatKey(_x22, _x23) {
+function getActiveChatKey(_x26, _x27) {
   return _getActiveChatKey.apply(this, arguments);
 }
 
 function _getActiveChatKey() {
-  _getActiveChatKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee13(chatKey, chatter_id) {
+  _getActiveChatKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee16(chatKey, chatter_id) {
     var response;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee13$(_context13) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee16$(_context16) {
       while (1) {
-        switch (_context13.prev = _context13.next) {
+        switch (_context16.prev = _context16.next) {
           case 0:
             response = null;
-            _context13.next = 3;
+            _context16.next = 3;
             return activeChatsRef.orderByChild('chatKey').equalTo(chatKey).once('value', function (snapshot) {
               if (snapshot.exists()) {
                 _.forEach(snapshot.val(), /*#__PURE__*/function () {
-                  var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee12(chat, key) {
-                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee12$(_context12) {
+                  var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee15(chat, key) {
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee15$(_context15) {
                       while (1) {
-                        switch (_context12.prev = _context12.next) {
+                        switch (_context15.prev = _context15.next) {
                           case 0:
                             if (chat.chatter_id === chatter_id) {
                               response = key;
@@ -4365,51 +4591,51 @@ function _getActiveChatKey() {
 
                           case 1:
                           case "end":
-                            return _context12.stop();
+                            return _context15.stop();
                         }
                       }
-                    }, _callee12);
+                    }, _callee15);
                   }));
 
-                  return function (_x45, _x46) {
-                    return _ref2.apply(this, arguments);
+                  return function (_x51, _x52) {
+                    return _ref3.apply(this, arguments);
                   };
                 }());
               }
             });
 
           case 3:
-            return _context13.abrupt("return", response);
+            return _context16.abrupt("return", response);
 
           case 4:
           case "end":
-            return _context13.stop();
+            return _context16.stop();
         }
       }
-    }, _callee13);
+    }, _callee16);
   }));
   return _getActiveChatKey.apply(this, arguments);
 }
 
-function getChatKey(_x24, _x25) {
+function getChatKey(_x28, _x29) {
   return _getChatKey.apply(this, arguments);
 }
 
 function _getChatKey() {
-  _getChatKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee15(chatter_id, receiver_id) {
+  _getChatKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee18(chatter_id, receiver_id) {
     var response;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee15$(_context15) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee18$(_context18) {
       while (1) {
-        switch (_context15.prev = _context15.next) {
+        switch (_context18.prev = _context18.next) {
           case 0:
             response = null;
-            _context15.next = 3;
+            _context18.next = 3;
             return chatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', function (snapshot) {
               _.forEach(snapshot.val(), /*#__PURE__*/function () {
-                var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee14(chat, key) {
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee14$(_context14) {
+                var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee17(chat, key) {
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee17$(_context17) {
                     while (1) {
-                      switch (_context14.prev = _context14.next) {
+                      switch (_context17.prev = _context17.next) {
                         case 0:
                           if (chat.receiver_id === receiver_id) {
                             response = key;
@@ -4417,57 +4643,57 @@ function _getChatKey() {
 
                         case 1:
                         case "end":
-                          return _context14.stop();
+                          return _context17.stop();
                       }
                     }
-                  }, _callee14);
+                  }, _callee17);
                 }));
 
-                return function (_x47, _x48) {
-                  return _ref3.apply(this, arguments);
+                return function (_x53, _x54) {
+                  return _ref4.apply(this, arguments);
                 };
               }());
             });
 
           case 3:
-            return _context15.abrupt("return", response);
+            return _context18.abrupt("return", response);
 
           case 4:
           case "end":
-            return _context15.stop();
+            return _context18.stop();
         }
       }
-    }, _callee15);
+    }, _callee18);
   }));
   return _getChatKey.apply(this, arguments);
 }
 
-function markMessagesAsRead(_x26, _x27, _x28) {
+function markMessagesAsRead(_x30, _x31, _x32) {
   return _markMessagesAsRead.apply(this, arguments);
 }
 
 function _markMessagesAsRead() {
-  _markMessagesAsRead = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee18(user_uid, chatKey, current_user_uid) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee18$(_context18) {
+  _markMessagesAsRead = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee21(user_uid, chatKey, current_user_uid) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee21$(_context21) {
       while (1) {
-        switch (_context18.prev = _context18.next) {
+        switch (_context21.prev = _context21.next) {
           case 0:
-            _context18.next = 2;
+            _context21.next = 2;
             return messagesRef.orderByChild('chatKey').equalTo(chatKey).once('value', /*#__PURE__*/function () {
-              var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee17(snapshot) {
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee17$(_context17) {
+              var _ref5 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee20(snapshot) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee20$(_context20) {
                   while (1) {
-                    switch (_context17.prev = _context17.next) {
+                    switch (_context20.prev = _context20.next) {
                       case 0:
                         _.forEach(snapshot.val(), /*#__PURE__*/function () {
-                          var _ref5 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee16(value, key) {
+                          var _ref6 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee19(value, key) {
                             var seenBy;
-                            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee16$(_context16) {
+                            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee19$(_context19) {
                               while (1) {
-                                switch (_context16.prev = _context16.next) {
+                                switch (_context19.prev = _context19.next) {
                                   case 0:
                                     if (!(value.chatter_id === user_uid && !value.message_seen)) {
-                                      _context16.next = 5;
+                                      _context19.next = 5;
                                       break;
                                     }
 
@@ -4479,7 +4705,7 @@ function _markMessagesAsRead() {
                                       seenBy = [current_user_uid];
                                     }
 
-                                    _context16.next = 5;
+                                    _context19.next = 5;
                                     return messagesRef.child(key).update({
                                       "seen_at": "".concat(new Date().toTimeString().substr(0, 5)),
                                       "message_seen": true,
@@ -4488,51 +4714,51 @@ function _markMessagesAsRead() {
 
                                   case 5:
                                   case "end":
-                                    return _context16.stop();
+                                    return _context19.stop();
                                 }
                               }
-                            }, _callee16);
+                            }, _callee19);
                           }));
 
-                          return function (_x50, _x51) {
-                            return _ref5.apply(this, arguments);
+                          return function (_x56, _x57) {
+                            return _ref6.apply(this, arguments);
                           };
                         }());
 
                       case 1:
                       case "end":
-                        return _context17.stop();
+                        return _context20.stop();
                     }
                   }
-                }, _callee17);
+                }, _callee20);
               }));
 
-              return function (_x49) {
-                return _ref4.apply(this, arguments);
+              return function (_x55) {
+                return _ref5.apply(this, arguments);
               };
             }());
 
           case 2:
           case "end":
-            return _context18.stop();
+            return _context21.stop();
         }
       }
-    }, _callee18);
+    }, _callee21);
   }));
   return _markMessagesAsRead.apply(this, arguments);
 }
 
-function createUser(_x29, _x30) {
+function createUser(_x33, _x34) {
   return _createUser.apply(this, arguments);
 }
 
 function _createUser() {
-  _createUser = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee19(email, password) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee19$(_context19) {
+  _createUser = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee22(email, password) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee22$(_context22) {
       while (1) {
-        switch (_context19.prev = _context19.next) {
+        switch (_context22.prev = _context22.next) {
           case 0:
-            return _context19.abrupt("return", (0,firebase_auth__WEBPACK_IMPORTED_MODULE_3__.createUserWithEmailAndPassword)(auth, email, password).then(function (userCredential) {
+            return _context22.abrupt("return", (0,firebase_auth__WEBPACK_IMPORTED_MODULE_3__.createUserWithEmailAndPassword)(auth, email, password).then(function (userCredential) {
               addUserToRLDb(userCredential.user);
               return userCredential;
             })["catch"](function (error) {
@@ -4541,46 +4767,46 @@ function _createUser() {
 
           case 1:
           case "end":
-            return _context19.stop();
+            return _context22.stop();
         }
       }
-    }, _callee19);
+    }, _callee22);
   }));
   return _createUser.apply(this, arguments);
 }
 
-function logUserIn(_x31, _x32) {
+function logUserIn(_x35, _x36) {
   return _logUserIn.apply(this, arguments);
 }
 
 function _logUserIn() {
-  _logUserIn = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee21(email, password) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee21$(_context21) {
+  _logUserIn = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee24(email, password) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee24$(_context24) {
       while (1) {
-        switch (_context21.prev = _context21.next) {
+        switch (_context24.prev = _context24.next) {
           case 0:
-            return _context21.abrupt("return", (0,firebase_auth__WEBPACK_IMPORTED_MODULE_3__.signInWithEmailAndPassword)(auth, email, password).then( /*#__PURE__*/function () {
-              var _ref6 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee20(userCredential) {
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee20$(_context20) {
+            return _context24.abrupt("return", (0,firebase_auth__WEBPACK_IMPORTED_MODULE_3__.signInWithEmailAndPassword)(auth, email, password).then( /*#__PURE__*/function () {
+              var _ref7 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee23(userCredential) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee23$(_context23) {
                   while (1) {
-                    switch (_context20.prev = _context20.next) {
+                    switch (_context23.prev = _context23.next) {
                       case 0:
-                        _context20.next = 2;
+                        _context23.next = 2;
                         return updateUserOnlineVisibility(userCredential, 'online');
 
                       case 2:
-                        return _context20.abrupt("return", userCredential);
+                        return _context23.abrupt("return", userCredential);
 
                       case 3:
                       case "end":
-                        return _context20.stop();
+                        return _context23.stop();
                     }
                   }
-                }, _callee20);
+                }, _callee23);
               }));
 
-              return function (_x52) {
-                return _ref6.apply(this, arguments);
+              return function (_x58) {
+                return _ref7.apply(this, arguments);
               };
             }())["catch"](function (error) {
               return error;
@@ -4588,10 +4814,10 @@ function _logUserIn() {
 
           case 1:
           case "end":
-            return _context21.stop();
+            return _context24.stop();
         }
       }
-    }, _callee21);
+    }, _callee24);
   }));
   return _logUserIn.apply(this, arguments);
 }
@@ -4601,33 +4827,33 @@ function logUserInGoogle() {
 }
 
 function _logUserInGoogle() {
-  _logUserInGoogle = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee23() {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee23$(_context23) {
+  _logUserInGoogle = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee26() {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee26$(_context26) {
       while (1) {
-        switch (_context23.prev = _context23.next) {
+        switch (_context26.prev = _context26.next) {
           case 0:
-            return _context23.abrupt("return", (0,firebase_auth__WEBPACK_IMPORTED_MODULE_3__.signInWithPopup)(auth, provider).then( /*#__PURE__*/function () {
-              var _ref7 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee22(result) {
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee22$(_context22) {
+            return _context26.abrupt("return", (0,firebase_auth__WEBPACK_IMPORTED_MODULE_3__.signInWithPopup)(auth, provider).then( /*#__PURE__*/function () {
+              var _ref8 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee25(result) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee25$(_context25) {
                   while (1) {
-                    switch (_context22.prev = _context22.next) {
+                    switch (_context25.prev = _context25.next) {
                       case 0:
-                        _context22.next = 2;
+                        _context25.next = 2;
                         return userExists(result.user.uid, result.user);
 
                       case 2:
-                        return _context22.abrupt("return", result);
+                        return _context25.abrupt("return", result);
 
                       case 3:
                       case "end":
-                        return _context22.stop();
+                        return _context25.stop();
                     }
                   }
-                }, _callee22);
+                }, _callee25);
               }));
 
-              return function (_x53) {
-                return _ref7.apply(this, arguments);
+              return function (_x59) {
+                return _ref8.apply(this, arguments);
               };
             }())["catch"](function (error) {
               console.log(error);
@@ -4636,10 +4862,10 @@ function _logUserInGoogle() {
 
           case 1:
           case "end":
-            return _context23.stop();
+            return _context26.stop();
         }
       }
-    }, _callee23);
+    }, _callee26);
   }));
   return _logUserInGoogle.apply(this, arguments);
 }
@@ -4653,125 +4879,125 @@ function addUserToRLDb(user) {
     "uid": user.uid
   });
 }
-function userExists(_x33, _x34) {
+function userExists(_x37, _x38) {
   return _userExists.apply(this, arguments);
 }
 
 function _userExists() {
-  _userExists = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee25(uid, user) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee25$(_context25) {
+  _userExists = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee28(uid, user) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee28$(_context28) {
       while (1) {
-        switch (_context25.prev = _context25.next) {
+        switch (_context28.prev = _context28.next) {
           case 0:
-            _context25.next = 2;
+            _context28.next = 2;
             return usersRef.orderByChild("uid").equalTo(uid).once('value', /*#__PURE__*/function () {
-              var _ref8 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee24(snapshot) {
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee24$(_context24) {
+              var _ref9 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee27(snapshot) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee27$(_context27) {
                   while (1) {
-                    switch (_context24.prev = _context24.next) {
+                    switch (_context27.prev = _context27.next) {
                       case 0:
                         if (!(!snapshot.exists() && user !== null)) {
-                          _context24.next = 3;
+                          _context27.next = 3;
                           break;
                         }
 
-                        _context24.next = 3;
+                        _context27.next = 3;
                         return addUserToRLDb(user);
 
                       case 3:
-                        _context24.next = 5;
+                        _context27.next = 5;
                         return updateUserOnlineVisibility(user, 'online');
 
                       case 5:
                       case "end":
-                        return _context24.stop();
+                        return _context27.stop();
                     }
                   }
-                }, _callee24);
+                }, _callee27);
               }));
 
-              return function (_x54) {
-                return _ref8.apply(this, arguments);
+              return function (_x60) {
+                return _ref9.apply(this, arguments);
               };
             }());
 
           case 2:
-            return _context25.abrupt("return", _context25.sent);
+            return _context28.abrupt("return", _context28.sent);
 
           case 3:
           case "end":
-            return _context25.stop();
+            return _context28.stop();
         }
       }
-    }, _callee25);
+    }, _callee28);
   }));
   return _userExists.apply(this, arguments);
 }
 
-function getUserByEmail(_x35) {
+function getUserByEmail(_x39) {
   return _getUserByEmail.apply(this, arguments);
 }
 
 function _getUserByEmail() {
-  _getUserByEmail = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee27(email) {
+  _getUserByEmail = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee30(email) {
     var response;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee27$(_context27) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee30$(_context30) {
       while (1) {
-        switch (_context27.prev = _context27.next) {
+        switch (_context30.prev = _context30.next) {
           case 0:
             response = 'DoesNotExists';
-            _context27.next = 3;
+            _context30.next = 3;
             return usersRef.orderByChild('email').equalTo(email).once('value', function (snapshot) {
               if (snapshot.exists()) {
                 _.forEach(snapshot.val(), /*#__PURE__*/function () {
-                  var _ref9 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee26(user) {
-                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee26$(_context26) {
+                  var _ref10 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee29(user) {
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee29$(_context29) {
                       while (1) {
-                        switch (_context26.prev = _context26.next) {
+                        switch (_context29.prev = _context29.next) {
                           case 0:
                             response = user.uid;
 
                           case 1:
                           case "end":
-                            return _context26.stop();
+                            return _context29.stop();
                         }
                       }
-                    }, _callee26);
+                    }, _callee29);
                   }));
 
-                  return function (_x55) {
-                    return _ref9.apply(this, arguments);
+                  return function (_x61) {
+                    return _ref10.apply(this, arguments);
                   };
                 }());
               }
             });
 
           case 3:
-            return _context27.abrupt("return", response);
+            return _context30.abrupt("return", response);
 
           case 4:
           case "end":
-            return _context27.stop();
+            return _context30.stop();
         }
       }
-    }, _callee27);
+    }, _callee30);
   }));
   return _getUserByEmail.apply(this, arguments);
 }
 
-function userIsAlreadyFriended(_x36, _x37) {
+function userIsAlreadyFriended(_x40, _x41) {
   return _userIsAlreadyFriended.apply(this, arguments);
 }
 
 function _userIsAlreadyFriended() {
-  _userIsAlreadyFriended = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee28(chatter_id, receiver_id) {
+  _userIsAlreadyFriended = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee31(chatter_id, receiver_id) {
     var response;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee28$(_context28) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee31$(_context31) {
       while (1) {
-        switch (_context28.prev = _context28.next) {
+        switch (_context31.prev = _context31.next) {
           case 0:
             response = 'NotFriended';
-            _context28.next = 3;
+            _context31.next = 3;
             return chatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', function (snapshot) {
               if (snapshot.exists()) {
                 _.forEach(snapshot.val(), function (chat, key) {
@@ -4783,49 +5009,49 @@ function _userIsAlreadyFriended() {
             });
 
           case 3:
-            return _context28.abrupt("return", response);
+            return _context31.abrupt("return", response);
 
           case 4:
           case "end":
-            return _context28.stop();
+            return _context31.stop();
         }
       }
-    }, _callee28);
+    }, _callee31);
   }));
   return _userIsAlreadyFriended.apply(this, arguments);
 }
 
-function userHasOnlineStatus(_x38) {
+function userHasOnlineStatus(_x42) {
   return _userHasOnlineStatus.apply(this, arguments);
 }
 
 function _userHasOnlineStatus() {
-  _userHasOnlineStatus = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee30(user) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee30$(_context30) {
+  _userHasOnlineStatus = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee33(user) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee33$(_context33) {
       while (1) {
-        switch (_context30.prev = _context30.next) {
+        switch (_context33.prev = _context33.next) {
           case 0:
             if (!(!user || !user.uid)) {
-              _context30.next = 2;
+              _context33.next = 2;
               break;
             }
 
-            return _context30.abrupt("return", '');
+            return _context33.abrupt("return", '');
 
           case 2:
-            _context30.next = 4;
+            _context33.next = 4;
             return usersVRef.orderByChild('uid').equalTo(user.uid).once('value', /*#__PURE__*/function () {
-              var _ref10 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee29(snapshot) {
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee29$(_context29) {
+              var _ref11 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee32(snapshot) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee32$(_context32) {
                   while (1) {
-                    switch (_context29.prev = _context29.next) {
+                    switch (_context32.prev = _context32.next) {
                       case 0:
                         if (snapshot.exists()) {
-                          _context29.next = 3;
+                          _context32.next = 3;
                           break;
                         }
 
-                        _context29.next = 3;
+                        _context32.next = 3;
                         return usersVRef.push({
                           "uid": user.uid,
                           "online_visibility": new Date().getTime()
@@ -4833,82 +5059,16 @@ function _userHasOnlineStatus() {
 
                       case 3:
                       case "end":
-                        return _context29.stop();
-                    }
-                  }
-                }, _callee29);
-              }));
-
-              return function (_x56) {
-                return _ref10.apply(this, arguments);
-              };
-            }());
-
-          case 4:
-          case "end":
-            return _context30.stop();
-        }
-      }
-    }, _callee30);
-  }));
-  return _userHasOnlineStatus.apply(this, arguments);
-}
-
-function getUserOnlineStatusKey(_x39) {
-  return _getUserOnlineStatusKey.apply(this, arguments);
-}
-
-function _getUserOnlineStatusKey() {
-  _getUserOnlineStatusKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee33(user) {
-    var userKey;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee33$(_context33) {
-      while (1) {
-        switch (_context33.prev = _context33.next) {
-          case 0:
-            userKey = null;
-            _context33.next = 3;
-            return usersVRef.orderByChild("uid").equalTo(user.uid).once('value', /*#__PURE__*/function () {
-              var _ref11 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee32(snapshot) {
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee32$(_context32) {
-                  while (1) {
-                    switch (_context32.prev = _context32.next) {
-                      case 0:
-                        _.filter(snapshot.val(), /*#__PURE__*/function () {
-                          var _ref12 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee31(value, key) {
-                            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee31$(_context31) {
-                              while (1) {
-                                switch (_context31.prev = _context31.next) {
-                                  case 0:
-                                    userKey = key;
-
-                                  case 1:
-                                  case "end":
-                                    return _context31.stop();
-                                }
-                              }
-                            }, _callee31);
-                          }));
-
-                          return function (_x58, _x59) {
-                            return _ref12.apply(this, arguments);
-                          };
-                        }());
-
-                      case 1:
-                      case "end":
                         return _context32.stop();
                     }
                   }
                 }, _callee32);
               }));
 
-              return function (_x57) {
+              return function (_x62) {
                 return _ref11.apply(this, arguments);
               };
             }());
-
-          case 3:
-            return _context33.abrupt("return", userKey);
 
           case 4:
           case "end":
@@ -4917,125 +5077,191 @@ function _getUserOnlineStatusKey() {
       }
     }, _callee33);
   }));
+  return _userHasOnlineStatus.apply(this, arguments);
+}
+
+function getUserOnlineStatusKey(_x43) {
   return _getUserOnlineStatusKey.apply(this, arguments);
 }
 
-function getUserOnlineStatus(_x40) {
-  return _getUserOnlineStatus.apply(this, arguments);
-}
-
-function _getUserOnlineStatus() {
-  _getUserOnlineStatus = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee35(user) {
-    var snapshotVal;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee35$(_context35) {
-      while (1) {
-        switch (_context35.prev = _context35.next) {
-          case 0:
-            if (!(!user || !user.uid)) {
-              _context35.next = 2;
-              break;
-            }
-
-            return _context35.abrupt("return", '');
-
-          case 2:
-            snapshotVal = {};
-            _context35.next = 5;
-            return userHasOnlineStatus(user);
-
-          case 5:
-            _context35.next = 7;
-            return usersVRef.orderByChild('uid').equalTo(user.uid).once('value', /*#__PURE__*/function () {
-              var _ref13 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee34(snapshot) {
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee34$(_context34) {
-                  while (1) {
-                    switch (_context34.prev = _context34.next) {
-                      case 0:
-                        snapshotVal = snapshot.val();
-
-                      case 1:
-                      case "end":
-                        return _context34.stop();
-                    }
-                  }
-                }, _callee34);
-              }));
-
-              return function (_x60) {
-                return _ref13.apply(this, arguments);
-              };
-            }());
-
-          case 7:
-            return _context35.abrupt("return", snapshotVal[Object.keys(snapshotVal)[0]].online_visibility);
-
-          case 8:
-          case "end":
-            return _context35.stop();
-        }
-      }
-    }, _callee35);
-  }));
-  return _getUserOnlineStatus.apply(this, arguments);
-}
-
-function getUserData(_x41) {
-  return _getUserData.apply(this, arguments);
-}
-
-function _getUserData() {
-  _getUserData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee36(user_uid) {
-    var userData;
+function _getUserOnlineStatusKey() {
+  _getUserOnlineStatusKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee36(user) {
+    var userKey;
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee36$(_context36) {
       while (1) {
         switch (_context36.prev = _context36.next) {
           case 0:
-            userData = {};
+            userKey = null;
             _context36.next = 3;
-            return usersRef.orderByChild('uid').equalTo(user_uid).once('value', function (snapshot) {
-              userData = snapshot.val();
-            });
+            return usersVRef.orderByChild("uid").equalTo(user.uid).once('value', /*#__PURE__*/function () {
+              var _ref12 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee35(snapshot) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee35$(_context35) {
+                  while (1) {
+                    switch (_context35.prev = _context35.next) {
+                      case 0:
+                        _.filter(snapshot.val(), /*#__PURE__*/function () {
+                          var _ref13 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee34(value, key) {
+                            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee34$(_context34) {
+                              while (1) {
+                                switch (_context34.prev = _context34.next) {
+                                  case 0:
+                                    userKey = key;
+
+                                  case 1:
+                                  case "end":
+                                    return _context34.stop();
+                                }
+                              }
+                            }, _callee34);
+                          }));
+
+                          return function (_x64, _x65) {
+                            return _ref13.apply(this, arguments);
+                          };
+                        }());
+
+                      case 1:
+                      case "end":
+                        return _context35.stop();
+                    }
+                  }
+                }, _callee35);
+              }));
+
+              return function (_x63) {
+                return _ref12.apply(this, arguments);
+              };
+            }());
 
           case 3:
-            _context36.next = 5;
-            return userData[Object.keys(userData)[0]];
+            return _context36.abrupt("return", userKey);
 
-          case 5:
-            return _context36.abrupt("return", _context36.sent);
-
-          case 6:
+          case 4:
           case "end":
             return _context36.stop();
         }
       }
     }, _callee36);
   }));
-  return _getUserData.apply(this, arguments);
+  return _getUserOnlineStatusKey.apply(this, arguments);
 }
 
-function updateUserOnlineVisibility(_x42, _x43) {
-  return _updateUserOnlineVisibility.apply(this, arguments);
+function getUserOnlineStatus(_x44) {
+  return _getUserOnlineStatus.apply(this, arguments);
 }
 
-function _updateUserOnlineVisibility() {
-  _updateUserOnlineVisibility = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee38(user, appearance) {
+function _getUserOnlineStatus() {
+  _getUserOnlineStatus = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee38(user) {
+    var snapshotVal;
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee38$(_context38) {
       while (1) {
         switch (_context38.prev = _context38.next) {
           case 0:
-            _context38.next = 2;
+            if (!(!user || !user.uid)) {
+              _context38.next = 2;
+              break;
+            }
+
+            return _context38.abrupt("return", '');
+
+          case 2:
+            snapshotVal = {};
+            _context38.next = 5;
+            return userHasOnlineStatus(user);
+
+          case 5:
+            _context38.next = 7;
+            return usersVRef.orderByChild('uid').equalTo(user.uid).once('value', /*#__PURE__*/function () {
+              var _ref14 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee37(snapshot) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee37$(_context37) {
+                  while (1) {
+                    switch (_context37.prev = _context37.next) {
+                      case 0:
+                        snapshotVal = snapshot.val();
+
+                      case 1:
+                      case "end":
+                        return _context37.stop();
+                    }
+                  }
+                }, _callee37);
+              }));
+
+              return function (_x66) {
+                return _ref14.apply(this, arguments);
+              };
+            }());
+
+          case 7:
+            return _context38.abrupt("return", snapshotVal[Object.keys(snapshotVal)[0]].online_visibility);
+
+          case 8:
+          case "end":
+            return _context38.stop();
+        }
+      }
+    }, _callee38);
+  }));
+  return _getUserOnlineStatus.apply(this, arguments);
+}
+
+function getUserData(_x45) {
+  return _getUserData.apply(this, arguments);
+}
+
+function _getUserData() {
+  _getUserData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee39(user_uid) {
+    var userData;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee39$(_context39) {
+      while (1) {
+        switch (_context39.prev = _context39.next) {
+          case 0:
+            userData = {};
+            _context39.next = 3;
+            return usersRef.orderByChild('uid').equalTo(user_uid).once('value', function (snapshot) {
+              userData = snapshot.val();
+            });
+
+          case 3:
+            _context39.next = 5;
+            return userData[Object.keys(userData)[0]];
+
+          case 5:
+            return _context39.abrupt("return", _context39.sent);
+
+          case 6:
+          case "end":
+            return _context39.stop();
+        }
+      }
+    }, _callee39);
+  }));
+  return _getUserData.apply(this, arguments);
+}
+
+function updateUserOnlineVisibility(_x46, _x47) {
+  return _updateUserOnlineVisibility.apply(this, arguments);
+}
+
+function _updateUserOnlineVisibility() {
+  _updateUserOnlineVisibility = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee41(user, appearance) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee41$(_context41) {
+      while (1) {
+        switch (_context41.prev = _context41.next) {
+          case 0:
+            _context41.next = 2;
             return userHasOnlineStatus(user);
 
           case 2:
-            _context38.next = 4;
+            _context41.next = 4;
             return usersVRef.orderByChild("uid").equalTo(user.uid).once("value", function (snapshot) {
               _.filter(snapshot.val(), /*#__PURE__*/function () {
-                var _ref14 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee37(userValue, key) {
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee37$(_context37) {
+                var _ref15 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee40(userValue, key) {
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee40$(_context40) {
                     while (1) {
-                      switch (_context37.prev = _context37.next) {
+                      switch (_context40.prev = _context40.next) {
                         case 0:
-                          _context37.next = 2;
+                          _context40.next = 2;
                           return _database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref("onlineStatus/".concat(key)).set({
                             "uid": userValue.uid,
                             "online_visibility": appearance
@@ -5043,24 +5269,24 @@ function _updateUserOnlineVisibility() {
 
                         case 2:
                         case "end":
-                          return _context37.stop();
+                          return _context40.stop();
                       }
                     }
-                  }, _callee37);
+                  }, _callee40);
                 }));
 
-                return function (_x61, _x62) {
-                  return _ref14.apply(this, arguments);
+                return function (_x67, _x68) {
+                  return _ref15.apply(this, arguments);
                 };
               }());
             });
 
           case 4:
           case "end":
-            return _context38.stop();
+            return _context41.stop();
         }
       }
-    }, _callee38);
+    }, _callee41);
   }));
   return _updateUserOnlineVisibility.apply(this, arguments);
 }

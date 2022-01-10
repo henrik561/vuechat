@@ -17,7 +17,8 @@
 <script>
 import User from "./ContactSideBar/User";
 import Search from "./ContactSideBar/Search";
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
+import db from "../../server/database";
 
 export default {
     name: "ContactSideBar",
@@ -30,14 +31,22 @@ export default {
     },
 
     computed: {
-        ...mapGetters(['getAllUsers']),
+        ...mapGetters(['getAllUsers', 'getCurrentUser']),
 
         hasUsers() {
             return !_.isEmpty(this.getAllUsers);
         }
     },
 
+    async created() {
+        await db.database().ref('chats').orderByChild('chatter_id').equalTo(this.getCurrentUser.uid).on('value', async (snapshot) => {
+            this.setAllUsers(snapshot.val())
+        })
+    },
+
     methods: {
+        ...mapActions(['setAllUsers']),
+
         searchInUsers(keyword) {
             this.filterWord = keyword;
         },

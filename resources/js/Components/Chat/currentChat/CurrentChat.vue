@@ -63,6 +63,7 @@ export default {
     },
 
     async created() {
+        //TODO make for all eventlisteners a function
         db.database().ref('messages').on('value', snapshot => {
             this.messages = snapshot.val();
             this.scrollToBottom()
