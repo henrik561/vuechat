@@ -26,13 +26,14 @@ export default {
         ...mapActions(['setPendingRequests']),
     },
 
-    created() {
-        db.database().ref('friendRequests').orderByChild('receiver_id').equalTo(this.getCurrentUser.uid).on('value', async snapshot => {
+    async created() {
+        await db.database().ref('friendRequests').orderByChild('receiver_id').equalTo(this.getCurrentUser.uid).on('value', async snapshot => {
+            console.log(snapshot.val())
             if(snapshot.exists()) {
-                this.setPendingRequests(Object.keys(snapshot.val()).length)
-                this.friends = snapshot.val();
+                await this.setPendingRequests(Object.keys(snapshot.val()).length)
+                this.friends = await snapshot.val();
             }else {
-                this.friends = {};
+                this.friends = [];
                 this.setPendingRequests(0)
             }
         })

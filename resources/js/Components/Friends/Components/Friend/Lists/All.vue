@@ -23,10 +23,6 @@ export default {
     },
 
     async created() {
-        await db.database().ref('chats').on('value', snapshot => {
-            console.log(snapshot.val())
-        })
-
         await db.database().ref('chats').orderByChild('chatter_id').equalTo(this.getCurrentUser.uid).on('value', async snapshot => {
             this.friends = snapshot.val();
         })

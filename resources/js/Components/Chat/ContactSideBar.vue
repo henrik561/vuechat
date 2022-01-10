@@ -4,7 +4,7 @@
             <Search @searchInUsers="searchInUsers"></Search>
         </div>
         <perfect-scrollbar class="overflow-y-scroll w-full">
-            <template v-for="user in getAllUsers">
+            <template v-for="user in getAllUsers" :key="user.uid">
                 <User :user="user"></User>
             </template>
                 <div class="flex w-full min-h-full py-6 justify-center items-center" v-if="!hasUsers">
@@ -27,6 +27,7 @@ export default {
     data() {
         return {
             filterWord: '',
+            users: [],
         }
     },
 

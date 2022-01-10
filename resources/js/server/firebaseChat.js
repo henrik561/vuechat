@@ -2,6 +2,7 @@ import db from './database';
 import "firebase/compat/firestore";
 import { getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider } from "firebase/auth";
 import {ref} from "vue";
+import chat from "../Pages/Chat";
 
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
@@ -60,12 +61,10 @@ export async function addAsFriend(chatter_id, receiver_id) {
 }
 
 export async function removeFriend(chatter_id, receiver_id) {
-    await chatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', snapshot => {
+    await chatsRef.once('value', snapshot => {
         if(snapshot.exists()) {
             _.forEach(snapshot.val(), async (friend, key) => {
-                if(friend.receiver_id === receiver_id) {
-                    console.log('removeFriend')
-                    console.log(friend)
+                if((friend.receiver_id === receiver_id && friend.chatter_id === chatter_id) || (friend.receiver_id === chatter_id && friend.chatter_id === receiver_id)) {
                     await chatsRef.child(key).set(null)
                 }
             })
@@ -98,7 +97,6 @@ export async function getPendingRequests(chatter_id) {
 export async function getFriendRequestKey(chatter_id, receiver_id) {
     let response
     await friendRequestsRef.orderByChild('chatter_id').equalTo(receiver_id).once('value', snapshot => {
-        console.log(snapshot.val())
         _.forEach(snapshot.val(), (request, key) => {
             if(request.receiver_id === chatter_id) {
                 response = key

@@ -216,6 +216,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
+ //TODO its possible to register without password repeat
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Register",
@@ -371,7 +372,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   data: function data() {
     return {
-      filterWord: ''
+      filterWord: '',
+      users: []
     };
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)(['getAllUsers', 'getCurrentUser'])), {}, {
@@ -1404,12 +1406,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return _server_database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref('chats').on('value', function (snapshot) {
-                console.log(snapshot.val());
-              });
-
-            case 2:
-              _context2.next = 4;
               return _server_database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref('chats').orderByChild('chatter_id').equalTo(_this.getCurrentUser.uid).on('value', /*#__PURE__*/function () {
                 var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(snapshot) {
                   return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
@@ -1431,7 +1427,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 };
               }());
 
-            case 4:
+            case 2:
             case "end":
               return _context2.stop();
           }
@@ -1669,34 +1665,62 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   created: function created() {
     var _this = this;
 
-    _server_database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref('friendRequests').orderByChild('receiver_id').equalTo(this.getCurrentUser.uid).on('value', /*#__PURE__*/function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(snapshot) {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (snapshot.exists()) {
-                  _this.setPendingRequests(Object.keys(snapshot.val()).length);
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return _server_database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref('friendRequests').orderByChild('receiver_id').equalTo(_this.getCurrentUser.uid).on('value', /*#__PURE__*/function () {
+                var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(snapshot) {
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+                    while (1) {
+                      switch (_context.prev = _context.next) {
+                        case 0:
+                          console.log(snapshot.val());
 
-                  _this.friends = snapshot.val();
-                } else {
-                  _this.friends = {};
+                          if (!snapshot.exists()) {
+                            _context.next = 9;
+                            break;
+                          }
 
-                  _this.setPendingRequests(0);
-                }
+                          _context.next = 4;
+                          return _this.setPendingRequests(Object.keys(snapshot.val()).length);
 
-              case 1:
-              case "end":
-                return _context.stop();
-            }
+                        case 4:
+                          _context.next = 6;
+                          return snapshot.val();
+
+                        case 6:
+                          _this.friends = _context.sent;
+                          _context.next = 11;
+                          break;
+
+                        case 9:
+                          _this.friends = [];
+
+                          _this.setPendingRequests(0);
+
+                        case 11:
+                        case "end":
+                          return _context.stop();
+                      }
+                    }
+                  }, _callee);
+                }));
+
+                return function (_x) {
+                  return _ref.apply(this, arguments);
+                };
+              }());
+
+            case 2:
+            case "end":
+              return _context2.stop();
           }
-        }, _callee);
-      }));
-
-      return function (_x) {
-        return _ref.apply(this, arguments);
-      };
-    }());
+        }
+      }, _callee2);
+    }))();
   }
 });
 
@@ -2594,12 +2618,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.getAllUsers, function (user) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_User, {
+          key: user.uid,
           user: user
         }, null, 8
         /* PROPS */
         , ["user"]);
-      }), 256
-      /* UNKEYED_FRAGMENT */
+      }), 128
+      /* KEYED_FRAGMENT */
       )), !$options.hasUsers ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_3, _hoisted_5)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
     }),
     _: 1
@@ -3385,7 +3410,7 @@ var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 
 var _hoisted_13 = [_hoisted_12];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("               // TODO when toggled to a friends list type then to add friend list type still shows (all) + (add friend)"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return $options.typeClickHandler('online');
     }),
@@ -4092,6 +4117,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var firebase_compat_firestore__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! firebase/compat/firestore */ "./node_modules/firebase/compat/firestore/dist/index.esm.js");
 /* harmony import */ var firebase_auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! firebase/auth */ "./node_modules/firebase/auth/dist/index.esm.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _Pages_Chat__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Pages/Chat */ "./resources/js/Pages/Chat.vue");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -4109,6 +4135,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -4285,7 +4312,7 @@ function _removeFriend() {
         switch (_context7.prev = _context7.next) {
           case 0:
             _context7.next = 2;
-            return chatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', function (snapshot) {
+            return chatsRef.once('value', function (snapshot) {
               if (snapshot.exists()) {
                 _.forEach(snapshot.val(), /*#__PURE__*/function () {
                   var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6(friend, key) {
@@ -4293,17 +4320,15 @@ function _removeFriend() {
                       while (1) {
                         switch (_context6.prev = _context6.next) {
                           case 0:
-                            if (!(friend.receiver_id === receiver_id)) {
-                              _context6.next = 5;
+                            if (!(friend.receiver_id === receiver_id && friend.chatter_id === chatter_id || friend.receiver_id === chatter_id && friend.chatter_id === receiver_id)) {
+                              _context6.next = 3;
                               break;
                             }
 
-                            console.log('removeFriend');
-                            console.log(friend);
-                            _context6.next = 5;
+                            _context6.next = 3;
                             return chatsRef.child(key).set(null);
 
-                          case 5:
+                          case 3:
                           case "end":
                             return _context6.stop();
                         }
@@ -4406,8 +4431,6 @@ function _getFriendRequestKey() {
           case 0:
             _context10.next = 2;
             return friendRequestsRef.orderByChild('chatter_id').equalTo(receiver_id).once('value', function (snapshot) {
-              console.log(snapshot.val());
-
               _.forEach(snapshot.val(), function (request, key) {
                 if (request.receiver_id === chatter_id) {
                   response = key;

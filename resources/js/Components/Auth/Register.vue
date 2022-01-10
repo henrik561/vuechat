@@ -32,6 +32,8 @@
 import {mapActions} from 'vuex';
 import {createUser, logUserInGoogle} from "../../server/firebaseChat";
 
+//TODO its possible to register without password repeat
+
 export default {
     name: "Register",
 
