@@ -216,7 +216,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
- //TODO its possible to register without password repeat
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Register",
@@ -226,8 +225,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       password: '',
       password_repeat: '',
       loggedIn: false,
-      form_errors: false,
-      canRegister: false
+      canRegister: false,
+      form: {
+        errors: []
+      }
     };
   },
   computed: {
@@ -235,13 +236,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.password === this.password_repeat;
     },
     hasPassword: function hasPassword() {
-      return this.canRegister = this.password.length > 0;
+      return this.canRegister = this.password.length > 6;
     },
     hasEmail: function hasEmail() {
       return this.canRegister = this.email.length > 0;
     },
     canSubmit: function canSubmit() {
-      return this.hasEmail && this.hasPassword;
+      return this.hasEmail && this.hasPassword && this.password === this.password_repeat;
     },
     hasValidEmail: function hasValidEmail() {
       var regex = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
@@ -258,8 +259,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                if (!_this.canRegister) {
-                  _context.next = 6;
+                if (!(_this.canSubmit && _this.canRegister)) {
+                  _context.next = 8;
                   break;
                 }
 
@@ -269,10 +270,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               case 3:
                 response = _context.sent;
 
-                if (!response.user) {
-                  _this.form.loginFailed = true;
+                if (response.user) {
+                  _context.next = 7;
+                  break;
                 }
 
+                _this.form.loginFailed = true;
+                return _context.abrupt("return");
+
+              case 7:
                 _this.setCurrentUser({
                   "username": response.user.displayName,
                   "email": response.user.email,
@@ -281,7 +287,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   "uid": response.user.uid
                 });
 
-              case 6:
+              case 8:
               case "end":
                 return _context.stop();
             }
@@ -307,12 +313,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               case 2:
                 response = _context2.sent;
 
-                if (response.user) {
+                if (!(!response.user || response.error.code === 400)) {
                   _context2.next = 6;
                   break;
                 }
 
-                _this2.form_errors = true;
+                _this2.form.errors = 'Er is iets fout gegaan';
                 return _context2.abrupt("return");
 
               case 6:
@@ -515,29 +521,62 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   }),
   created: function created() {
-    var _this = this;
-
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.next = 2;
-              return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserData)(_this.user.receiver_id);
-
-            case 2:
-              _this.userData = _context.sent;
-
-            case 3:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }))();
+    this.getUserData();
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)(['setNewChat', 'setNewChatKey'])), {}, {
     startNewChat: function startNewChat() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (!(_this.getNewChatUser && _this.getNewChatUser.uid === _this.user.receiver_id)) {
+                  _context.next = 2;
+                  break;
+                }
+
+                return _context.abrupt("return");
+
+              case 2:
+                _context.t0 = _this;
+                _context.t1 = _objectSpread;
+                _context.t2 = _objectSpread({}, _this.userData);
+                _context.t3 = {};
+                _context.next = 8;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserOnlineStatus)(_this.userData);
+
+              case 8:
+                _context.t4 = _context.sent;
+                _context.t5 = {
+                  'online_visibility': _context.t4
+                };
+                _context.t6 = (0, _context.t1)(_context.t2, _context.t3, _context.t5);
+                _context.next = 13;
+                return _context.t0.setNewChat.call(_context.t0, _context.t6);
+
+              case 13:
+                _context.next = 15;
+                return _this.setNewChatKey(_this.user.chatKey);
+
+              case 15:
+                _context.next = 17;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.createNewChat)(_this.getCurrentUser.uid, _this.userData.uid, _this.user.chatKey);
+
+              case 17:
+                _context.next = 19;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.markMessagesAsRead)(_this.userData.uid, _this.user.chatKey, _this.getCurrentUser.uid);
+
+              case 19:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    getUserData: function getUserData() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -545,43 +584,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                if (!(_this2.getNewChatUser && _this2.getNewChatUser.uid === _this2.user.receiver_id)) {
-                  _context2.next = 2;
-                  break;
-                }
-
-                return _context2.abrupt("return");
+                _context2.next = 2;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserData)(_this2.user.receiver_id);
 
               case 2:
-                _context2.t0 = _this2;
-                _context2.t1 = _objectSpread;
-                _context2.t2 = _objectSpread({}, _this2.userData);
-                _context2.t3 = {};
-                _context2.next = 8;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserOnlineStatus)(_this2.userData);
+                _this2.userData = _context2.sent;
 
-              case 8:
-                _context2.t4 = _context2.sent;
-                _context2.t5 = {
-                  'online_visibility': _context2.t4
-                };
-                _context2.t6 = (0, _context2.t1)(_context2.t2, _context2.t3, _context2.t5);
-                _context2.next = 13;
-                return _context2.t0.setNewChat.call(_context2.t0, _context2.t6);
-
-              case 13:
-                _context2.next = 15;
-                return _this2.setNewChatKey(_this2.user.chatKey);
-
-              case 15:
-                _context2.next = 17;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.createNewChat)(_this2.getCurrentUser.uid, _this2.userData.uid, _this2.user.chatKey);
-
-              case 17:
-                _context2.next = 19;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.markMessagesAsRead)(_this2.userData.uid, _this2.user.chatKey, _this2.getCurrentUser.uid);
-
-              case 19:
+              case 3:
               case "end":
                 return _context2.stop();
             }
@@ -589,7 +598,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }, _callee2);
       }))();
     }
-  })
+  }),
+  watch: {
+    user: function user(_user) {
+      this.getUserData();
+    }
+  }
 });
 
 /***/ }),
@@ -973,6 +987,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
+ //TODO remove send request to self: henrikh2004@gmail.com -> henrikh2004@gmail.com
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "AddFriends",
@@ -1136,26 +1151,55 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   }),
   created: function created() {
-    var _this = this;
-
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.next = 2;
-              return _this.getFriendsData();
-
-            case 2:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }))();
+    this.getFriendsData();
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)(['setNewChat', 'setNewChatKey', 'setFriendPopupUser'])), {}, {
     getFriendsData: function getFriendsData() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (!(_this.getFriendsListType === 'pending')) {
+                  _context.next = 6;
+                  break;
+                }
+
+                _context.next = 3;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserData)(_this.friend.chatter_id);
+
+              case 3:
+                _this.friendData = _context.sent;
+                _context.next = 9;
+                break;
+
+              case 6:
+                _context.next = 8;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserData)(_this.friend.receiver_id);
+
+              case 8:
+                _this.friendData = _context.sent;
+
+              case 9:
+                _context.next = 11;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserOnlineStatus)({
+                  uid: _this.friendData.uid
+                });
+
+              case 11:
+                _this.friendData['online_visibility'] = _context.sent;
+
+              case 12:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    acceptFriendRequest: function acceptFriendRequest() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -1163,36 +1207,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                if (!(_this2.getFriendsListType === 'pending')) {
-                  _context2.next = 6;
-                  break;
-                }
+                _context2.next = 2;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.addNewChat)(_this2.getCurrentUser.uid, _this2.friendData.uid);
 
-                _context2.next = 3;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserData)(_this2.friend.chatter_id);
-
-              case 3:
-                _this2.friendData = _context2.sent;
-                _context2.next = 9;
-                break;
-
-              case 6:
-                _context2.next = 8;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserData)(_this2.friend.receiver_id);
-
-              case 8:
-                _this2.friendData = _context2.sent;
-
-              case 9:
-                _context2.next = 11;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserOnlineStatus)({
-                  uid: _this2.friendData.uid
-                });
-
-              case 11:
-                _this2.friendData['online_visibility'] = _context2.sent;
-
-              case 12:
+              case 2:
               case "end":
                 return _context2.stop();
             }
@@ -1200,7 +1218,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }, _callee2);
       }))();
     },
-    acceptFriendRequest: function acceptFriendRequest() {
+    rejectFriendRequest: function rejectFriendRequest() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
@@ -1209,7 +1227,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.addNewChat)(_this3.getCurrentUser.uid, _this3.friendData.uid);
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.rejectFriendRequest)(_this3.getCurrentUser.uid, _this3.friendData.uid);
 
               case 2:
               case "end":
@@ -1219,18 +1237,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }, _callee3);
       }))();
     },
-    rejectFriendRequest: function rejectFriendRequest() {
+    setNewChatUser: function setNewChatUser() {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        var chatKey;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
                 _context4.next = 2;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.rejectFriendRequest)(_this4.getCurrentUser.uid, _this4.friendData.uid);
+                return _this4.setNewChat(_this4.friendData);
 
               case 2:
+                _context4.next = 4;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getChatKey)(_this4.getCurrentUser.uid, _this4.friendData.uid);
+
+              case 4:
+                chatKey = _context4.sent;
+                _context4.next = 7;
+                return _this4.setNewChatKey(chatKey);
+
+              case 7:
+                _context4.next = 9;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.markMessagesAsRead)(_this4.friendData.uid, chatKey, _this4.getCurrentUser.uid);
+
+              case 9:
+                _context4.next = 11;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.createNewChat)(_this4.getCurrentUser.uid, _this4.friendData.uid, chatKey);
+
+              case 11:
               case "end":
                 return _context4.stop();
             }
@@ -1238,49 +1274,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }, _callee4);
       }))();
     },
-    setNewChatUser: function setNewChatUser() {
+    closePopup: function closePopup() {
+      this.setFriendPopupUser(null);
+    },
+    toggleOptionsPopup: function toggleOptionsPopup() {
+      if (this.usersPopupIsOpen) {
+        this.closePopup();
+      } else {
+        this.setFriendPopupUser(this.friendData.uid);
+      }
+    },
+    removeFriend: function removeFriend() {
       var _this5 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
-        var chatKey;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                _context5.t0 = _this5;
-                _context5.t1 = _objectSpread;
-                _context5.t2 = _objectSpread({}, _this5.friendData);
-                _context5.t3 = {};
-                _context5.next = 6;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserOnlineStatus)(_this5.friendData);
+                _context5.next = 2;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.removeFriend)(_this5.getCurrentUser.uid, _this5.friendData.uid);
 
-              case 6:
-                _context5.t4 = _context5.sent;
-                _context5.t5 = {
-                  'online_visibility': _context5.t4
-                };
-                _context5.t6 = (0, _context5.t1)(_context5.t2, _context5.t3, _context5.t5);
-                _context5.next = 11;
-                return _context5.t0.setNewChat.call(_context5.t0, _context5.t6);
+              case 2:
+                _this5.closePopup();
 
-              case 11:
-                _context5.next = 13;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getChatKey)(_this5.getCurrentUser.uid, _this5.friendData.uid);
-
-              case 13:
-                chatKey = _context5.sent;
-                _context5.next = 16;
-                return _this5.setNewChatKey(chatKey);
-
-              case 16:
-                _context5.next = 18;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.markMessagesAsRead)(_this5.friendData.uid, chatKey, _this5.getCurrentUser.uid);
-
-              case 18:
-                _context5.next = 20;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.createNewChat)(_this5.getCurrentUser.uid, _this5.friendData.uid, chatKey);
-
-              case 20:
+              case 3:
               case "end":
                 return _context5.stop();
             }
@@ -1288,17 +1306,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }, _callee5);
       }))();
     },
-    toggleOptionsPopup: function toggleOptionsPopup() {
-      if (this.usersPopupIsOpen) {
-        this.setFriendPopupUser(null);
-      } else {
-        this.setFriendPopupUser(this.friendData.uid);
-      }
-    },
-    closePopup: function closePopup() {
-      this.setFriendPopupUser(null);
-    },
-    removeFriend: function removeFriend() {
+    blockFriend: function blockFriend() {
       var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
@@ -1307,50 +1315,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             switch (_context6.prev = _context6.next) {
               case 0:
                 _context6.next = 2;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.removeFriend)(_this6.getCurrentUser.uid, _this6.friendData.uid);
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.blockFriend)(_this6.getCurrentUser.uid, _this6.getFriendPopupUser);
 
               case 2:
-                _context6.next = 4;
-                return _this6.getFriendsData();
-
-              case 4:
                 _this6.closePopup();
 
-              case 5:
+              case 3:
               case "end":
                 return _context6.stop();
             }
           }
         }, _callee6);
       }))();
-    },
-    blockFriend: function blockFriend() {
-      var _this7 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
-          while (1) {
-            switch (_context7.prev = _context7.next) {
-              case 0:
-                _context7.next = 2;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.blockFriend)(_this7.getCurrentUser.uid, _this7.getFriendPopupUser);
-
-              case 2:
-                _context7.next = 4;
-                return _this7.getFriendsData();
-
-              case 4:
-                _this7.closePopup();
-
-              case 5:
-              case "end":
-                return _context7.stop();
-            }
-          }
-        }, _callee7);
-      }))();
     }
-  })
+  }),
+  watch: {
+    friend: {
+      handler: function handler(user) {
+        this.getFriendsData();
+      }
+    }
+  }
 });
 
 /***/ }),
@@ -1632,9 +1617,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _server_database__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../server/database */ "./resources/js/server/database.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
-/* harmony import */ var _Friend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Friend */ "./resources/js/Components/Friends/Components/Friend/Friend.vue");
+/* harmony import */ var _server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../server/firebaseChat */ "./resources/js/server/firebaseChat.js");
+/* harmony import */ var _server_database__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../server/database */ "./resources/js/server/database.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
+/* harmony import */ var _Friend__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Friend */ "./resources/js/Components/Friends/Components/Friend/Friend.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -1650,18 +1636,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Pending",
   components: {
-    Friend: _Friend__WEBPACK_IMPORTED_MODULE_2__["default"]
+    Friend: _Friend__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   data: function data() {
     return {
       friends: []
     };
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)(['getCurrentUser'])),
-  methods: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)(['setPendingRequests'])),
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)(['getCurrentUser'])),
+  methods: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)(['setPendingRequests'])),
   created: function created() {
     var _this = this;
 
@@ -1671,37 +1658,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return _server_database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref('friendRequests').orderByChild('receiver_id').equalTo(_this.getCurrentUser.uid).on('value', /*#__PURE__*/function () {
+              return _server_database__WEBPACK_IMPORTED_MODULE_2__["default"].database().ref('friendRequests').orderByChild('receiver_id').equalTo(_this.getCurrentUser.uid).on('value', /*#__PURE__*/function () {
                 var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(snapshot) {
                   return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
                     while (1) {
                       switch (_context.prev = _context.next) {
                         case 0:
-                          console.log(snapshot.val());
-
                           if (!snapshot.exists()) {
-                            _context.next = 9;
+                            _context.next = 6;
                             break;
                           }
 
-                          _context.next = 4;
+                          _context.next = 3;
                           return _this.setPendingRequests(Object.keys(snapshot.val()).length);
 
-                        case 4:
-                          _context.next = 6;
-                          return snapshot.val();
-
-                        case 6:
-                          _this.friends = _context.sent;
-                          _context.next = 11;
+                        case 3:
+                          _this.friends = snapshot.val();
+                          _context.next = 8;
                           break;
 
-                        case 9:
+                        case 6:
                           _this.friends = [];
 
                           _this.setPendingRequests(0);
 
-                        case 11:
+                        case 8:
                         case "end":
                           return _context.stop();
                       }
@@ -2441,7 +2422,12 @@ var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 /* HOISTED */
 );
 
-var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
+var _hoisted_3 = {
+  key: 0,
+  "class": "bg-red-500 flex items-center py-2 px-3 flex-col gap-1 rounded-2xl mb-4"
+};
+
+var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
   xmlns: "http://www.w3.org/2000/svg",
   "class": "h-5 w-5 text-gray-400",
   fill: "none",
@@ -2452,19 +2438,6 @@ var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
   "stroke-linejoin": "round",
   "stroke-width": "2",
   d: "M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
-})], -1
-/* HOISTED */
-);
-
-var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
-  xmlns: "http://www.w3.org/2000/svg",
-  "class": "h-5 w-5 text-gray-400",
-  viewBox: "0 0 20 20",
-  fill: "currentColor"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
-  "fill-rule": "evenodd",
-  d: "M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z",
-  "clip-rule": "evenodd"
 })], -1
 /* HOISTED */
 );
@@ -2482,11 +2455,24 @@ var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 /* HOISTED */
 );
 
-var _hoisted_6 = {
+var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
+  xmlns: "http://www.w3.org/2000/svg",
+  "class": "h-5 w-5 text-gray-400",
+  viewBox: "0 0 20 20",
+  fill: "currentColor"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
+  "fill-rule": "evenodd",
+  d: "M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z",
+  "clip-rule": "evenodd"
+})], -1
+/* HOISTED */
+);
+
+var _hoisted_7 = {
   "class": "mt-2"
 };
 
-var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Already have an account? ");
+var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Already have an account? ");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
@@ -2495,9 +2481,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $options.registerUser && $options.registerUser.apply($options, arguments);
     }, ["prevent"])),
     method: "POST"
-  }, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  }, [_hoisted_2, $data.form.errors.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_3, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.form.errors, function (error) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("- " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(error), 1
+    /* TEXT */
+    )], 64
+    /* STABLE_FRAGMENT */
+    );
+  }), 256
+  /* UNKEYED_FRAGMENT */
+  ))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$options.hasEmail ? $options.hasValidEmail ? 'border-green-500' : 'border-red-500' : '', "flex items-center border-2 py-2 px-3 rounded-2xl mb-4"])
-  }, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }, [_hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
       return $data.email = $event;
     }),
@@ -2512,7 +2506,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* CLASS */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$options.hasPassword ? $options.passwordsDoMatch ? 'border-green-500' : 'border-red-500' : '', "flex items-center border-2 py-2 px-3 rounded-2xl mb-4"])
-  }, [_hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }, [_hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
       return $data.password = $event;
     }),
@@ -2527,7 +2521,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* CLASS */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$options.hasPassword ? $options.passwordsDoMatch ? 'border-green-500' : 'border-red-500' : '', "flex items-center border-2 py-2 px-3 rounded-2xl"])
-  }, [_hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }, [_hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
       return $data.password_repeat = $event;
     }),
@@ -2540,7 +2534,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* NEED_PATCH */
   ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.password_repeat]])], 2
   /* CLASS */
-  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_6, [_hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_7, [_hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
     onClick: _cache[3] || (_cache[3] = function () {
       return $options.changeAuthType && $options.changeAuthType.apply($options, arguments);
     }),
@@ -3338,7 +3332,9 @@ __webpack_require__.r(__webpack_exports__);
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Friend = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Friend");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.friends, function (friend) {
+  return $data.friends ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    key: 0
+  }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.friends, function (friend) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Friend, {
       key: friend.uid,
       friend: friend
@@ -3347,7 +3343,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     , ["friend"]);
   }), 128
   /* KEYED_FRAGMENT */
-  );
+  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true);
 }
 
 /***/ }),
@@ -3898,7 +3894,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__.createStore({
       },
       friends: {
         addFriends: false,
-        listType: 'online',
+        listType: 'pending',
         pendingRequests: 0,
         popup: {
           user_uid: null

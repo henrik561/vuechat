@@ -83,8 +83,8 @@ export default {
         },
     },
 
-    async created() {
-        await this.getFriendsData()
+    created() {
+        this.getFriendsData()
     },
 
     methods: {
@@ -108,38 +108,41 @@ export default {
         },
 
         async setNewChatUser(){
-            await this.setNewChat({
-                ...this.friendData,
-                'online_visibility' : await getUserOnlineStatus(this.friendData)
-            });
+            await this.setNewChat(this.friendData);
             let chatKey = await getChatKey(this.getCurrentUser.uid, this.friendData.uid)
             await this.setNewChatKey(chatKey)
             await markMessagesAsRead(this.friendData.uid, chatKey, this.getCurrentUser.uid);
             await createNewChat(this.getCurrentUser.uid, this.friendData.uid, chatKey);
         },
 
+        closePopup() {
+            this.setFriendPopupUser(null)
+        },
+
         toggleOptionsPopup() {
             if(this.usersPopupIsOpen) {
-                this.setFriendPopupUser(null);
+                this.closePopup()
             }else {
                 this.setFriendPopupUser(this.friendData.uid);
             }
         },
 
-        closePopup() {
-            this.setFriendPopupUser(null)
-        },
-
         async removeFriend() {
             await removeFriend(this.getCurrentUser.uid, this.friendData.uid)
-            await this.getFriendsData();
             this.closePopup()
         },
 
         async blockFriend() {
             await blockFriend(this.getCurrentUser.uid, this.getFriendPopupUser)
-            await this.getFriendsData()
             this.closePopup()
+        }
+    },
+
+    watch: {
+        friend: {
+            handler: function (user) {
+                this.getFriendsData();
+            }
         }
     }
 }

@@ -2,6 +2,9 @@
     <div class="flex w-1/2 justify-center items-center bg-white">
         <form class="bg-white" @submit.prevent="registerUser" method="POST">
             <h1 class="text-gray-800 font-bold text-2xl mb-1">Welcome to vueChat</h1>
+            <div v-if="form.errors.length" class="bg-red-500 flex items-center py-2 px-3 flex-col gap-1 rounded-2xl mb-4">
+                <template v-for="error in form.errors">- {{ error }}</template>
+            </div>
             <div :class="hasEmail ? hasValidEmail ? 'border-green-500' : 'border-red-500' : ''"  class="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
@@ -32,8 +35,6 @@
 import {mapActions} from 'vuex';
 import {createUser, logUserInGoogle} from "../../server/firebaseChat";
 
-//TODO its possible to register without password repeat
-
 export default {
     name: "Register",
 
@@ -43,8 +44,11 @@ export default {
             password: '',
             password_repeat: '',
             loggedIn: false,
-            form_errors: false,
             canRegister: false,
+            form: {
+                errors: [
+                ]
+            },
         }
     },
 
@@ -54,7 +58,7 @@ export default {
         },
 
         hasPassword() {
-            return this.canRegister = this.password.length > 0;
+            return this.canRegister = this.password.length > 6;
         },
 
         hasEmail() {
@@ -62,7 +66,7 @@ export default {
         },
 
         canSubmit() {
-            return this.hasEmail && this.hasPassword;
+            return this.hasEmail && this.hasPassword && this.password === this.password_repeat;
         },
 
         hasValidEmail() {
@@ -76,11 +80,11 @@ export default {
         ...mapActions(['setCurrentUser', 'setAuthType', 'setCurrentUser']),
 
         async registerUser() {
-            if(this.canRegister) {
+            if(this.canSubmit && this.canRegister) {
                 const response = await createUser(this.email, this.password);
-
                 if(!response.user) {
                     this.form.loginFailed = true
+                    return;
                 }
 
                 this.setCurrentUser({
@@ -99,9 +103,10 @@ export default {
 
         async loginWithGoogleProvider() {
             const response = await logUserInGoogle();
-
-            if(!response.user) {
-                this.form_errors = true;
+            //TODO catch form errors
+            // give response of not true & take form error
+            if(!response.user || response.error.code === 400) {
+                this.form.errors = 'Er is iets fout gegaan'
                 return;
             }
 

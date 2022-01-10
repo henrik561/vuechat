@@ -14,7 +14,7 @@ const store = new createStore({
             },
             friends: {
                 addFriends: false,
-                listType: 'online',
+                listType: 'pending',
                 pendingRequests: 0,
                 popup: {
                     user_uid: null,

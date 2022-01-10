@@ -45,8 +45,8 @@ export default {
         },
     },
 
-    async created() {
-        this.userData = await getUserData(this.user.receiver_id)
+    created() {
+        this.getUserData()
     },
 
     methods: {
@@ -64,6 +64,15 @@ export default {
             await markMessagesAsRead(this.userData.uid, this.user.chatKey, this.getCurrentUser.uid);
         },
 
+        async getUserData() {
+            this.userData = await getUserData(this.user.receiver_id)
+        }
+    },
+
+    watch: {
+        user: function(user) {
+            this.getUserData()
+        }
     }
 }
 </script>

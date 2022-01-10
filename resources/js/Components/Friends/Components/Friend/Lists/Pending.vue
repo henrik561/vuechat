@@ -1,10 +1,11 @@
 <template>
-    <template v-for="friend in friends" :key="friend.uid">
+    <template v-if="friends" v-for="friend in friends" :key="friend.uid">
         <Friend :friend="friend"></Friend>
     </template>
 </template>
 
 <script>
+import {getUserData, getUserOnlineStatus} from "../../../../../server/firebaseChat";
 import db from "../../../../../server/database";
 import {mapActions, mapGetters} from "vuex";
 import Friend from "../Friend";
@@ -28,12 +29,11 @@ export default {
 
     async created() {
         await db.database().ref('friendRequests').orderByChild('receiver_id').equalTo(this.getCurrentUser.uid).on('value', async snapshot => {
-            console.log(snapshot.val())
             if(snapshot.exists()) {
                 await this.setPendingRequests(Object.keys(snapshot.val()).length)
-                this.friends = await snapshot.val();
+                this.friends = snapshot.val()
             }else {
-                this.friends = [];
+                this.friends = []
                 this.setPendingRequests(0)
             }
         })
