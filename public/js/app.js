@@ -2862,7 +2862,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "object-cover h-12 border border-gray-300 w-12 rounded-full",
         width: "100",
         height: "100",
-        src: $data.userData.profilePicture ? $data.userData.profilePicture : '/Uploads/Profiles/profile.jpeg',
+        src: $data.userData.profilePicture && !$props.user.has_been_blocked ? $data.userData.profilePicture : '/Uploads/Profiles/profile.jpeg',
         alt: "user profile picture"
       }, null, 8
       /* PROPS */
