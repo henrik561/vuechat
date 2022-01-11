@@ -31,14 +31,25 @@ export default {
                     db.database().ref('users').orderByChild('uid').equalTo(user.receiver_id).on('value',  snapshot => {
                         if(snapshot.exists()) {
                             let userData = first(snapshot.val());
-                            if (!_.isEmpty(this.friends)) {
-                                _.forEach(this.friends, async (friend, key) => {
-                                    if (friend.receiver_id === user.receiver_id) {
-                                        this.friends = _.filter(this.friends, friend => friend.receiver_id !== user.receiver_id)
-                                    }
-                                })
+                            if(!user.blocked) {
+                                if(!_.isEmpty(this.friends)) {
+                                    return _.forEach(this.friends, async (friend, key) => {
+                                        if(friend.receiver_id === user.receiver_id) {
+                                            this.friends = _.filter(this.friends, friend => friend.receiver_id !== user.receiver_id)
+                                        }
+                                        this.friends.push({...user, 'online_visibility': userData.online_visibility})
+                                    })
+                                }
+                                this.friends.push({...user, 'online_visibility': userData.online_visibility})
+                            }else {
+                                if(!_.isEmpty(this.friends)) {
+                                    _.forEach(this.friends, async (friend, key) => {
+                                        this.friends = _.filter(this.friends, friend => {
+                                            return friend.receiver_id !== user.receiver_id
+                                        })
+                                    })
+                                }
                             }
-                            this.friends.push({...user, 'online_visibility': userData.online_visibility})
                         }
                         resolve()
                     })

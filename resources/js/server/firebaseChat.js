@@ -95,6 +95,15 @@ export async function setFriendBlockStatus(chatter_id, receiver_id, blocked) {
             })
         }
     })
+    await chatsRef.orderByChild('chatter_id').equalTo(receiver_id).once('value', snapshot => {
+        if(snapshot.exists()) {
+            _.forEach(snapshot.val(), (chat, key) => {
+                if(chat.receiver_id === chatter_id) {
+                    chatsRef.child(key).update({has_been_blocked: blocked})
+                }
+            })
+        }
+    })
 }
 
 export async function blockFriend(chatter_id, receiver_id) {
@@ -139,6 +148,7 @@ export async function addNewChat(chatter_id, receiver_id) {
         chatter_id,
         receiver_id,
         blocked: false,
+        has_been_blocked: false,
         newMessages: 0,
     })
     await chatsRef.child(newChat.key).update({ 'chatKey' : newChat.key })

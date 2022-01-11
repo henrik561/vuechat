@@ -1371,60 +1371,91 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   created: function created() {
     var _this = this;
 
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
         while (1) {
-          switch (_context4.prev = _context4.next) {
+          switch (_context5.prev = _context5.next) {
             case 0:
               _server_database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref('chats').orderByChild('chatter_id').equalTo(_this.getCurrentUser.uid).on('value', /*#__PURE__*/function () {
-                var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(snapshot) {
+                var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(snapshot) {
                   var requests;
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
                     while (1) {
-                      switch (_context3.prev = _context3.next) {
+                      switch (_context4.prev = _context4.next) {
                         case 0:
                           _this.friends = [];
                           requests = _.map(snapshot.val(), function (user) {
                             return new Promise( /*#__PURE__*/function () {
-                              var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(resolve) {
-                                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+                              var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(resolve) {
+                                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
                                   while (1) {
-                                    switch (_context2.prev = _context2.next) {
+                                    switch (_context3.prev = _context3.next) {
                                       case 0:
                                         _server_database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref('users').orderByChild('uid').equalTo(user.receiver_id).on('value', function (snapshot) {
                                           if (snapshot.exists()) {
                                             var userData = (0,_Functions_Helpers__WEBPACK_IMPORTED_MODULE_3__["default"])(snapshot.val());
 
-                                            if (!_.isEmpty(_this.friends)) {
-                                              _.forEach(_this.friends, /*#__PURE__*/function () {
-                                                var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(friend, key) {
-                                                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-                                                    while (1) {
-                                                      switch (_context.prev = _context.next) {
-                                                        case 0:
-                                                          if (friend.receiver_id === user.receiver_id) {
+                                            if (!user.blocked) {
+                                              if (!_.isEmpty(_this.friends)) {
+                                                return _.forEach(_this.friends, /*#__PURE__*/function () {
+                                                  var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(friend, key) {
+                                                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+                                                      while (1) {
+                                                        switch (_context.prev = _context.next) {
+                                                          case 0:
+                                                            if (friend.receiver_id === user.receiver_id) {
+                                                              _this.friends = _.filter(_this.friends, function (friend) {
+                                                                return friend.receiver_id !== user.receiver_id;
+                                                              });
+                                                            }
+
+                                                            _this.friends.push(_objectSpread(_objectSpread({}, user), {}, {
+                                                              'online_visibility': userData.online_visibility
+                                                            }));
+
+                                                          case 2:
+                                                          case "end":
+                                                            return _context.stop();
+                                                        }
+                                                      }
+                                                    }, _callee);
+                                                  }));
+
+                                                  return function (_x3, _x4) {
+                                                    return _ref3.apply(this, arguments);
+                                                  };
+                                                }());
+                                              }
+
+                                              _this.friends.push(_objectSpread(_objectSpread({}, user), {}, {
+                                                'online_visibility': userData.online_visibility
+                                              }));
+                                            } else {
+                                              if (!_.isEmpty(_this.friends)) {
+                                                _.forEach(_this.friends, /*#__PURE__*/function () {
+                                                  var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(friend, key) {
+                                                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+                                                      while (1) {
+                                                        switch (_context2.prev = _context2.next) {
+                                                          case 0:
                                                             _this.friends = _.filter(_this.friends, function (friend) {
                                                               return friend.receiver_id !== user.receiver_id;
                                                             });
-                                                          }
 
-                                                        case 1:
-                                                        case "end":
-                                                          return _context.stop();
+                                                          case 1:
+                                                          case "end":
+                                                            return _context2.stop();
+                                                        }
                                                       }
-                                                    }
-                                                  }, _callee);
-                                                }));
+                                                    }, _callee2);
+                                                  }));
 
-                                                return function (_x3, _x4) {
-                                                  return _ref3.apply(this, arguments);
-                                                };
-                                              }());
+                                                  return function (_x5, _x6) {
+                                                    return _ref4.apply(this, arguments);
+                                                  };
+                                                }());
+                                              }
                                             }
-
-                                            _this.friends.push(_objectSpread(_objectSpread({}, user), {}, {
-                                              'online_visibility': userData.online_visibility
-                                            }));
                                           }
 
                                           resolve();
@@ -1432,10 +1463,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
                                       case 1:
                                       case "end":
-                                        return _context2.stop();
+                                        return _context3.stop();
                                     }
                                   }
-                                }, _callee2);
+                                }, _callee3);
                               }));
 
                               return function (_x2) {
@@ -1443,15 +1474,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                               };
                             }());
                           });
-                          _context3.next = 4;
+                          _context4.next = 4;
                           return Promise.all(requests);
 
                         case 4:
                         case "end":
-                          return _context3.stop();
+                          return _context4.stop();
                       }
                     }
-                  }, _callee3);
+                  }, _callee4);
                 }));
 
                 return function (_x) {
@@ -1461,10 +1492,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
             case 1:
             case "end":
-              return _context4.stop();
+              return _context5.stop();
           }
         }
-      }, _callee4);
+      }, _callee5);
     }))();
   }
 });
@@ -4593,6 +4624,20 @@ function _setFriendBlockStatus() {
             });
 
           case 2:
+            _context9.next = 4;
+            return chatsRef.orderByChild('chatter_id').equalTo(receiver_id).once('value', function (snapshot) {
+              if (snapshot.exists()) {
+                _.forEach(snapshot.val(), function (chat, key) {
+                  if (chat.receiver_id === chatter_id) {
+                    chatsRef.child(key).update({
+                      has_been_blocked: blocked
+                    });
+                  }
+                });
+              }
+            });
+
+          case 4:
           case "end":
             return _context9.stop();
         }
@@ -4766,6 +4811,7 @@ function _addNewChat() {
               chatter_id: chatter_id,
               receiver_id: receiver_id,
               blocked: false,
+              has_been_blocked: false,
               newMessages: 0
             });
             _context15.next = 8;
