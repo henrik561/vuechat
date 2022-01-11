@@ -116,7 +116,7 @@ export async function userIsBlocked(chatter_id, receiver_id) {
     await chatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', snapshot => {
         if(snapshot.exists()) {
             _.forEach(snapshot.val(), (chat, key) => {
-                if(chat.receiver_id === receiver_id) {
+                if(chat.receiver_id === receiver_id && chat.has_been_blocked) {
                     response = true;
                 }
             })

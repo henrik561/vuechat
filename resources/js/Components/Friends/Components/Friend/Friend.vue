@@ -2,11 +2,11 @@
     <div class="w-full px-4 h-16 flex mb-4 justify-between items-center relative border-t borer-white">
         <div class="flex gap-2">
             <div class="relative">
-                <img class="object-cover h-12 border border-gray-300 w-12 rounded-full" width="100" height="100" :src="friendData.profilePicture ? friendData.profilePicture : '/Uploads/Profiles/profile.jpeg'" alt="user profile picture">
+                <img class="object-cover h-12 border border-gray-300 w-12 rounded-full" width="100" height="100" :src="friendData.profilePicture && !friend.has_been_blocked ? friendData.profilePicture : '/Uploads/Profiles/profile.jpeg'" alt="user profile picture">
             </div>
-            <div class="flex flex-col text-white">
+            <div class="flex flex-col justify-center text-white">
                 <span>{{ friendData.email }}</span>
-                <span>{{ formatUserOnlineVisibility }}</span>
+                <span v-if="!friend.has_been_blocked">{{ formatUserOnlineVisibility }}</span>
             </div>
         </div>
         <div v-if="getFriendsListType !== 'pending' && getFriendsListType !== 'blocked'" class="flex gap-2">
