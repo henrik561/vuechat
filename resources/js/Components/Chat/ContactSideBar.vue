@@ -19,6 +19,8 @@ import User from "./ContactSideBar/User";
 import Search from "./ContactSideBar/Search";
 import {mapActions, mapGetters} from "vuex";
 import db from "../../server/database";
+import first from "../../Functions/Helpers";
+import Database from "../../server/database";
 
 export default {
     name: "ContactSideBar",
@@ -36,12 +38,13 @@ export default {
 
         hasUsers() {
             return !_.isEmpty(this.getAllUsers);
-        }
+        },
+
     },
 
     async created() {
         await db.database().ref('chats').orderByChild('chatter_id').equalTo(this.getCurrentUser.uid).on('value', async (snapshot) => {
-            this.setAllUsers(snapshot.val())
+            this.setAllUsers(_.filter(snapshot.val(), user => !user.blocked))
         })
     },
 
@@ -52,6 +55,13 @@ export default {
             this.filterWord = keyword;
         },
     },
+
+    watch: {
+        friends: {
+            handler: function (friends) {
+            }
+        }
+    }
 
 
 }

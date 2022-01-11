@@ -7,9 +7,9 @@
 <script>
 
 import db from "../../../../../server/database";
-import {getUserOnlineStatus} from "../../../../../server/firebaseChat";
 import {mapGetters} from "vuex";
 import Friend from "../Friend";
+import first from "../../../../../Functions/Helpers";
 
 export default {
     name: "Online",
@@ -24,13 +24,41 @@ export default {
         ...mapGetters(['getCurrentUser']),
     },
 
-    created() {
+    async created() {
         db.database().ref('chats').orderByChild('chatter_id').equalTo(this.getCurrentUser.uid).on('value', async snapshot => {
-            this.friends = _.filter(snapshot.val(), async user => {
-                return await getUserOnlineStatus({ uid: user.receiver_id }) === 'online' && !user.blocked
+            this.friends = [];
+            let requests = _.map(snapshot.val(),(user) => {
+                return new Promise(async (resolve) => {
+                    db.database().ref('users').orderByChild('uid').equalTo(user.receiver_id).on('value',  snapshot => {
+                        if(snapshot.exists()) {
+                            let userData = first(snapshot.val());
+                            if(userData.online_visibility === "online" && !user.blocked) {
+                                if(!_.isEmpty(this.friends)) {
+                                    return _.forEach(this.friends, async (friend, key) => {
+                                        if(friend.receiver_id === user.receiver_id) {
+                                            this.friends[key] = {...user, 'online_visibility': userData.online_visibility}
+                                        }
+                                    })
+                                }
+                                this.friends.push({...user, 'online_visibility': userData.online_visibility})
+                            }else if(userData.online_visibility !== "online") {
+                                if(!_.isEmpty(this.friends)) {
+                                    _.forEach(this.friends, async (friend, key) => {
+                                        this.friends = _.filter(this.friends, friend => {
+                                            return friend.receiver_id !== user.receiver_id
+                                        })
+                                    })
+                                }
+                            }
+                            resolve()
+                        }
+                    })
+                });
             })
+
+            await Promise.all(requests)
         })
-    }
+    },
 }
 </script>
 

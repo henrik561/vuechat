@@ -23,6 +23,7 @@
 import {mapGetters} from "vuex";
 import moment from 'moment';
 import db from "../../../server/database";
+import first from "../../../Functions/Helpers";
 
 export default {
     name: "ChatUserTopBar",
@@ -31,13 +32,6 @@ export default {
         return {
             userStatus: ''
         }
-    },
-
-    async created() {
-        this.userStatus = this.getNewChatUser.online_visibility
-        await db.database().ref('onlineStatus').on('child_changed', async snapshot => {
-            this.userStatus = snapshot.val().online_visibility
-        })
     },
 
     computed: {
@@ -54,6 +48,12 @@ export default {
                 return '';
             }
         },
+    },
+
+    created() {
+        db.database().ref('users').orderByChild('uid').equalTo(this.getNewChatUser.uid).on('value', snapshot => {
+            this.userStatus = first(snapshot.val()).online_visibility
+        })
     },
 
     methods: {

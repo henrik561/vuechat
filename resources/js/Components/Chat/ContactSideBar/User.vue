@@ -17,10 +17,11 @@
 </template>
 
 <script>
-import {getUserOnlineStatus, markMessagesAsRead, getUserData, createNewChat} from "../../../server/firebaseChat";
+import {markMessagesAsRead, getUserData, createNewChat} from "../../../server/firebaseChat";
 import {mapActions, mapGetters} from "vuex";
 import NavLink from "../../../Shared/Navbar/NavLink";
 import db from '../../../server/database';
+import first from "../../../Functions/Helpers";
 
 export default {
     name: "User",
@@ -29,7 +30,6 @@ export default {
 
     data() {
         return {
-            userStatus: 'online',
             userData: {},
             newMessages: 0,
         }
@@ -48,7 +48,7 @@ export default {
     },
 
     created() {
-        this.getUserData()
+        this.getUserData();
 
         db.database().ref('chats').orderByChild('chatKey').equalTo(this.user.chatKey).on('value', snapshot => {
             if(snapshot.exists()) {
@@ -67,10 +67,7 @@ export default {
             if(this.getNewChatUser && this.getNewChatUser.uid === this.user.receiver_id) {
                 return
             }
-            await this.setNewChat({
-                ...this.userData,
-                'online_visibility' : await getUserOnlineStatus(this.userData)
-            });
+            await this.setNewChat(this.userData);
             await this.setNewChatKey(this.user.chatKey)
             await createNewChat(this.getCurrentUser.uid, this.userData.uid, this.user.chatKey);
             await markMessagesAsRead(this.userData.uid, this.user.chatKey, this.getCurrentUser.uid);

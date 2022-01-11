@@ -352,8 +352,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _ContactSideBar_User__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ContactSideBar/User */ "./resources/js/Components/Chat/ContactSideBar/User.vue");
 /* harmony import */ var _ContactSideBar_Search__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ContactSideBar/Search */ "./resources/js/Components/Chat/ContactSideBar/Search.vue");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
 /* harmony import */ var _server_database__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../server/database */ "./resources/js/server/database.js");
+/* harmony import */ var _Functions_Helpers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Functions/Helpers */ "./resources/js/Functions/Helpers.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -365,6 +366,8 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
 
 
 
@@ -382,7 +385,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       users: []
     };
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)(['getAllUsers', 'getCurrentUser'])), {}, {
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)(['getAllUsers', 'getCurrentUser'])), {}, {
     hasUsers: function hasUsers() {
       return !_.isEmpty(this.getAllUsers);
     }
@@ -402,7 +405,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     while (1) {
                       switch (_context.prev = _context.next) {
                         case 0:
-                          _this.setAllUsers(snapshot.val());
+                          _this.setAllUsers(_.filter(snapshot.val(), function (user) {
+                            return !user.blocked;
+                          }));
 
                         case 1:
                         case "end":
@@ -425,11 +430,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, _callee2);
     }))();
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)(['setAllUsers'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)(['setAllUsers'])), {}, {
     searchInUsers: function searchInUsers(keyword) {
       this.filterWord = keyword;
     }
-  })
+  }),
+  watch: {
+    friends: {
+      handler: function handler(friends) {}
+    }
+  }
 });
 
 /***/ }),
@@ -483,9 +493,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../server/firebaseChat */ "./resources/js/server/firebaseChat.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
 /* harmony import */ var _Shared_Navbar_NavLink__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Shared/Navbar/NavLink */ "./resources/js/Shared/Navbar/NavLink.vue");
 /* harmony import */ var _server_database__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../server/database */ "./resources/js/server/database.js");
+/* harmony import */ var _Functions_Helpers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../Functions/Helpers */ "./resources/js/Functions/Helpers.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -502,6 +513,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "User",
   components: {
@@ -510,12 +522,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   props: ["user"],
   data: function data() {
     return {
-      userStatus: 'online',
       userData: {},
       newMessages: 0
     };
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)(['getNewChatUser', 'getUserHasChat', 'getCurrentUser'])), {}, {
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)(['getNewChatUser', 'getUserHasChat', 'getCurrentUser'])), {}, {
     hasNewMessages: function hasNewMessages() {
       return this.newMessages > 0;
     },
@@ -537,7 +548,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     });
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)(['setNewChat', 'setNewChatKey'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)(['setNewChat', 'setNewChatKey'])), {}, {
     startNewChat: function startNewChat() {
       var _this2 = this;
 
@@ -554,35 +565,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 return _context.abrupt("return");
 
               case 2:
-                _context.t0 = _this2;
-                _context.t1 = _objectSpread;
-                _context.t2 = _objectSpread({}, _this2.userData);
-                _context.t3 = {};
-                _context.next = 8;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserOnlineStatus)(_this2.userData);
+                _context.next = 4;
+                return _this2.setNewChat(_this2.userData);
 
-              case 8:
-                _context.t4 = _context.sent;
-                _context.t5 = {
-                  'online_visibility': _context.t4
-                };
-                _context.t6 = (0, _context.t1)(_context.t2, _context.t3, _context.t5);
-                _context.next = 13;
-                return _context.t0.setNewChat.call(_context.t0, _context.t6);
-
-              case 13:
-                _context.next = 15;
+              case 4:
+                _context.next = 6;
                 return _this2.setNewChatKey(_this2.user.chatKey);
 
-              case 15:
-                _context.next = 17;
+              case 6:
+                _context.next = 8;
                 return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.createNewChat)(_this2.getCurrentUser.uid, _this2.userData.uid, _this2.user.chatKey);
 
-              case 17:
-                _context.next = 19;
+              case 8:
+                _context.next = 10;
                 return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.markMessagesAsRead)(_this2.userData.uid, _this2.user.chatKey, _this2.getCurrentUser.uid);
 
-              case 19:
+              case 10:
               case "end":
                 return _context.stop();
             }
@@ -633,23 +631,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _server_database__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../server/database */ "./resources/js/server/database.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _server_database__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../server/database */ "./resources/js/server/database.js");
+/* harmony import */ var _Functions_Helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Functions/Helpers */ "./resources/js/Functions/Helpers.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 
 
@@ -661,58 +653,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       userStatus: ''
     };
   },
-  created: function created() {
-    var _this = this;
-
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _this.userStatus = _this.getNewChatUser.online_visibility;
-              _context2.next = 3;
-              return _server_database__WEBPACK_IMPORTED_MODULE_2__["default"].database().ref('onlineStatus').on('child_changed', /*#__PURE__*/function () {
-                var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(snapshot) {
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-                    while (1) {
-                      switch (_context.prev = _context.next) {
-                        case 0:
-                          _this.userStatus = snapshot.val().online_visibility;
-
-                        case 1:
-                        case "end":
-                          return _context.stop();
-                      }
-                    }
-                  }, _callee);
-                }));
-
-                return function (_x) {
-                  return _ref.apply(this, arguments);
-                };
-              }());
-
-            case 3:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2);
-    }))();
-  },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)(['getNewChatUser'])), {}, {
     formatUserOnlineVisibility: function formatUserOnlineVisibility() {
       var userLastSeen = this.userStatus;
 
       if (userLastSeen === 'online') {
         return userLastSeen;
-      } else if (moment__WEBPACK_IMPORTED_MODULE_1___default()(userLastSeen).isValid()) {
-        return moment__WEBPACK_IMPORTED_MODULE_1___default()(userLastSeen).fromNow();
+      } else if (moment__WEBPACK_IMPORTED_MODULE_0___default()(userLastSeen).isValid()) {
+        return moment__WEBPACK_IMPORTED_MODULE_0___default()(userLastSeen).fromNow();
       } else {
         return '';
       }
     }
   }),
+  created: function created() {
+    var _this = this;
+
+    _server_database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref('users').orderByChild('uid').equalTo(this.getNewChatUser.uid).on('value', function (snapshot) {
+      _this.userStatus = (0,_Functions_Helpers__WEBPACK_IMPORTED_MODULE_2__["default"])(snapshot.val()).online_visibility;
+    });
+  },
   methods: {
     handleClick: function handleClick() {
       this.$emit('handleTopBarClick');
@@ -1197,15 +1157,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _this.friendData = _context.sent;
 
               case 9:
-                _context.next = 11;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserOnlineStatus)({
-                  uid: _this.friendData.uid
-                });
-
-              case 11:
-                _this.friendData['online_visibility'] = _context.sent;
-
-              case 12:
               case "end":
                 return _context.stop();
             }
@@ -1329,7 +1280,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             switch (_context6.prev = _context6.next) {
               case 0:
                 _context6.next = 2;
-                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.blockFriend)(_this6.getCurrentUser.uid, _this6.getFriendPopupUser);
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.blockFriend)(_this6.getCurrentUser.uid, _this6.friendData.uid);
 
               case 2:
                 _this6.closePopup();
@@ -1340,6 +1291,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }
           }
         }, _callee6);
+      }))();
+    },
+    unblockFriend: function unblockFriend() {
+      var _this7 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _context7.next = 2;
+                return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.unblockFriend)(_this7.getCurrentUser.uid, _this7.friendData.uid);
+
+              case 2:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7);
       }))();
     }
   }),
@@ -1368,8 +1338,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _server_database__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../server/database */ "./resources/js/server/database.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
 /* harmony import */ var _Friend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Friend */ "./resources/js/Components/Friends/Components/Friend/Friend.vue");
+/* harmony import */ var _Functions_Helpers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../Functions/Helpers */ "./resources/js/Functions/Helpers.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -1385,6 +1356,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "All",
   components: {
@@ -1395,32 +1367,91 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       friends: []
     };
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)(['getCurrentUser'])),
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)(['getCurrentUser'])),
   created: function created() {
     var _this = this;
 
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
-              _context2.next = 2;
-              return _server_database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref('chats').orderByChild('chatter_id').equalTo(_this.getCurrentUser.uid).on('value', /*#__PURE__*/function () {
-                var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(snapshot) {
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+              _server_database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref('chats').orderByChild('chatter_id').equalTo(_this.getCurrentUser.uid).on('value', /*#__PURE__*/function () {
+                var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(snapshot) {
+                  var requests;
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
                     while (1) {
-                      switch (_context.prev = _context.next) {
+                      switch (_context3.prev = _context3.next) {
                         case 0:
-                          _this.friends = _.filter(snapshot.val(), function (user) {
-                            return !user.blocked;
-                          });
+                          _this.friends = [];
+                          requests = _.map(snapshot.val(), function (user) {
+                            return new Promise( /*#__PURE__*/function () {
+                              var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(resolve) {
+                                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+                                  while (1) {
+                                    switch (_context2.prev = _context2.next) {
+                                      case 0:
+                                        _server_database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref('users').orderByChild('uid').equalTo(user.receiver_id).on('value', function (snapshot) {
+                                          if (snapshot.exists()) {
+                                            var userData = (0,_Functions_Helpers__WEBPACK_IMPORTED_MODULE_3__["default"])(snapshot.val());
 
-                        case 1:
+                                            if (!_.isEmpty(_this.friends)) {
+                                              _.forEach(_this.friends, /*#__PURE__*/function () {
+                                                var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(friend, key) {
+                                                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+                                                    while (1) {
+                                                      switch (_context.prev = _context.next) {
+                                                        case 0:
+                                                          if (friend.receiver_id === user.receiver_id) {
+                                                            _this.friends = _.filter(_this.friends, function (friend) {
+                                                              return friend.receiver_id !== user.receiver_id;
+                                                            });
+                                                          }
+
+                                                        case 1:
+                                                        case "end":
+                                                          return _context.stop();
+                                                      }
+                                                    }
+                                                  }, _callee);
+                                                }));
+
+                                                return function (_x3, _x4) {
+                                                  return _ref3.apply(this, arguments);
+                                                };
+                                              }());
+                                            }
+
+                                            _this.friends.push(_objectSpread(_objectSpread({}, user), {}, {
+                                              'online_visibility': userData.online_visibility
+                                            }));
+                                          }
+
+                                          resolve();
+                                        });
+
+                                      case 1:
+                                      case "end":
+                                        return _context2.stop();
+                                    }
+                                  }
+                                }, _callee2);
+                              }));
+
+                              return function (_x2) {
+                                return _ref2.apply(this, arguments);
+                              };
+                            }());
+                          });
+                          _context3.next = 4;
+                          return Promise.all(requests);
+
+                        case 4:
                         case "end":
-                          return _context.stop();
+                          return _context3.stop();
                       }
                     }
-                  }, _callee);
+                  }, _callee3);
                 }));
 
                 return function (_x) {
@@ -1428,12 +1459,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 };
               }());
 
-            case 2:
+            case 1:
             case "end":
-              return _context2.stop();
+              return _context4.stop();
           }
         }
-      }, _callee2);
+      }, _callee4);
     }))();
   }
 });
@@ -1526,9 +1557,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _server_database__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../server/database */ "./resources/js/server/database.js");
-/* harmony import */ var _server_firebaseChat__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../server/firebaseChat */ "./resources/js/server/firebaseChat.js");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
-/* harmony import */ var _Friend__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Friend */ "./resources/js/Components/Friends/Components/Friend/Friend.vue");
+/* harmony import */ var _Friend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Friend */ "./resources/js/Components/Friends/Components/Friend/Friend.vue");
+/* harmony import */ var _Functions_Helpers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../Functions/Helpers */ "./resources/js/Functions/Helpers.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -1548,7 +1579,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Online",
   components: {
-    Friend: _Friend__WEBPACK_IMPORTED_MODULE_3__["default"]
+    Friend: _Friend__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
@@ -1559,62 +1590,128 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   created: function created() {
     var _this = this;
 
-    _server_database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref('chats').orderByChild('chatter_id').equalTo(this.getCurrentUser.uid).on('value', /*#__PURE__*/function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(snapshot) {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _this.friends = _.filter(snapshot.val(), /*#__PURE__*/function () {
-                  var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(user) {
-                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-                      while (1) {
-                        switch (_context.prev = _context.next) {
-                          case 0:
-                            _context.next = 2;
-                            return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_2__.getUserOnlineStatus)({
-                              uid: user.receiver_id
-                            });
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              _server_database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref('chats').orderByChild('chatter_id').equalTo(_this.getCurrentUser.uid).on('value', /*#__PURE__*/function () {
+                var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(snapshot) {
+                  var requests;
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+                    while (1) {
+                      switch (_context4.prev = _context4.next) {
+                        case 0:
+                          _this.friends = [];
+                          requests = _.map(snapshot.val(), function (user) {
+                            return new Promise( /*#__PURE__*/function () {
+                              var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(resolve) {
+                                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+                                  while (1) {
+                                    switch (_context3.prev = _context3.next) {
+                                      case 0:
+                                        _server_database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref('users').orderByChild('uid').equalTo(user.receiver_id).on('value', function (snapshot) {
+                                          if (snapshot.exists()) {
+                                            var userData = (0,_Functions_Helpers__WEBPACK_IMPORTED_MODULE_3__["default"])(snapshot.val());
 
-                          case 2:
-                            _context.t1 = _context.sent;
-                            _context.t0 = _context.t1 === 'online';
+                                            if (userData.online_visibility === "online" && !user.blocked) {
+                                              if (!_.isEmpty(_this.friends)) {
+                                                return _.forEach(_this.friends, /*#__PURE__*/function () {
+                                                  var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(friend, key) {
+                                                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+                                                      while (1) {
+                                                        switch (_context.prev = _context.next) {
+                                                          case 0:
+                                                            if (friend.receiver_id === user.receiver_id) {
+                                                              _this.friends[key] = _objectSpread(_objectSpread({}, user), {}, {
+                                                                'online_visibility': userData.online_visibility
+                                                              });
+                                                            }
 
-                            if (!_context.t0) {
-                              _context.next = 6;
-                              break;
-                            }
+                                                          case 1:
+                                                          case "end":
+                                                            return _context.stop();
+                                                        }
+                                                      }
+                                                    }, _callee);
+                                                  }));
 
-                            _context.t0 = !user.blocked;
+                                                  return function (_x3, _x4) {
+                                                    return _ref3.apply(this, arguments);
+                                                  };
+                                                }());
+                                              }
 
-                          case 6:
-                            return _context.abrupt("return", _context.t0);
+                                              _this.friends.push(_objectSpread(_objectSpread({}, user), {}, {
+                                                'online_visibility': userData.online_visibility
+                                              }));
+                                            } else if (userData.online_visibility !== "online") {
+                                              if (!_.isEmpty(_this.friends)) {
+                                                _.forEach(_this.friends, /*#__PURE__*/function () {
+                                                  var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(friend, key) {
+                                                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+                                                      while (1) {
+                                                        switch (_context2.prev = _context2.next) {
+                                                          case 0:
+                                                            _this.friends = _.filter(_this.friends, function (friend) {
+                                                              return friend.receiver_id !== user.receiver_id;
+                                                            });
 
-                          case 7:
-                          case "end":
-                            return _context.stop();
-                        }
+                                                          case 1:
+                                                          case "end":
+                                                            return _context2.stop();
+                                                        }
+                                                      }
+                                                    }, _callee2);
+                                                  }));
+
+                                                  return function (_x5, _x6) {
+                                                    return _ref4.apply(this, arguments);
+                                                  };
+                                                }());
+                                              }
+                                            }
+
+                                            resolve();
+                                          }
+                                        });
+
+                                      case 1:
+                                      case "end":
+                                        return _context3.stop();
+                                    }
+                                  }
+                                }, _callee3);
+                              }));
+
+                              return function (_x2) {
+                                return _ref2.apply(this, arguments);
+                              };
+                            }());
+                          });
+                          _context4.next = 4;
+                          return Promise.all(requests);
+
+                        case 4:
+                        case "end":
+                          return _context4.stop();
                       }
-                    }, _callee);
-                  }));
+                    }
+                  }, _callee4);
+                }));
 
-                  return function (_x2) {
-                    return _ref2.apply(this, arguments);
-                  };
-                }());
+                return function (_x) {
+                  return _ref.apply(this, arguments);
+                };
+              }());
 
-              case 1:
-              case "end":
-                return _context2.stop();
-            }
+            case 1:
+            case "end":
+              return _context5.stop();
           }
-        }, _callee2);
-      }));
-
-      return function (_x) {
-        return _ref.apply(this, arguments);
-      };
-    }());
+        }
+      }, _callee5);
+    }))();
   }
 });
 
@@ -1756,6 +1853,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.setFriendsListType(type);
     },
     addFriendHandler: function addFriendHandler() {
+      this.setFriendsListType(null);
       this.setAddFriends();
     }
   })
@@ -2118,12 +2216,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               switch (_context2.prev = _context2.next) {
                 case 0:
                   _context2.next = 2;
-                  return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_7__.getUserOnlineStatusKey)(user);
+                  return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_7__.getUserKey)(user);
 
                 case 2:
                   userKey = _context2.sent;
                   _context2.next = 5;
-                  return _server_database__WEBPACK_IMPORTED_MODULE_8__["default"].database().ref("onlineStatus/".concat(userKey)).onDisconnect().update({
+                  return _server_database__WEBPACK_IMPORTED_MODULE_8__["default"].database().ref("users/".concat(userKey)).onDisconnect().update({
                     'online_visibility': new Date().getTime()
                   });
 
@@ -3109,10 +3207,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=template&id=714bf39b":
-/*!******************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=template&id=714bf39b ***!
-  \******************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=template&id=714bf39b&scoped=true":
+/*!******************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=template&id=714bf39b&scoped=true ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -3121,6 +3219,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render)
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+
+var _withScopeId = function _withScopeId(n) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.pushScopeId)("data-v-714bf39b"), n = n(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.popScopeId)(), n;
+};
 
 var _hoisted_1 = {
   "class": "w-full px-4 h-16 flex mb-4 justify-between items-center relative border-t borer-white"
@@ -3143,17 +3246,21 @@ var _hoisted_7 = {
   "class": "w-10 h-10 flex items-center bg-white rounded-full justify-center"
 };
 
-var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
-  "class": "fas fa-comment-alt text-purple-800"
-}, null, -1
-/* HOISTED */
-);
+var _hoisted_8 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": "fas fa-comment-alt text-purple-800"
+  }, null, -1
+  /* HOISTED */
+  );
+});
 
-var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
-  "class": "fas fa-ellipsis-v text-purple-800"
-}, null, -1
-/* HOISTED */
-);
+var _hoisted_9 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": "fas fa-ellipsis-v text-purple-800"
+  }, null, -1
+  /* HOISTED */
+  );
+});
 
 var _hoisted_10 = [_hoisted_9];
 var _hoisted_11 = {
@@ -3161,23 +3268,40 @@ var _hoisted_11 = {
   "class": "flex gap-2"
 };
 
-var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
-  "class": "fas fa-check text-green-500"
-}, null, -1
-/* HOISTED */
-);
+var _hoisted_12 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": "fas fa-check text-green-500"
+  }, null, -1
+  /* HOISTED */
+  );
+});
 
 var _hoisted_13 = [_hoisted_12];
 
-var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
-  "class": "fas fa-times text-red-500"
-}, null, -1
-/* HOISTED */
-);
+var _hoisted_14 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": "fas fa-times text-red-500"
+  }, null, -1
+  /* HOISTED */
+  );
+});
 
 var _hoisted_15 = [_hoisted_14];
 var _hoisted_16 = {
-  key: 2,
+  key: 2
+};
+
+var _hoisted_17 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": "fas transition-all cursor-pointer w-full h-full duration-300 fa-user-times text-red-500 hover:text-white"
+  }, null, -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_18 = [_hoisted_17];
+var _hoisted_19 = {
+  key: 3,
   "class": "w-auto absolute flex flex-col justify-center gap-3 p-2 h-auto bg-white right-4 top-full w-40 h-24 rounded-2xl z-20"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -3195,7 +3319,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.formatUserOnlineVisibility), 1
   /* TEXT */
-  )])]), _ctx.getFriendsListType !== 'pending' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_NavLink, {
+  )])]), _ctx.getFriendsListType !== 'pending' && _ctx.getFriendsListType !== 'blocked' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_NavLink, {
     notNavbarLink: true,
     href: "/chat",
     onClick: $options.setNewChatUser
@@ -3213,7 +3337,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $options.toggleOptionsPopup && $options.toggleOptionsPopup.apply($options, arguments);
     }),
     "class": "w-10 h-10 flex items-center bg-white rounded-full justify-center"
-  }, _hoisted_10)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  }, _hoisted_10)])) : _ctx.getFriendsListType === 'pending' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     onClick: _cache[1] || (_cache[1] = function () {
       return $options.acceptFriendRequest && $options.acceptFriendRequest.apply($options, arguments);
     }),
@@ -3223,17 +3347,22 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $options.rejectFriendRequest && $options.rejectFriendRequest.apply($options, arguments);
     }),
     "class": "w-10 h-10 flex bg-white rounded-full items-center justify-center"
-  }, _hoisted_15)])), $options.usersPopupIsOpen ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  }, _hoisted_15)])) : _ctx.getFriendsListType === 'blocked' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     onClick: _cache[3] || (_cache[3] = function () {
+      return $options.unblockFriend && $options.unblockFriend.apply($options, arguments);
+    }),
+    "class": "w-10 h-10 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center duration-300 bg-white rounded-full"
+  }, _hoisted_18)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $options.usersPopupIsOpen ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+    onClick: _cache[4] || (_cache[4] = function () {
       return $options.removeFriend && $options.removeFriend.apply($options, arguments);
     }),
     "class": "text-yellow-500 cursor-pointer p-2 transition-all duration-300 rounded-2xl hover:bg-yellow-500 hover:text-white"
-  }, "Vriend verwijderen"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
-    onClick: _cache[4] || (_cache[4] = function () {
+  }, "Remove Friend"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+    onClick: _cache[5] || (_cache[5] = function () {
       return $options.blockFriend && $options.blockFriend.apply($options, arguments);
     }),
     "class": "text-red-500 cursor-pointer p-2 transition-all duration-300 rounded-2xl hover:bg-red-500 hover:text-white"
-  }, "Vriend Blokkeren")])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
+  }, "Block Friend")])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
 }
 
 /***/ }),
@@ -3924,7 +4053,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__.createStore({
       },
       friends: {
         addFriends: false,
-        listType: 'pending',
+        listType: 'all',
         pendingRequests: 0,
         popup: {
           user_uid: null
@@ -3989,6 +4118,16 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__.createStore({
     SET_ALL_USERS: function SET_ALL_USERS(state, users) {
       state.users = users;
     },
+    SET_ONE_USER: function SET_ONE_USER(state, user) {
+      state.users.push(user);
+    },
+    UNSET_ONE_USER: function UNSET_ONE_USER(state, user) {
+      var index = state.users.indexOf(user);
+
+      if (index > -1) {
+        state.users.splice(index, 1);
+      }
+    },
     SET_NEW_CHAT: function SET_NEW_CHAT(state, user) {
       state.chat.user = user;
     },
@@ -4035,32 +4174,40 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__.createStore({
       var commit = _ref5.commit;
       commit('SET_ALL_USERS', users);
     },
-    setNewChat: function setNewChat(_ref6, user) {
+    setOneUser: function setOneUser(_ref6, user) {
       var commit = _ref6.commit;
+      commit('SET_ONE_USER', user);
+    },
+    unsetOneUser: function unsetOneUser(_ref7, user) {
+      var commit = _ref7.commit;
+      commit('UNSET_ONE_USER', user);
+    },
+    setNewChat: function setNewChat(_ref8, user) {
+      var commit = _ref8.commit;
       commit('SET_NEW_CHAT', user);
     },
-    setNewChatKey: function setNewChatKey(_ref7, chatKey) {
-      var commit = _ref7.commit;
+    setNewChatKey: function setNewChatKey(_ref9, chatKey) {
+      var commit = _ref9.commit;
       commit('SET_NEW_CHAT_KEY', chatKey);
     },
-    setChatStop: function setChatStop(_ref8) {
-      var commit = _ref8.commit;
+    setChatStop: function setChatStop(_ref10) {
+      var commit = _ref10.commit;
       commit('SET_CHAT_STOP');
     },
-    setAddFriends: function setAddFriends(_ref9) {
-      var commit = _ref9.commit;
+    setAddFriends: function setAddFriends(_ref11) {
+      var commit = _ref11.commit;
       commit('SET_ADD_FRIENDS');
     },
-    setFriendsListType: function setFriendsListType(_ref10, type) {
-      var commit = _ref10.commit;
+    setFriendsListType: function setFriendsListType(_ref12, type) {
+      var commit = _ref12.commit;
       commit('SET_FRIENDS_LIST_TYPE', type);
     },
-    setPendingRequests: function setPendingRequests(_ref11, amount) {
-      var commit = _ref11.commit;
+    setPendingRequests: function setPendingRequests(_ref13, amount) {
+      var commit = _ref13.commit;
       commit('SET_PENDING_REQUESTS', amount);
     },
-    setFriendPopupUser: function setFriendPopupUser(_ref12, user) {
-      var commit = _ref12.commit;
+    setFriendPopupUser: function setFriendPopupUser(_ref14, user) {
+      var commit = _ref14.commit;
       commit('SET_FRIEND_POPUP_USER', user);
     }
   }
@@ -4113,7 +4260,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "hasExistingConnection": () => (/* binding */ hasExistingConnection),
 /* harmony export */   "addAsFriend": () => (/* binding */ addAsFriend),
 /* harmony export */   "removeFriend": () => (/* binding */ removeFriend),
+/* harmony export */   "setFriendBlockStatus": () => (/* binding */ setFriendBlockStatus),
 /* harmony export */   "blockFriend": () => (/* binding */ blockFriend),
+/* harmony export */   "unblockFriend": () => (/* binding */ unblockFriend),
 /* harmony export */   "getPendingRequests": () => (/* binding */ getPendingRequests),
 /* harmony export */   "getFriendRequestKey": () => (/* binding */ getFriendRequestKey),
 /* harmony export */   "rejectFriendRequest": () => (/* binding */ rejectFriendRequest),
@@ -4132,7 +4281,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "getUserByEmail": () => (/* binding */ getUserByEmail),
 /* harmony export */   "userIsAlreadyFriended": () => (/* binding */ userIsAlreadyFriended),
 /* harmony export */   "userHasOnlineStatus": () => (/* binding */ userHasOnlineStatus),
-/* harmony export */   "getUserOnlineStatusKey": () => (/* binding */ getUserOnlineStatusKey),
+/* harmony export */   "getUserKey": () => (/* binding */ getUserKey),
 /* harmony export */   "getUserOnlineStatus": () => (/* binding */ getUserOnlineStatus),
 /* harmony export */   "getUserData": () => (/* binding */ getUserData),
 /* harmony export */   "updateUserOnlineVisibility": () => (/* binding */ updateUserOnlineVisibility),
@@ -4228,7 +4377,7 @@ function _sendMessage() {
                     }, _callee);
                   }));
 
-                  return function (_x52, _x53) {
+                  return function (_x57, _x58) {
                     return _ref.apply(this, arguments);
                   };
                 }());
@@ -4276,7 +4425,7 @@ function _hasChat() {
                 }, _callee3);
               }));
 
-              return function (_x54) {
+              return function (_x59) {
                 return _ref2.apply(this, arguments);
               };
             }());
@@ -4403,7 +4552,7 @@ function _removeFriend() {
                     }, _callee7);
                   }));
 
-                  return function (_x55, _x56) {
+                  return function (_x60, _x61) {
                     return _ref3.apply(this, arguments);
                   };
                 }());
@@ -4420,12 +4569,12 @@ function _removeFriend() {
   return _removeFriend.apply(this, arguments);
 }
 
-function blockFriend(_x14, _x15) {
-  return _blockFriend.apply(this, arguments);
+function setFriendBlockStatus(_x14, _x15, _x16) {
+  return _setFriendBlockStatus.apply(this, arguments);
 }
 
-function _blockFriend() {
-  _blockFriend = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee9(chatter_id, receiver_id) {
+function _setFriendBlockStatus() {
+  _setFriendBlockStatus = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee9(chatter_id, receiver_id, blocked) {
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee9$(_context9) {
       while (1) {
         switch (_context9.prev = _context9.next) {
@@ -4434,9 +4583,9 @@ function _blockFriend() {
             return chatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', function (snapshot) {
               if (snapshot.exists()) {
                 _.forEach(snapshot.val(), function (chat, key) {
-                  if (chat.receiver_id === receiver_id && !chat.blocked) {
+                  if (chat.receiver_id === receiver_id) {
                     chatsRef.child(key).update({
-                      blocked: true
+                      blocked: blocked
                     });
                   }
                 });
@@ -4450,22 +4599,68 @@ function _blockFriend() {
       }
     }, _callee9);
   }));
+  return _setFriendBlockStatus.apply(this, arguments);
+}
+
+function blockFriend(_x17, _x18) {
   return _blockFriend.apply(this, arguments);
 }
 
-function getPendingRequests(_x16) {
-  return _getPendingRequests.apply(this, arguments);
-}
-
-function _getPendingRequests() {
-  _getPendingRequests = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee10(chatter_id) {
-    var response;
+function _blockFriend() {
+  _blockFriend = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee10(chatter_id, receiver_id) {
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee10$(_context10) {
       while (1) {
         switch (_context10.prev = _context10.next) {
           case 0:
+            _context10.next = 2;
+            return setFriendBlockStatus(chatter_id, receiver_id, true);
+
+          case 2:
+          case "end":
+            return _context10.stop();
+        }
+      }
+    }, _callee10);
+  }));
+  return _blockFriend.apply(this, arguments);
+}
+
+function unblockFriend(_x19, _x20) {
+  return _unblockFriend.apply(this, arguments);
+}
+
+function _unblockFriend() {
+  _unblockFriend = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee11(chatter_id, receiver_id) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee11$(_context11) {
+      while (1) {
+        switch (_context11.prev = _context11.next) {
+          case 0:
+            _context11.next = 2;
+            return setFriendBlockStatus(chatter_id, receiver_id, false);
+
+          case 2:
+          case "end":
+            return _context11.stop();
+        }
+      }
+    }, _callee11);
+  }));
+  return _unblockFriend.apply(this, arguments);
+}
+
+function getPendingRequests(_x21) {
+  return _getPendingRequests.apply(this, arguments);
+}
+
+function _getPendingRequests() {
+  _getPendingRequests = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee12(chatter_id) {
+    var response;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee12$(_context12) {
+      while (1) {
+        switch (_context12.prev = _context12.next) {
+          case 0:
             response = 0;
-            _context10.next = 3;
+            _context12.next = 3;
             return friendRequestsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', function (snapshot) {
               if (snapshot.exists()) {
                 response = Object.keys(snapshot.val()).length;
@@ -4473,30 +4668,30 @@ function _getPendingRequests() {
             });
 
           case 3:
-            return _context10.abrupt("return", response);
+            return _context12.abrupt("return", response);
 
           case 4:
           case "end":
-            return _context10.stop();
+            return _context12.stop();
         }
       }
-    }, _callee10);
+    }, _callee12);
   }));
   return _getPendingRequests.apply(this, arguments);
 }
 
-function getFriendRequestKey(_x17, _x18) {
+function getFriendRequestKey(_x22, _x23) {
   return _getFriendRequestKey.apply(this, arguments);
 }
 
 function _getFriendRequestKey() {
-  _getFriendRequestKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee11(chatter_id, receiver_id) {
+  _getFriendRequestKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee13(chatter_id, receiver_id) {
     var response;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee11$(_context11) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee13$(_context13) {
       while (1) {
-        switch (_context11.prev = _context11.next) {
+        switch (_context13.prev = _context13.next) {
           case 0:
-            _context11.next = 2;
+            _context13.next = 2;
             return friendRequestsRef.orderByChild('chatter_id').equalTo(receiver_id).once('value', function (snapshot) {
               _.forEach(snapshot.val(), function (request, key) {
                 if (request.receiver_id === chatter_id) {
@@ -4506,64 +4701,64 @@ function _getFriendRequestKey() {
             });
 
           case 2:
-            return _context11.abrupt("return", response);
+            return _context13.abrupt("return", response);
 
           case 3:
           case "end":
-            return _context11.stop();
+            return _context13.stop();
         }
       }
-    }, _callee11);
+    }, _callee13);
   }));
   return _getFriendRequestKey.apply(this, arguments);
 }
 
-function rejectFriendRequest(_x19, _x20) {
+function rejectFriendRequest(_x24, _x25) {
   return _rejectFriendRequest.apply(this, arguments);
 }
 
 function _rejectFriendRequest() {
-  _rejectFriendRequest = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee12(chatter_id, receiver_id) {
+  _rejectFriendRequest = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee14(chatter_id, receiver_id) {
     var requestKey;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee12$(_context12) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee14$(_context14) {
       while (1) {
-        switch (_context12.prev = _context12.next) {
+        switch (_context14.prev = _context14.next) {
           case 0:
-            _context12.next = 2;
+            _context14.next = 2;
             return getFriendRequestKey(chatter_id, receiver_id);
 
           case 2:
-            requestKey = _context12.sent;
-            _context12.next = 5;
+            requestKey = _context14.sent;
+            _context14.next = 5;
             return friendRequestsRef.child(requestKey).set(null);
 
           case 5:
           case "end":
-            return _context12.stop();
+            return _context14.stop();
         }
       }
-    }, _callee12);
+    }, _callee14);
   }));
   return _rejectFriendRequest.apply(this, arguments);
 }
 
-function addNewChat(_x21, _x22) {
+function addNewChat(_x26, _x27) {
   return _addNewChat.apply(this, arguments);
 } //Create new active chat
 
 function _addNewChat() {
-  _addNewChat = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee13(chatter_id, receiver_id) {
+  _addNewChat = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee15(chatter_id, receiver_id) {
     var requestKey, newChat;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee13$(_context13) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee15$(_context15) {
       while (1) {
-        switch (_context13.prev = _context13.next) {
+        switch (_context15.prev = _context15.next) {
           case 0:
-            _context13.next = 2;
+            _context15.next = 2;
             return getFriendRequestKey(chatter_id, receiver_id);
 
           case 2:
-            requestKey = _context13.sent;
-            _context13.next = 5;
+            requestKey = _context15.sent;
+            _context15.next = 5;
             return friendRequestsRef.child(requestKey).set(null);
 
           case 5:
@@ -4573,7 +4768,7 @@ function _addNewChat() {
               blocked: false,
               newMessages: 0
             });
-            _context13.next = 8;
+            _context15.next = 8;
             return chatsRef.child(newChat.key).update({
               'chatKey': newChat.key
             });
@@ -4586,33 +4781,33 @@ function _addNewChat() {
               newMessages: 0,
               blocked: false
             });
-            return _context13.abrupt("return", 'AddedAsFriend');
+            return _context15.abrupt("return", 'AddedAsFriend');
 
           case 10:
           case "end":
-            return _context13.stop();
+            return _context15.stop();
         }
       }
-    }, _callee13);
+    }, _callee15);
   }));
   return _addNewChat.apply(this, arguments);
 }
 
-function createNewChat(_x23, _x24, _x25) {
+function createNewChat(_x28, _x29, _x30) {
   return _createNewChat.apply(this, arguments);
 }
 
 function _createNewChat() {
-  _createNewChat = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee14(chatter_id, receiver_id, chatKey) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee14$(_context14) {
+  _createNewChat = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee16(chatter_id, receiver_id, chatKey) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee16$(_context16) {
       while (1) {
-        switch (_context14.prev = _context14.next) {
+        switch (_context16.prev = _context16.next) {
           case 0:
-            _context14.next = 2;
+            _context16.next = 2;
             return stopActiveChat(chatter_id);
 
           case 2:
-            _context14.next = 4;
+            _context16.next = 4;
             return activeChatsRef.push({
               chatter_id: chatter_id,
               receiver_id: receiver_id,
@@ -4621,25 +4816,25 @@ function _createNewChat() {
 
           case 4:
           case "end":
-            return _context14.stop();
+            return _context16.stop();
         }
       }
-    }, _callee14);
+    }, _callee16);
   }));
   return _createNewChat.apply(this, arguments);
 }
 
-function stopActiveChat(_x26) {
+function stopActiveChat(_x31) {
   return _stopActiveChat.apply(this, arguments);
 }
 
 function _stopActiveChat() {
-  _stopActiveChat = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee15(chatter_id) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee15$(_context15) {
+  _stopActiveChat = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee17(chatter_id) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee17$(_context17) {
       while (1) {
-        switch (_context15.prev = _context15.next) {
+        switch (_context17.prev = _context17.next) {
           case 0:
-            _context15.next = 2;
+            _context17.next = 2;
             return activeChatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', function (snapshot) {
               _.forEach(snapshot.val(), function (chat, key) {
                 activeChatsRef.child(key).set(null);
@@ -4648,73 +4843,20 @@ function _stopActiveChat() {
 
           case 2:
           case "end":
-            return _context15.stop();
-        }
-      }
-    }, _callee15);
-  }));
-  return _stopActiveChat.apply(this, arguments);
-}
-
-function getActiveChatKey(_x27, _x28) {
-  return _getActiveChatKey.apply(this, arguments);
-}
-
-function _getActiveChatKey() {
-  _getActiveChatKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee17(chatKey, chatter_id) {
-    var response;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee17$(_context17) {
-      while (1) {
-        switch (_context17.prev = _context17.next) {
-          case 0:
-            response = null;
-            _context17.next = 3;
-            return activeChatsRef.orderByChild('chatKey').equalTo(chatKey).once('value', function (snapshot) {
-              if (snapshot.exists()) {
-                _.forEach(snapshot.val(), /*#__PURE__*/function () {
-                  var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee16(chat, key) {
-                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee16$(_context16) {
-                      while (1) {
-                        switch (_context16.prev = _context16.next) {
-                          case 0:
-                            if (chat.chatter_id === chatter_id) {
-                              response = key;
-                            }
-
-                          case 1:
-                          case "end":
-                            return _context16.stop();
-                        }
-                      }
-                    }, _callee16);
-                  }));
-
-                  return function (_x57, _x58) {
-                    return _ref4.apply(this, arguments);
-                  };
-                }());
-              }
-            });
-
-          case 3:
-            return _context17.abrupt("return", response);
-
-          case 4:
-          case "end":
             return _context17.stop();
         }
       }
     }, _callee17);
   }));
+  return _stopActiveChat.apply(this, arguments);
+}
+
+function getActiveChatKey(_x32, _x33) {
   return _getActiveChatKey.apply(this, arguments);
 }
 
-function getChatKey(_x29, _x30) {
-  return _getChatKey.apply(this, arguments);
-}
-
-function _getChatKey() {
-  _getChatKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee19(chatter_id, receiver_id) {
+function _getActiveChatKey() {
+  _getActiveChatKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee19(chatKey, chatter_id) {
     var response;
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee19$(_context19) {
       while (1) {
@@ -4722,29 +4864,31 @@ function _getChatKey() {
           case 0:
             response = null;
             _context19.next = 3;
-            return chatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', function (snapshot) {
-              _.forEach(snapshot.val(), /*#__PURE__*/function () {
-                var _ref5 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee18(chat, key) {
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee18$(_context18) {
-                    while (1) {
-                      switch (_context18.prev = _context18.next) {
-                        case 0:
-                          if (chat.receiver_id === receiver_id) {
-                            response = key;
-                          }
+            return activeChatsRef.orderByChild('chatKey').equalTo(chatKey).once('value', function (snapshot) {
+              if (snapshot.exists()) {
+                _.forEach(snapshot.val(), /*#__PURE__*/function () {
+                  var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee18(chat, key) {
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee18$(_context18) {
+                      while (1) {
+                        switch (_context18.prev = _context18.next) {
+                          case 0:
+                            if (chat.chatter_id === chatter_id) {
+                              response = key;
+                            }
 
-                        case 1:
-                        case "end":
-                          return _context18.stop();
+                          case 1:
+                          case "end":
+                            return _context18.stop();
+                        }
                       }
-                    }
-                  }, _callee18);
-                }));
+                    }, _callee18);
+                  }));
 
-                return function (_x59, _x60) {
-                  return _ref5.apply(this, arguments);
-                };
-              }());
+                  return function (_x62, _x63) {
+                    return _ref4.apply(this, arguments);
+                  };
+                }());
+              }
             });
 
           case 3:
@@ -4757,20 +4901,71 @@ function _getChatKey() {
       }
     }, _callee19);
   }));
+  return _getActiveChatKey.apply(this, arguments);
+}
+
+function getChatKey(_x34, _x35) {
   return _getChatKey.apply(this, arguments);
 }
 
-function markChatNotificationAsRead(_x31, _x32, _x33) {
+function _getChatKey() {
+  _getChatKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee21(chatter_id, receiver_id) {
+    var response;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee21$(_context21) {
+      while (1) {
+        switch (_context21.prev = _context21.next) {
+          case 0:
+            response = null;
+            _context21.next = 3;
+            return chatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', function (snapshot) {
+              _.forEach(snapshot.val(), /*#__PURE__*/function () {
+                var _ref5 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee20(chat, key) {
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee20$(_context20) {
+                    while (1) {
+                      switch (_context20.prev = _context20.next) {
+                        case 0:
+                          if (chat.receiver_id === receiver_id) {
+                            response = key;
+                          }
+
+                        case 1:
+                        case "end":
+                          return _context20.stop();
+                      }
+                    }
+                  }, _callee20);
+                }));
+
+                return function (_x64, _x65) {
+                  return _ref5.apply(this, arguments);
+                };
+              }());
+            });
+
+          case 3:
+            return _context21.abrupt("return", response);
+
+          case 4:
+          case "end":
+            return _context21.stop();
+        }
+      }
+    }, _callee21);
+  }));
+  return _getChatKey.apply(this, arguments);
+}
+
+function markChatNotificationAsRead(_x36, _x37, _x38) {
   return _markChatNotificationAsRead.apply(this, arguments);
 }
 
 function _markChatNotificationAsRead() {
-  _markChatNotificationAsRead = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee20(chatter_id, chatKey, receiver_id) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee20$(_context20) {
+  _markChatNotificationAsRead = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee22(chatter_id, chatKey, receiver_id) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee22$(_context22) {
       while (1) {
-        switch (_context20.prev = _context20.next) {
+        switch (_context22.prev = _context22.next) {
           case 0:
-            _context20.next = 2;
+            _context22.next = 2;
             return chatsRef.orderByChild('chatKey').equalTo(chatKey).once('value', function (snapshot) {
               if (snapshot.exists()) {
                 _.forEach(snapshot.val(), function (chat, key) {
@@ -4785,44 +4980,44 @@ function _markChatNotificationAsRead() {
 
           case 2:
           case "end":
-            return _context20.stop();
+            return _context22.stop();
         }
       }
-    }, _callee20);
+    }, _callee22);
   }));
   return _markChatNotificationAsRead.apply(this, arguments);
 }
 
-function markMessagesAsRead(_x34, _x35, _x36) {
+function markMessagesAsRead(_x39, _x40, _x41) {
   return _markMessagesAsRead.apply(this, arguments);
 }
 
 function _markMessagesAsRead() {
-  _markMessagesAsRead = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee23(chatter_id, chatKey, receiver_id) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee23$(_context23) {
+  _markMessagesAsRead = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee25(chatter_id, chatKey, receiver_id) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee25$(_context25) {
       while (1) {
-        switch (_context23.prev = _context23.next) {
+        switch (_context25.prev = _context25.next) {
           case 0:
-            _context23.next = 2;
+            _context25.next = 2;
             return markChatNotificationAsRead(chatter_id, chatKey, receiver_id);
 
           case 2:
-            _context23.next = 4;
+            _context25.next = 4;
             return messagesRef.orderByChild('chatKey').equalTo(chatKey).once('value', /*#__PURE__*/function () {
-              var _ref6 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee22(snapshot) {
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee22$(_context22) {
+              var _ref6 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee24(snapshot) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee24$(_context24) {
                   while (1) {
-                    switch (_context22.prev = _context22.next) {
+                    switch (_context24.prev = _context24.next) {
                       case 0:
                         _.forEach(snapshot.val(), /*#__PURE__*/function () {
-                          var _ref7 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee21(value, key) {
+                          var _ref7 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee23(value, key) {
                             var seenBy;
-                            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee21$(_context21) {
+                            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee23$(_context23) {
                               while (1) {
-                                switch (_context21.prev = _context21.next) {
+                                switch (_context23.prev = _context23.next) {
                                   case 0:
                                     if (!(value.chatter_id === chatter_id && !value.message_seen)) {
-                                      _context21.next = 5;
+                                      _context23.next = 5;
                                       break;
                                     }
 
@@ -4834,7 +5029,7 @@ function _markMessagesAsRead() {
                                       seenBy = [receiver_id];
                                     }
 
-                                    _context21.next = 5;
+                                    _context23.next = 5;
                                     return messagesRef.child(key).update({
                                       "seen_at": "".concat(new Date().toTimeString().substr(0, 5)),
                                       "message_seen": true,
@@ -4843,101 +5038,54 @@ function _markMessagesAsRead() {
 
                                   case 5:
                                   case "end":
-                                    return _context21.stop();
+                                    return _context23.stop();
                                 }
                               }
-                            }, _callee21);
+                            }, _callee23);
                           }));
 
-                          return function (_x62, _x63) {
+                          return function (_x67, _x68) {
                             return _ref7.apply(this, arguments);
                           };
                         }());
 
                       case 1:
                       case "end":
-                        return _context22.stop();
+                        return _context24.stop();
                     }
                   }
-                }, _callee22);
+                }, _callee24);
               }));
 
-              return function (_x61) {
+              return function (_x66) {
                 return _ref6.apply(this, arguments);
               };
             }());
 
           case 4:
           case "end":
-            return _context23.stop();
+            return _context25.stop();
         }
       }
-    }, _callee23);
+    }, _callee25);
   }));
   return _markMessagesAsRead.apply(this, arguments);
 }
 
-function createUser(_x37, _x38) {
+function createUser(_x42, _x43) {
   return _createUser.apply(this, arguments);
 }
 
 function _createUser() {
-  _createUser = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee24(email, password) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee24$(_context24) {
-      while (1) {
-        switch (_context24.prev = _context24.next) {
-          case 0:
-            return _context24.abrupt("return", (0,firebase_auth__WEBPACK_IMPORTED_MODULE_3__.createUserWithEmailAndPassword)(auth, email, password).then(function (userCredential) {
-              addUserToRLDb(userCredential.user);
-              return userCredential;
-            })["catch"](function (error) {
-              return error;
-            }));
-
-          case 1:
-          case "end":
-            return _context24.stop();
-        }
-      }
-    }, _callee24);
-  }));
-  return _createUser.apply(this, arguments);
-}
-
-function logUserIn(_x39, _x40) {
-  return _logUserIn.apply(this, arguments);
-}
-
-function _logUserIn() {
-  _logUserIn = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee26(email, password) {
+  _createUser = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee26(email, password) {
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee26$(_context26) {
       while (1) {
         switch (_context26.prev = _context26.next) {
           case 0:
-            return _context26.abrupt("return", (0,firebase_auth__WEBPACK_IMPORTED_MODULE_3__.signInWithEmailAndPassword)(auth, email, password).then( /*#__PURE__*/function () {
-              var _ref8 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee25(userCredential) {
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee25$(_context25) {
-                  while (1) {
-                    switch (_context25.prev = _context25.next) {
-                      case 0:
-                        _context25.next = 2;
-                        return updateUserOnlineVisibility(userCredential, 'online');
-
-                      case 2:
-                        return _context25.abrupt("return", userCredential);
-
-                      case 3:
-                      case "end":
-                        return _context25.stop();
-                    }
-                  }
-                }, _callee25);
-              }));
-
-              return function (_x64) {
-                return _ref8.apply(this, arguments);
-              };
-            }())["catch"](function (error) {
+            return _context26.abrupt("return", (0,firebase_auth__WEBPACK_IMPORTED_MODULE_3__.createUserWithEmailAndPassword)(auth, email, password).then(function (userCredential) {
+              addUserToRLDb(userCredential.user);
+              return userCredential;
+            })["catch"](function (error) {
               return error;
             }));
 
@@ -4948,30 +5096,30 @@ function _logUserIn() {
       }
     }, _callee26);
   }));
+  return _createUser.apply(this, arguments);
+}
+
+function logUserIn(_x44, _x45) {
   return _logUserIn.apply(this, arguments);
 }
 
-function logUserInGoogle() {
-  return _logUserInGoogle.apply(this, arguments);
-}
-
-function _logUserInGoogle() {
-  _logUserInGoogle = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee28() {
+function _logUserIn() {
+  _logUserIn = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee28(email, password) {
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee28$(_context28) {
       while (1) {
         switch (_context28.prev = _context28.next) {
           case 0:
-            return _context28.abrupt("return", (0,firebase_auth__WEBPACK_IMPORTED_MODULE_3__.signInWithPopup)(auth, provider).then( /*#__PURE__*/function () {
-              var _ref9 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee27(result) {
+            return _context28.abrupt("return", (0,firebase_auth__WEBPACK_IMPORTED_MODULE_3__.signInWithEmailAndPassword)(auth, email, password).then( /*#__PURE__*/function () {
+              var _ref8 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee27(userCredential) {
                 return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee27$(_context27) {
                   while (1) {
                     switch (_context27.prev = _context27.next) {
                       case 0:
                         _context27.next = 2;
-                        return userExists(result.user.uid, result.user);
+                        return updateUserOnlineVisibility(userCredential, 'online');
 
                       case 2:
-                        return _context27.abrupt("return", result);
+                        return _context27.abrupt("return", userCredential);
 
                       case 3:
                       case "end":
@@ -4981,11 +5129,10 @@ function _logUserInGoogle() {
                 }, _callee27);
               }));
 
-              return function (_x65) {
-                return _ref9.apply(this, arguments);
+              return function (_x69) {
+                return _ref8.apply(this, arguments);
               };
             }())["catch"](function (error) {
-              console.log(error);
               return error;
             }));
 
@@ -4996,6 +5143,54 @@ function _logUserInGoogle() {
       }
     }, _callee28);
   }));
+  return _logUserIn.apply(this, arguments);
+}
+
+function logUserInGoogle() {
+  return _logUserInGoogle.apply(this, arguments);
+}
+
+function _logUserInGoogle() {
+  _logUserInGoogle = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee30() {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee30$(_context30) {
+      while (1) {
+        switch (_context30.prev = _context30.next) {
+          case 0:
+            return _context30.abrupt("return", (0,firebase_auth__WEBPACK_IMPORTED_MODULE_3__.signInWithPopup)(auth, provider).then( /*#__PURE__*/function () {
+              var _ref9 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee29(result) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee29$(_context29) {
+                  while (1) {
+                    switch (_context29.prev = _context29.next) {
+                      case 0:
+                        _context29.next = 2;
+                        return userExists(result.user.uid, result.user);
+
+                      case 2:
+                        return _context29.abrupt("return", result);
+
+                      case 3:
+                      case "end":
+                        return _context29.stop();
+                    }
+                  }
+                }, _callee29);
+              }));
+
+              return function (_x70) {
+                return _ref9.apply(this, arguments);
+              };
+            }())["catch"](function (error) {
+              console.log(error);
+              return error;
+            }));
+
+          case 1:
+          case "end":
+            return _context30.stop();
+        }
+      }
+    }, _callee30);
+  }));
   return _logUserInGoogle.apply(this, arguments);
 }
 
@@ -5005,96 +5200,97 @@ function addUserToRLDb(user) {
     "email": user.email,
     "phoneNumber": user.phoneNumber,
     "profilePicture": user.photoURL,
+    "online_visibility": 'online',
     "uid": user.uid
   });
 }
-function userExists(_x41, _x42) {
+function userExists(_x46, _x47) {
   return _userExists.apply(this, arguments);
 }
 
 function _userExists() {
-  _userExists = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee30(uid, user) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee30$(_context30) {
+  _userExists = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee32(uid, user) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee32$(_context32) {
       while (1) {
-        switch (_context30.prev = _context30.next) {
+        switch (_context32.prev = _context32.next) {
           case 0:
-            _context30.next = 2;
+            _context32.next = 2;
             return usersRef.orderByChild("uid").equalTo(uid).once('value', /*#__PURE__*/function () {
-              var _ref10 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee29(snapshot) {
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee29$(_context29) {
+              var _ref10 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee31(snapshot) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee31$(_context31) {
                   while (1) {
-                    switch (_context29.prev = _context29.next) {
+                    switch (_context31.prev = _context31.next) {
                       case 0:
                         if (!(!snapshot.exists() && user !== null)) {
-                          _context29.next = 3;
+                          _context31.next = 3;
                           break;
                         }
 
-                        _context29.next = 3;
+                        _context31.next = 3;
                         return addUserToRLDb(user);
 
                       case 3:
-                        _context29.next = 5;
+                        _context31.next = 5;
                         return updateUserOnlineVisibility(user, 'online');
 
                       case 5:
                       case "end":
-                        return _context29.stop();
+                        return _context31.stop();
                     }
                   }
-                }, _callee29);
+                }, _callee31);
               }));
 
-              return function (_x66) {
+              return function (_x71) {
                 return _ref10.apply(this, arguments);
               };
             }());
 
           case 2:
-            return _context30.abrupt("return", _context30.sent);
+            return _context32.abrupt("return", _context32.sent);
 
           case 3:
           case "end":
-            return _context30.stop();
+            return _context32.stop();
         }
       }
-    }, _callee30);
+    }, _callee32);
   }));
   return _userExists.apply(this, arguments);
 }
 
-function getUserByEmail(_x43) {
+function getUserByEmail(_x48) {
   return _getUserByEmail.apply(this, arguments);
 }
 
 function _getUserByEmail() {
-  _getUserByEmail = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee32(email) {
+  _getUserByEmail = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee34(email) {
     var response;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee32$(_context32) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee34$(_context34) {
       while (1) {
-        switch (_context32.prev = _context32.next) {
+        switch (_context34.prev = _context34.next) {
           case 0:
             response = 'DoesNotExists';
-            _context32.next = 3;
+            _context34.next = 3;
             return usersRef.orderByChild('email').equalTo(email).once('value', function (snapshot) {
               if (snapshot.exists()) {
                 _.forEach(snapshot.val(), /*#__PURE__*/function () {
-                  var _ref11 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee31(user) {
-                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee31$(_context31) {
+                  var _ref11 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee33(user) {
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee33$(_context33) {
                       while (1) {
-                        switch (_context31.prev = _context31.next) {
+                        switch (_context33.prev = _context33.next) {
                           case 0:
                             response = user.uid;
 
                           case 1:
                           case "end":
-                            return _context31.stop();
+                            return _context33.stop();
                         }
                       }
-                    }, _callee31);
+                    }, _callee33);
                   }));
 
-                  return function (_x67) {
+                  return function (_x72) {
                     return _ref11.apply(this, arguments);
                   };
                 }());
@@ -5102,31 +5298,31 @@ function _getUserByEmail() {
             });
 
           case 3:
-            return _context32.abrupt("return", response);
+            return _context34.abrupt("return", response);
 
           case 4:
           case "end":
-            return _context32.stop();
+            return _context34.stop();
         }
       }
-    }, _callee32);
+    }, _callee34);
   }));
   return _getUserByEmail.apply(this, arguments);
 }
 
-function userIsAlreadyFriended(_x44, _x45) {
+function userIsAlreadyFriended(_x49, _x50) {
   return _userIsAlreadyFriended.apply(this, arguments);
 }
 
 function _userIsAlreadyFriended() {
-  _userIsAlreadyFriended = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee33(chatter_id, receiver_id) {
+  _userIsAlreadyFriended = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee35(chatter_id, receiver_id) {
     var response;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee33$(_context33) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee35$(_context35) {
       while (1) {
-        switch (_context33.prev = _context33.next) {
+        switch (_context35.prev = _context35.next) {
           case 0:
             response = 'NotFriended';
-            _context33.next = 3;
+            _context35.next = 3;
             return chatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', function (snapshot) {
               if (snapshot.exists()) {
                 _.forEach(snapshot.val(), function (chat, key) {
@@ -5138,66 +5334,7 @@ function _userIsAlreadyFriended() {
             });
 
           case 3:
-            return _context33.abrupt("return", response);
-
-          case 4:
-          case "end":
-            return _context33.stop();
-        }
-      }
-    }, _callee33);
-  }));
-  return _userIsAlreadyFriended.apply(this, arguments);
-}
-
-function userHasOnlineStatus(_x46) {
-  return _userHasOnlineStatus.apply(this, arguments);
-}
-
-function _userHasOnlineStatus() {
-  _userHasOnlineStatus = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee35(user) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee35$(_context35) {
-      while (1) {
-        switch (_context35.prev = _context35.next) {
-          case 0:
-            if (!(!user || !user.uid)) {
-              _context35.next = 2;
-              break;
-            }
-
-            return _context35.abrupt("return", '');
-
-          case 2:
-            _context35.next = 4;
-            return usersVRef.orderByChild('uid').equalTo(user.uid).once('value', /*#__PURE__*/function () {
-              var _ref12 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee34(snapshot) {
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee34$(_context34) {
-                  while (1) {
-                    switch (_context34.prev = _context34.next) {
-                      case 0:
-                        if (snapshot.exists()) {
-                          _context34.next = 3;
-                          break;
-                        }
-
-                        _context34.next = 3;
-                        return usersVRef.push({
-                          "uid": user.uid,
-                          "online_visibility": new Date().getTime()
-                        });
-
-                      case 3:
-                      case "end":
-                        return _context34.stop();
-                    }
-                  }
-                }, _callee34);
-              }));
-
-              return function (_x68) {
-                return _ref12.apply(this, arguments);
-              };
-            }());
+            return _context35.abrupt("return", response);
 
           case 4:
           case "end":
@@ -5206,107 +5343,107 @@ function _userHasOnlineStatus() {
       }
     }, _callee35);
   }));
+  return _userIsAlreadyFriended.apply(this, arguments);
+}
+
+function userHasOnlineStatus(_x51) {
   return _userHasOnlineStatus.apply(this, arguments);
 }
 
-function getUserOnlineStatusKey(_x47) {
-  return _getUserOnlineStatusKey.apply(this, arguments);
+function _userHasOnlineStatus() {
+  _userHasOnlineStatus = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee37(user) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee37$(_context37) {
+      while (1) {
+        switch (_context37.prev = _context37.next) {
+          case 0:
+            if (!(!user || !user.uid)) {
+              _context37.next = 2;
+              break;
+            }
+
+            return _context37.abrupt("return", '');
+
+          case 2:
+            _context37.next = 4;
+            return usersVRef.orderByChild('uid').equalTo(user.uid).once('value', /*#__PURE__*/function () {
+              var _ref12 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee36(snapshot) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee36$(_context36) {
+                  while (1) {
+                    switch (_context36.prev = _context36.next) {
+                      case 0:
+                        if (snapshot.exists()) {
+                          _context36.next = 3;
+                          break;
+                        }
+
+                        _context36.next = 3;
+                        return usersVRef.push({
+                          "uid": user.uid,
+                          "online_visibility": new Date().getTime()
+                        });
+
+                      case 3:
+                      case "end":
+                        return _context36.stop();
+                    }
+                  }
+                }, _callee36);
+              }));
+
+              return function (_x73) {
+                return _ref12.apply(this, arguments);
+              };
+            }());
+
+          case 4:
+          case "end":
+            return _context37.stop();
+        }
+      }
+    }, _callee37);
+  }));
+  return _userHasOnlineStatus.apply(this, arguments);
 }
 
-function _getUserOnlineStatusKey() {
-  _getUserOnlineStatusKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee38(user) {
+function getUserKey(_x52) {
+  return _getUserKey.apply(this, arguments);
+}
+
+function _getUserKey() {
+  _getUserKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee40(user) {
     var userKey;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee38$(_context38) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee40$(_context40) {
       while (1) {
-        switch (_context38.prev = _context38.next) {
+        switch (_context40.prev = _context40.next) {
           case 0:
             userKey = null;
-            _context38.next = 3;
-            return usersVRef.orderByChild("uid").equalTo(user.uid).once('value', /*#__PURE__*/function () {
-              var _ref13 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee37(snapshot) {
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee37$(_context37) {
+            _context40.next = 3;
+            return usersRef.orderByChild("uid").equalTo(user.uid).once('value', /*#__PURE__*/function () {
+              var _ref13 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee39(snapshot) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee39$(_context39) {
                   while (1) {
-                    switch (_context37.prev = _context37.next) {
+                    switch (_context39.prev = _context39.next) {
                       case 0:
                         _.filter(snapshot.val(), /*#__PURE__*/function () {
-                          var _ref14 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee36(value, key) {
-                            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee36$(_context36) {
+                          var _ref14 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee38(value, key) {
+                            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee38$(_context38) {
                               while (1) {
-                                switch (_context36.prev = _context36.next) {
+                                switch (_context38.prev = _context38.next) {
                                   case 0:
                                     userKey = key;
 
                                   case 1:
                                   case "end":
-                                    return _context36.stop();
+                                    return _context38.stop();
                                 }
                               }
-                            }, _callee36);
+                            }, _callee38);
                           }));
 
-                          return function (_x70, _x71) {
+                          return function (_x75, _x76) {
                             return _ref14.apply(this, arguments);
                           };
                         }());
-
-                      case 1:
-                      case "end":
-                        return _context37.stop();
-                    }
-                  }
-                }, _callee37);
-              }));
-
-              return function (_x69) {
-                return _ref13.apply(this, arguments);
-              };
-            }());
-
-          case 3:
-            return _context38.abrupt("return", userKey);
-
-          case 4:
-          case "end":
-            return _context38.stop();
-        }
-      }
-    }, _callee38);
-  }));
-  return _getUserOnlineStatusKey.apply(this, arguments);
-}
-
-function getUserOnlineStatus(_x48) {
-  return _getUserOnlineStatus.apply(this, arguments);
-}
-
-function _getUserOnlineStatus() {
-  _getUserOnlineStatus = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee40(user) {
-    var snapshotVal;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee40$(_context40) {
-      while (1) {
-        switch (_context40.prev = _context40.next) {
-          case 0:
-            if (!(!user || !user.uid)) {
-              _context40.next = 2;
-              break;
-            }
-
-            return _context40.abrupt("return", '');
-
-          case 2:
-            snapshotVal = {};
-            _context40.next = 5;
-            return userHasOnlineStatus(user);
-
-          case 5:
-            _context40.next = 7;
-            return usersVRef.orderByChild('uid').equalTo(user.uid).once('value', /*#__PURE__*/function () {
-              var _ref15 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee39(snapshot) {
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee39$(_context39) {
-                  while (1) {
-                    switch (_context39.prev = _context39.next) {
-                      case 0:
-                        snapshotVal = snapshot.val();
 
                       case 1:
                       case "end":
@@ -5316,106 +5453,152 @@ function _getUserOnlineStatus() {
                 }, _callee39);
               }));
 
-              return function (_x72) {
-                return _ref15.apply(this, arguments);
+              return function (_x74) {
+                return _ref13.apply(this, arguments);
               };
             }());
 
-          case 7:
-            return _context40.abrupt("return", snapshotVal[Object.keys(snapshotVal)[0]].online_visibility);
+          case 3:
+            return _context40.abrupt("return", userKey);
 
-          case 8:
+          case 4:
           case "end":
             return _context40.stop();
         }
       }
     }, _callee40);
   }));
+  return _getUserKey.apply(this, arguments);
+}
+
+function getUserOnlineStatus(_x53) {
   return _getUserOnlineStatus.apply(this, arguments);
 }
 
-function getUserData(_x49) {
+function _getUserOnlineStatus() {
+  _getUserOnlineStatus = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee42(user) {
+    var snapshotVal;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee42$(_context42) {
+      while (1) {
+        switch (_context42.prev = _context42.next) {
+          case 0:
+            snapshotVal = {};
+            _context42.next = 3;
+            return userHasOnlineStatus(user);
+
+          case 3:
+            _context42.next = 5;
+            return usersVRef.orderByChild('uid').equalTo(user.uid).once('value', /*#__PURE__*/function () {
+              var _ref15 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee41(snapshot) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee41$(_context41) {
+                  while (1) {
+                    switch (_context41.prev = _context41.next) {
+                      case 0:
+                        snapshotVal = snapshot.val();
+
+                      case 1:
+                      case "end":
+                        return _context41.stop();
+                    }
+                  }
+                }, _callee41);
+              }));
+
+              return function (_x77) {
+                return _ref15.apply(this, arguments);
+              };
+            }());
+
+          case 5:
+            return _context42.abrupt("return", snapshotVal[Object.keys(snapshotVal)[0]].online_visibility);
+
+          case 6:
+          case "end":
+            return _context42.stop();
+        }
+      }
+    }, _callee42);
+  }));
+  return _getUserOnlineStatus.apply(this, arguments);
+}
+
+function getUserData(_x54) {
   return _getUserData.apply(this, arguments);
 }
 
 function _getUserData() {
-  _getUserData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee41(user_uid) {
+  _getUserData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee43(user_uid) {
     var userData;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee41$(_context41) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee43$(_context43) {
       while (1) {
-        switch (_context41.prev = _context41.next) {
+        switch (_context43.prev = _context43.next) {
           case 0:
             userData = {};
-            _context41.next = 3;
+            _context43.next = 3;
             return usersRef.orderByChild('uid').equalTo(user_uid).once('value', function (snapshot) {
               userData = snapshot.val();
             });
 
           case 3:
-            _context41.next = 5;
+            _context43.next = 5;
             return userData[Object.keys(userData)[0]];
 
           case 5:
-            return _context41.abrupt("return", _context41.sent);
+            return _context43.abrupt("return", _context43.sent);
 
           case 6:
-          case "end":
-            return _context41.stop();
-        }
-      }
-    }, _callee41);
-  }));
-  return _getUserData.apply(this, arguments);
-}
-
-function updateUserOnlineVisibility(_x50, _x51) {
-  return _updateUserOnlineVisibility.apply(this, arguments);
-}
-
-function _updateUserOnlineVisibility() {
-  _updateUserOnlineVisibility = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee43(user, appearance) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee43$(_context43) {
-      while (1) {
-        switch (_context43.prev = _context43.next) {
-          case 0:
-            _context43.next = 2;
-            return userHasOnlineStatus(user);
-
-          case 2:
-            _context43.next = 4;
-            return usersVRef.orderByChild("uid").equalTo(user.uid).once("value", function (snapshot) {
-              _.filter(snapshot.val(), /*#__PURE__*/function () {
-                var _ref16 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee42(userValue, key) {
-                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee42$(_context42) {
-                    while (1) {
-                      switch (_context42.prev = _context42.next) {
-                        case 0:
-                          _context42.next = 2;
-                          return _database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref("onlineStatus/".concat(key)).set({
-                            "uid": userValue.uid,
-                            "online_visibility": appearance
-                          });
-
-                        case 2:
-                        case "end":
-                          return _context42.stop();
-                      }
-                    }
-                  }, _callee42);
-                }));
-
-                return function (_x73, _x74) {
-                  return _ref16.apply(this, arguments);
-                };
-              }());
-            });
-
-          case 4:
           case "end":
             return _context43.stop();
         }
       }
     }, _callee43);
+  }));
+  return _getUserData.apply(this, arguments);
+}
+
+function updateUserOnlineVisibility(_x55, _x56) {
+  return _updateUserOnlineVisibility.apply(this, arguments);
+}
+
+function _updateUserOnlineVisibility() {
+  _updateUserOnlineVisibility = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee45(user, appearance) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee45$(_context45) {
+      while (1) {
+        switch (_context45.prev = _context45.next) {
+          case 0:
+            _context45.next = 2;
+            return usersRef.orderByChild("uid").equalTo(user.uid).once("value", function (snapshot) {
+              _.filter(snapshot.val(), /*#__PURE__*/function () {
+                var _ref16 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee44(userValue, key) {
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee44$(_context44) {
+                    while (1) {
+                      switch (_context44.prev = _context44.next) {
+                        case 0:
+                          _context44.next = 2;
+                          return _database__WEBPACK_IMPORTED_MODULE_1__["default"].database().ref("users/".concat(key)).update({
+                            "online_visibility": appearance
+                          });
+
+                        case 2:
+                        case "end":
+                          return _context44.stop();
+                      }
+                    }
+                  }, _callee44);
+                }));
+
+                return function (_x78, _x79) {
+                  return _ref16.apply(this, arguments);
+                };
+              }());
+            });
+
+          case 2:
+          case "end":
+            return _context45.stop();
+        }
+      }
+    }, _callee45);
   }));
   return _updateUserOnlineVisibility.apply(this, arguments);
 }
@@ -5492,6 +5675,30 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, "\n.container-max-height[data-v-0ca66463] {\n        height: calc(100vh - 4rem);\n}\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=style&index=0&id=714bf39b&scoped=true&lang=css":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=style&index=0&id=714bf39b&scoped=true&lang=css ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.fa-user-times[data-v-714bf39b] {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -5926,6 +6133,36 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=style&index=0&id=714bf39b&scoped=true&lang=css":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=style&index=0&id=714bf39b&scoped=true&lang=css ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Friend_vue_vue_type_style_index_0_id_714bf39b_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Friend.vue?vue&type=style&index=0&id=714bf39b&scoped=true&lang=css */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=style&index=0&id=714bf39b&scoped=true&lang=css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Friend_vue_vue_type_style_index_0_id_714bf39b_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Friend_vue_vue_type_style_index_0_id_714bf39b_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Shared/Layout.vue?vue&type=style&index=0&id=6bf30086&scoped=true&lang=css":
 /*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Shared/Layout.vue?vue&type=style&index=0&id=6bf30086&scoped=true&lang=css ***!
@@ -6284,15 +6521,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Friend_vue_vue_type_template_id_714bf39b__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Friend.vue?vue&type=template&id=714bf39b */ "./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=template&id=714bf39b");
+/* harmony import */ var _Friend_vue_vue_type_template_id_714bf39b_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Friend.vue?vue&type=template&id=714bf39b&scoped=true */ "./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=template&id=714bf39b&scoped=true");
 /* harmony import */ var _Friend_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Friend.vue?vue&type=script&lang=js */ "./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_henrik_Projects_vueChat2_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Friend_vue_vue_type_style_index_0_id_714bf39b_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Friend.vue?vue&type=style&index=0&id=714bf39b&scoped=true&lang=css */ "./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=style&index=0&id=714bf39b&scoped=true&lang=css");
+/* harmony import */ var _Users_henrik_Projects_vueChat2_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_henrik_Projects_vueChat2_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Friend_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Friend_vue_vue_type_template_id_714bf39b__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Components/Friends/Components/Friend/Friend.vue"]])
+
+
+const __exports__ = /*#__PURE__*/(0,_Users_henrik_Projects_vueChat2_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_Friend_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Friend_vue_vue_type_template_id_714bf39b_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render],['__scopeId',"data-v-714bf39b"],['__file',"resources/js/Components/Friends/Components/Friend/Friend.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -7200,18 +7440,18 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=template&id=714bf39b":
-/*!****************************************************************************************************!*\
-  !*** ./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=template&id=714bf39b ***!
-  \****************************************************************************************************/
+/***/ "./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=template&id=714bf39b&scoped=true":
+/*!****************************************************************************************************************!*\
+  !*** ./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=template&id=714bf39b&scoped=true ***!
+  \****************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Friend_vue_vue_type_template_id_714bf39b__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Friend_vue_vue_type_template_id_714bf39b_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Friend_vue_vue_type_template_id_714bf39b__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Friend.vue?vue&type=template&id=714bf39b */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=template&id=714bf39b");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Friend_vue_vue_type_template_id_714bf39b_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Friend.vue?vue&type=template&id=714bf39b&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=template&id=714bf39b&scoped=true");
 
 
 /***/ }),
@@ -7443,6 +7683,19 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_UserProfile_vue_vue_type_style_index_0_id_0ca66463_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/style-loader/dist/cjs.js!../../../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./UserProfile.vue?vue&type=style&index=0&id=0ca66463&scoped=true&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Chat/currentChat/UserProfile/UserProfile.vue?vue&type=style&index=0&id=0ca66463&scoped=true&lang=css");
+
+
+/***/ }),
+
+/***/ "./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=style&index=0&id=714bf39b&scoped=true&lang=css":
+/*!******************************************************************************************************************************!*\
+  !*** ./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=style&index=0&id=714bf39b&scoped=true&lang=css ***!
+  \******************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Friend_vue_vue_type_style_index_0_id_714bf39b_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/style-loader/dist/cjs.js!../../../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Friend.vue?vue&type=style&index=0&id=714bf39b&scoped=true&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Friends/Components/Friend/Friend.vue?vue&type=style&index=0&id=714bf39b&scoped=true&lang=css");
 
 
 /***/ }),

@@ -51,6 +51,7 @@ export default {
         },
 
         addFriendHandler() {
+            this.setFriendsListType(null);
             this.setAddFriends();
         }
     },

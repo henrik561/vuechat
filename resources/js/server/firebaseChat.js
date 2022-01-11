@@ -85,16 +85,24 @@ export async function removeFriend(chatter_id, receiver_id) {
     })
 }
 
-export async function blockFriend(chatter_id, receiver_id) {
+export async function setFriendBlockStatus(chatter_id, receiver_id, blocked) {
     await chatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', snapshot => {
         if(snapshot.exists()) {
             _.forEach(snapshot.val(), (chat, key) => {
-                if(chat.receiver_id === receiver_id && !chat.blocked) {
-                    chatsRef.child(key).update({blocked: true})
+                if(chat.receiver_id === receiver_id) {
+                    chatsRef.child(key).update({blocked})
                 }
             })
         }
     })
+}
+
+export async function blockFriend(chatter_id, receiver_id) {
+    await setFriendBlockStatus(chatter_id, receiver_id, true)
+}
+
+export async function unblockFriend(chatter_id, receiver_id) {
+    await setFriendBlockStatus(chatter_id, receiver_id, false)
 }
 
 export async function getPendingRequests(chatter_id) {
@@ -260,6 +268,7 @@ export function addUserToRLDb(user) {
         "email" : user.email,
         "phoneNumber" : user.phoneNumber,
         "profilePicture" : user.photoURL,
+        "online_visibility" : 'online',
         "uid" : user.uid,
     });
 }
@@ -314,9 +323,9 @@ export async function userHasOnlineStatus(user) {
     })
 }
 
-export async function getUserOnlineStatusKey(user) {
+export async function getUserKey(user) {
     let userKey = null;
-    await usersVRef.orderByChild("uid").equalTo(user.uid).once('value', async (snapshot) => {
+    await usersRef.orderByChild("uid").equalTo(user.uid).once('value', async (snapshot) => {
         _.filter(snapshot.val(), async function(value, key) {
             userKey = key
         })
@@ -325,9 +334,6 @@ export async function getUserOnlineStatusKey(user) {
 }
 
 export async function getUserOnlineStatus(user) {
-    if(!user || !user.uid) {
-        return '';
-    }
     let snapshotVal = {}
     await userHasOnlineStatus(user)
     await usersVRef.orderByChild('uid').equalTo(user.uid).once('value', async (snapshot) => {
@@ -345,11 +351,9 @@ export async function getUserData(user_uid) {
 }
 
 export async function updateUserOnlineVisibility(user, appearance) {
-    await userHasOnlineStatus(user);
-    await usersVRef.orderByChild("uid").equalTo(user.uid).once("value", (snapshot) => {
-        _.filter(snapshot.val(), async function (userValue, key) {
-            await db.database().ref(`onlineStatus/${key}`).set({
-                "uid": userValue.uid,
+    await usersRef.orderByChild("uid").equalTo(user.uid).once("value", (snapshot) => {
+        _.filter(snapshot.val(), async (userValue, key) => {
+            await db.database().ref(`users/${key}`).update({
                 "online_visibility": appearance
             });
         })

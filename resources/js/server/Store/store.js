@@ -14,7 +14,7 @@ const store = new createStore({
             },
             friends: {
                 addFriends: false,
-                listType: 'pending',
+                listType: 'all',
                 pendingRequests: 0,
                 popup: {
                     user_uid: null,
@@ -75,6 +75,17 @@ const store = new createStore({
             state.users = users;
         },
 
+        SET_ONE_USER(state, user) {
+            state.users.push(user)
+        },
+
+        UNSET_ONE_USER(state, user) {
+          let index = state.users.indexOf(user);
+          if(index > -1) {
+              state.users.splice(index, 1);
+          }
+        },
+
         SET_NEW_CHAT(state, user) {
             state.chat.user = user;
         },
@@ -127,6 +138,14 @@ const store = new createStore({
 
         setAllUsers({commit}, users) {
             commit('SET_ALL_USERS', users);
+        },
+
+        setOneUser({commit}, user) {
+            commit('SET_ONE_USER', user);
+        },
+
+        unsetOneUser({commit}, user) {
+            commit('UNSET_ONE_USER', user);
         },
 
         setNewChat({commit}, user) {

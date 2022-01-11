@@ -9,7 +9,7 @@
                 <span>{{ formatUserOnlineVisibility }}</span>
             </div>
         </div>
-        <div v-if="getFriendsListType !== 'pending'" class="flex gap-2">
+        <div v-if="getFriendsListType !== 'pending' && getFriendsListType !== 'blocked'" class="flex gap-2">
             <div class="w-10 h-10 flex items-center bg-white rounded-full justify-center">
                 <NavLink :notNavbarLink="true" href="/chat" @click="setNewChatUser"><i class="fas fa-comment-alt text-purple-800"></i></NavLink>
             </div>
@@ -17,7 +17,7 @@
                 <i class="fas fa-ellipsis-v text-purple-800"></i>
             </div>
         </div>
-        <div v-else class="flex gap-2">
+        <div v-else-if="getFriendsListType === 'pending'" class="flex gap-2">
             <div @click="acceptFriendRequest" class="w-10 h-10 flex items-center bg-white rounded-full justify-center">
                 <i class="fas fa-check text-green-500"></i>
             </div>
@@ -25,9 +25,14 @@
                 <i class="fas fa-times text-red-500"></i>
             </div>
         </div>
+        <div v-else-if="getFriendsListType === 'blocked'">
+            <div @click="unblockFriend" class="w-10 h-10 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center duration-300 bg-white rounded-full">
+                <i class="fas transition-all cursor-pointer w-full h-full duration-300 fa-user-times text-red-500 hover:text-white"></i>
+            </div>
+        </div>
         <div v-if="usersPopupIsOpen" class="w-auto absolute flex flex-col justify-center gap-3 p-2 h-auto bg-white right-4 top-full w-40 h-24 rounded-2xl z-20">
-            <span @click="removeFriend" class="text-yellow-500 cursor-pointer p-2 transition-all duration-300 rounded-2xl hover:bg-yellow-500 hover:text-white">Vriend verwijderen</span>
-            <span @click="blockFriend" class="text-red-500 cursor-pointer p-2 transition-all duration-300 rounded-2xl hover:bg-red-500 hover:text-white">Vriend Blokkeren</span>
+            <span @click="removeFriend" class="text-yellow-500 cursor-pointer p-2 transition-all duration-300 rounded-2xl hover:bg-yellow-500 hover:text-white">Remove Friend</span>
+            <span @click="blockFriend" class="text-red-500 cursor-pointer p-2 transition-all duration-300 rounded-2xl hover:bg-red-500 hover:text-white">Block Friend</span>
         </div>
     </div>
 </template>
@@ -37,12 +42,11 @@
 import {
     getUserData,
     addNewChat,
-    getUserOnlineStatus,
     rejectFriendRequest,
     createNewChat, markMessagesAsRead,
     getChatKey,
     removeFriend,
-    blockFriend,
+    blockFriend, unblockFriend,
 } from "../../../../server/firebaseChat";
 import moment from "moment";
 import {mapActions, mapGetters} from "vuex";
@@ -96,7 +100,6 @@ export default {
             }else {
                 this.friendData = await getUserData(this.friend.receiver_id)
             }
-            this.friendData['online_visibility'] = await getUserOnlineStatus({ uid: this.friendData.uid })
         },
 
         async acceptFriendRequest() {
@@ -133,8 +136,12 @@ export default {
         },
 
         async blockFriend() {
-            await blockFriend(this.getCurrentUser.uid, this.getFriendPopupUser)
+            await blockFriend(this.getCurrentUser.uid, this.friendData.uid)
             this.closePopup()
+        },
+
+        async unblockFriend() {
+            await unblockFriend(this.getCurrentUser.uid, this.friendData.uid)
         }
     },
 
@@ -149,5 +156,11 @@ export default {
 </script>
 
 <style scoped>
+
+.fa-user-times {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 </style>

@@ -35,7 +35,7 @@ import ChatPreRender from "../Components/base/ChatPreRender";
 import Login from "../Components/Auth/Login";
 import Register from "../Components/Auth/Register";
 import {mapActions, mapGetters} from "vuex";
-import {updateUserOnlineVisibility, getUserOnlineStatusKey} from "../server/firebaseChat";
+import {getUserKey, getChatKey} from "../server/firebaseChat";
 import db from "../server/database";
 import ContactSideBar from "../Components/Chat/ContactSideBar";
 
@@ -54,9 +54,8 @@ export default {
     watch: {
         getCurrentUser: {
             handler: async function(user) {
-                let userKey = await getUserOnlineStatusKey(user)
-                //TODO status does not always goes to offline
-                await db.database().ref(`onlineStatus/${userKey}`).onDisconnect().update({'online_visibility': new Date().getTime()})
+                let userKey = await getUserKey(user)
+                await db.database().ref(`users/${userKey}`).onDisconnect().update({'online_visibility': new Date().getTime()})
                 await db.database().ref('friendRequests').orderByChild('receiver_id').equalTo(this.getCurrentUser.uid).on('value', async snapshot => {
                     if(snapshot.exists()) {
                         this.setPendingRequests(Object.keys(snapshot.val()).length)
