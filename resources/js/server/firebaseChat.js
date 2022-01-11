@@ -14,12 +14,13 @@ const usersVRef = db.database().ref('onlineStatus');
 const friendRequestsRef = db.database().ref('friendRequests')
 
 //Chat functions
-export async function sendMessage(chatter_id, receiver_id, chatKey, message, message_seen) {
+export async function sendMessage(chatter_id, receiver_id, chatKey, message, message_seen, received) {
     messagesRef.push({
         chatter_id,
         chatKey,
         message,
         message_seen,
+        received,
         timestamp: `${(new Date()).toTimeString().substr(0,5)}`
     });
 
@@ -108,6 +109,20 @@ export async function setFriendBlockStatus(chatter_id, receiver_id, blocked) {
 
 export async function blockFriend(chatter_id, receiver_id) {
     await setFriendBlockStatus(chatter_id, receiver_id, true)
+}
+
+export async function userIsBlocked(chatter_id, receiver_id) {
+    let response = false;
+    await chatsRef.orderByChild('chatter_id').equalTo(chatter_id).once('value', snapshot => {
+        if(snapshot.exists()) {
+            _.forEach(snapshot.val(), (chat, key) => {
+                if(chat.receiver_id === receiver_id) {
+                    response = true;
+                }
+            })
+        }
+    })
+    return response;
 }
 
 export async function unblockFriend(chatter_id, receiver_id) {

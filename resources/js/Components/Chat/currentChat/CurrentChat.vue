@@ -10,9 +10,9 @@
                             <div class="flex gap-1 items-end text-xs mt-3" :class="message.chatter_id === getCurrentUser.uid ? 'justify-end' : 'justify-start'">
                                 <div class="message_timestamp">{{ message.timestamp }}</div>
                                 <div class="message_status text-xs items-center" v-if="message.chatter_id === getCurrentUser.uid">
-                                    <i class="fas fa-check text-gray-400" v-if="false"></i>
-                                    <i class="fas fa-check-double text-gray-400" v-if="!message.message_seen"></i>
-                                    <i class="fas fa-check-double text-blue-400" v-if="message.message_seen"></i>
+                                    <i class="fas fa-check text-gray-400" v-if="!message.received"></i>
+                                    <i class="fas fa-check-double text-gray-400" v-else-if="!message.message_seen"></i>
+                                    <i class="fas fa-check-double text-blue-400" v-else-if="message.message_seen"></i>
                                 </div>
                             </div>
                         </div>
@@ -40,9 +40,7 @@ import NewMessage from "./newMessage";
 import {
     sendMessage,
     hasExistingConnection,
-    markMessagesAsRead,
-    createNewChat,
-    getActiveChatKey
+    userIsBlocked
 } from '../../../server/firebaseChat';
 import db from '../../../server/database';
 import ChatUserTopBar from "./ChatUserTopBar";
@@ -56,7 +54,6 @@ export default {
         return {
             messages: null,
             fetchMessages:false,
-            hasChatConnection: false,
             showNewMessageShort: true,
             viewUserProfile: false,
         }
@@ -99,8 +96,9 @@ export default {
         ...mapActions(['setChatStop']),
 
         async sendNewMessageEvent(message) {
-            this.hasChatConnection = await hasExistingConnection(this.getCurrentChatKey, this.getCurrentUser.uid, this.getNewChatUser.uid);
-            await sendMessage(this.getCurrentUser.uid, this.getNewChatUser.uid, this.getCurrentChatKey, message, this.hasChatConnection);
+            let hasChatConnection = await hasExistingConnection(this.getCurrentChatKey, this.getCurrentUser.uid, this.getNewChatUser.uid);
+            let isBlocked = await userIsBlocked(this.getCurrentUser.uid, this.getNewChatUser.uid)
+            await sendMessage(this.getCurrentUser.uid, this.getNewChatUser.uid, this.getCurrentChatKey, message, hasChatConnection, !isBlocked);
             await this.scrollToBottom();
         },
 
