@@ -20,6 +20,7 @@
 import {getUserOnlineStatus, markMessagesAsRead, getUserData, createNewChat} from "../../../server/firebaseChat";
 import {mapActions, mapGetters} from "vuex";
 import NavLink from "../../../Shared/Navbar/NavLink";
+import db from '../../../server/database';
 
 export default {
     name: "User",
@@ -29,7 +30,8 @@ export default {
     data() {
         return {
             userStatus: 'online',
-            userData: {}
+            userData: {},
+            newMessages: 0,
         }
     },
 
@@ -37,16 +39,26 @@ export default {
         ...mapGetters(['getNewChatUser', 'getUserHasChat', 'getCurrentUser']),
 
         hasNewMessages() {
-            return Math.round(Math.random()) > 0;
+            return this.newMessages > 0
         },
 
         getNewMessageAmount() {
-            return Math.floor(Math.random() * (3 - 1 + 1)) + 1;
+            return this.newMessages
         },
     },
 
     created() {
         this.getUserData()
+
+        db.database().ref('chats').orderByChild('chatKey').equalTo(this.user.chatKey).on('value', snapshot => {
+            if(snapshot.exists()) {
+                _.forEach(snapshot.val(), chat => {
+                    if(chat.chatter_id === this.user.receiver_id) {
+                        this.newMessages = chat.newMessages;
+                    }
+                })
+            }
+        })
     },
 
     methods: {

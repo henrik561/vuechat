@@ -54,9 +54,7 @@ export default {
     watch: {
         getCurrentUser: {
             handler: async function(user) {
-                await updateUserOnlineVisibility(this.getCurrentUser, 'online')
                 let userKey = await getUserOnlineStatusKey(user)
-
                 //TODO status does not always goes to offline
                 await db.database().ref(`onlineStatus/${userKey}`).onDisconnect().update({'online_visibility': new Date().getTime()})
                 await db.database().ref('friendRequests').orderByChild('receiver_id').equalTo(this.getCurrentUser.uid).on('value', async snapshot => {

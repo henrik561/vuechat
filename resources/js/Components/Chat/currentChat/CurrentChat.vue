@@ -100,7 +100,7 @@ export default {
 
         async sendNewMessageEvent(message) {
             this.hasChatConnection = await hasExistingConnection(this.getCurrentChatKey, this.getCurrentUser.uid, this.getNewChatUser.uid);
-            await sendMessage(this.getCurrentUser.uid, this.getCurrentChatKey, message, this.hasChatConnection);
+            await sendMessage(this.getCurrentUser.uid, this.getNewChatUser.uid, this.getCurrentChatKey, message, this.hasChatConnection);
             await this.scrollToBottom();
         },
 

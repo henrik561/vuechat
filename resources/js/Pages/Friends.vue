@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col w-full">
+    <div class="flex flex-col w-3/4">
         <FriendsNavbar></FriendsNavbar>
         <div class="py-4 px-8">
             <div v-if="getAddFriends">

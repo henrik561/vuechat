@@ -1,8 +1,7 @@
 import db from './database';
 import "firebase/compat/firestore";
 import { getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider } from "firebase/auth";
-import {ref} from "vue";
-import chat from "../Pages/Chat";
+import first from "../Functions/Helpers";
 
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
@@ -15,7 +14,7 @@ const usersVRef = db.database().ref('onlineStatus');
 const friendRequestsRef = db.database().ref('friendRequests')
 
 //Chat functions
-export async function sendMessage(chatter_id, chatKey, message, message_seen) {
+export async function sendMessage(chatter_id, receiver_id, chatKey, message, message_seen) {
     messagesRef.push({
         chatter_id,
         chatKey,
@@ -23,6 +22,20 @@ export async function sendMessage(chatter_id, chatKey, message, message_seen) {
         message_seen,
         timestamp: `${(new Date()).toTimeString().substr(0,5)}`
     });
+
+    if(message_seen) {
+       return
+    }
+
+    await chatsRef.orderByChild('chatKey').equalTo(chatKey).once('value', snapshot => {
+        if(snapshot.exists()) {
+            _.forEach(snapshot.val(), async (chat, key) => {
+                if(chat.receiver_id === receiver_id) {
+                    await chatsRef.child(key).update({ newMessages: chat.newMessages + 1})
+                }
+            })
+        }
+    })
 }
 
 export async function hasChat(chatKey) {
@@ -118,12 +131,14 @@ export async function addNewChat(chatter_id, receiver_id) {
         chatter_id,
         receiver_id,
         blocked: false,
+        newMessages: 0,
     })
     await chatsRef.child(newChat.key).update({ 'chatKey' : newChat.key })
     chatsRef.push({
         chatter_id: receiver_id,
         receiver_id: chatter_id,
         chatKey: newChat.key,
+        newMessages: 0,
         blocked: false,
     })
     return 'AddedAsFriend'
@@ -173,15 +188,28 @@ export async function getChatKey(chatter_id, receiver_id) {
     return response;
 }
 
-export async function markMessagesAsRead(user_uid, chatKey, current_user_uid) {
+export async function markChatNotificationAsRead(chatter_id, chatKey, receiver_id) {
+    await chatsRef.orderByChild('chatKey').equalTo(chatKey).once('value', snapshot => {
+        if(snapshot.exists()) {
+            _.forEach(snapshot.val(), (chat, key) => {
+                if(chat.receiver_id === receiver_id && chat.chatter_id === chatter_id) {
+                    chatsRef.child(key).update({ newMessages: 0 })
+                }
+            })
+        }
+    })
+}
+
+export async function markMessagesAsRead(chatter_id, chatKey, receiver_id) {
+    await markChatNotificationAsRead(chatter_id, chatKey, receiver_id);
     await messagesRef.orderByChild('chatKey').equalTo(chatKey).once('value', async (snapshot) => {
         _.forEach(snapshot.val(), async (value, key) => {
-            if(value.chatter_id === user_uid && !value.message_seen) {
+            if(value.chatter_id === chatter_id && !value.message_seen) {
                 let seenBy = [];
                 if(value.seen_by) {
-                    seenBy = [...value.seen_by, current_user_uid];
+                    seenBy = [...value.seen_by, receiver_id];
                 }else {
-                    seenBy = [current_user_uid];
+                    seenBy = [receiver_id];
                 }
                 await messagesRef.child(key).update({
                     "seen_at" : `${(new Date()).toTimeString().substr(0,5)}`,
