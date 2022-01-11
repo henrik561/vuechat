@@ -24,7 +24,9 @@ export default {
 
     async created() {
         await db.database().ref('chats').orderByChild('chatter_id').equalTo(this.getCurrentUser.uid).on('value', async snapshot => {
-            this.friends = snapshot.val();
+            this.friends = _.filter(snapshot.val(), user => {
+                return !user.blocked;
+            })
         })
     }
 }

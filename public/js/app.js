@@ -1411,7 +1411,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     while (1) {
                       switch (_context.prev = _context.next) {
                         case 0:
-                          _this.friends = snapshot.val();
+                          _this.friends = _.filter(snapshot.val(), function (user) {
+                            return !user.blocked;
+                          });
 
                         case 1:
                         case "end":
