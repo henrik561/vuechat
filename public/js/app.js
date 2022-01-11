@@ -382,7 +382,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       filterWord: '',
-      users: []
+      users: [],
+      createGroupChat: false
     };
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)(['getAllUsers', 'getCurrentUser'])), {}, {
@@ -433,6 +434,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)(['setAllUsers'])), {}, {
     searchInUsers: function searchInUsers(keyword) {
       this.filterWord = keyword;
+    },
+    startGroupChat: function startGroupChat() {
+      this.createGroupChat = !this.createGroupChat;
     }
   }),
   watch: {
@@ -2761,9 +2765,10 @@ var _withScopeId = function _withScopeId(n) {
 };
 
 var _hoisted_1 = {
-  "class": "w-1/4 border-r-2 border-white bg-transparent max-viewport-height flex flex-col contact-sidebar"
+  "class": "w-1/4 border-r-2 border-white relative bg-transparent max-viewport-height flex flex-col contact-sidebar"
 };
 var _hoisted_2 = {
+  key: 0,
   "class": "flex flex-col w-full border-2 border-blue-800"
 };
 var _hoisted_3 = {
@@ -2780,6 +2785,24 @@ var _hoisted_4 = /*#__PURE__*/_withScopeId(function () {
 });
 
 var _hoisted_5 = [_hoisted_4];
+
+var _hoisted_6 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": "fas fa-comment-medical text-white text-3xl transition-all duration-300 hover:text-green-500"
+  }, null, -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_7 = [_hoisted_6];
+var _hoisted_8 = {
+  key: 2,
+  "class": "w-full h-full p-4"
+};
+
+var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"mb-3\" data-v-d863e990><h1 class=\"text-white font-bold text-xl\" data-v-d863e990>Create a group chat</h1></div><div class=\"w-full flex flex-col gap-3 h-12\" data-v-d863e990><input name=\"group-name\" class=\"px-4 py-2 rounded-3xl\" placeholder=\"Group name...\" data-v-d863e990><input name=\"group-description\" class=\"px-4 py-2 rounded-3xl\" placeholder=\"Group description...\" data-v-d863e990><button class=\"px-4 py-2 rounded-3xl bg-green-500 text-white\" data-v-d863e990>Create group</button></div>", 2);
+
+var _hoisted_11 = [_hoisted_9];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Search = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Search");
 
@@ -2787,11 +2810,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_perfect_scrollbar = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("perfect-scrollbar");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Search, {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [!$data.createGroupChat ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Search, {
     onSearchInUsers: $options.searchInUsers
   }, null, 8
   /* PROPS */
-  , ["onSearchInUsers"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_perfect_scrollbar, {
+  , ["onSearchInUsers"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$data.createGroupChat ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_perfect_scrollbar, {
+    key: 1,
     "class": "overflow-y-scroll w-full"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -2809,7 +2833,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
     /* STABLE */
 
-  })]);
+  })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    onClick: _cache[0] || (_cache[0] = function () {
+      return $options.startGroupChat && $options.startGroupChat.apply($options, arguments);
+    }),
+    "class": "w-16 h-16 rounded-full bg-white flex items-center justify-center transition-all duration-300 hover:bg-white bg-green-500 absolute bottom-4 right-4"
+  }, _hoisted_7), $data.createGroupChat ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_8, _hoisted_11)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
 }
 
 /***/ }),
