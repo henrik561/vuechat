@@ -14,16 +14,9 @@
         <div @click="startGroupChat" class="w-16 h-16 rounded-full bg-white flex items-center justify-center transition-all duration-300 hover:bg-white bg-green-500 absolute bottom-4 right-4">
             <i class="fas fa-comment-medical text-white text-3xl transition-all duration-300 hover:text-green-500"></i>
         </div>
-        <div v-if="createGroupChat" class="w-full h-full p-4">
-            <div class="mb-3">
-                <h1 class="text-white font-bold text-xl">Create a group chat</h1>
-            </div>
-            <div class="w-full flex flex-col gap-3 h-12">
-                <input name="group-name" class="px-4 py-2 rounded-3xl" placeholder="Group name...">
-                <input name="group-description" class="px-4 py-2 rounded-3xl" placeholder="Group description...">
-                <button class="px-4 py-2 rounded-3xl bg-green-500 text-white">Create group</button>
-            </div>
-        </div>
+        <template v-if="createGroupChat">
+            <Groupchat></Groupchat>
+        </template>
     </div>
 </template>
 
@@ -34,10 +27,11 @@ import {mapActions, mapGetters} from "vuex";
 import db from "../../server/database";
 import first from "../../Functions/Helpers";
 import Database from "../../server/database";
+import Groupchat from "./Groupchat/Groupchat";
 
 export default {
     name: "ContactSideBar",
-    components: {Search, User},
+    components: {Groupchat, Search, User},
 
     data() {
         return {
