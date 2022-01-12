@@ -22,8 +22,6 @@
 import {mapGetters, mapActions} from "vuex";
 import {addAsFriend, addNewChat, getUserByEmail} from "../../../server/firebaseChat";
 
-//TODO remove send request to self: henrikh2004@gmail.com -> henrikh2004@gmail.com
-
 export default {
     name: "AddFriends",
 
