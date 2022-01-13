@@ -4,34 +4,39 @@
             <Search @searchInUsers="searchInUsers"></Search>
         </div>
         <perfect-scrollbar v-if="!createGroupChat" class="overflow-y-scroll w-full">
-            <template v-for="user in getAllUsers" :key="user.uid">
-                <User :user="user"></User>
+            <template v-for="chat in getAllUsers" :key="chat.uid">
+                <template v-if="chat.members">
+                    <Group :group="chat"></Group>
+                </template>
+                <template v-else>
+                    <User :user="chat"></User>
+                </template>
             </template>
-                <div class="flex w-full min-h-full py-6 justify-center items-center" v-if="!hasUsers">
-                    <span class="text-white">Geen contacten gevonden!</span>
-                </div>
+            <div class="flex w-full min-h-full py-6 justify-center items-center" v-if="!hasUsers">
+                <span class="text-white">Geen contacten gevonden!</span>
+            </div>
         </perfect-scrollbar>
-        <div @click="startGroupChat" class="w-16 h-16 rounded-full bg-white flex items-center justify-center transition-all duration-300 hover:bg-white bg-green-500 absolute bottom-4 right-4">
+        <div @click="toggleCreateChat" class="w-16 h-16 rounded-full bg-white flex items-center justify-center transition-all duration-300 hover:bg-white bg-green-500 absolute bottom-4 right-4">
             <i class="fas fa-comment-medical text-white text-3xl transition-all duration-300 hover:text-green-500"></i>
         </div>
         <template v-if="createGroupChat">
-            <Groupchat></Groupchat>
+            <Groupchat @toggleGroupChatPopup="toggleCreateChat"></Groupchat>
         </template>
     </div>
 </template>
 
 <script>
+
 import User from "./ContactSideBar/User";
 import Search from "./ContactSideBar/Search";
 import {mapActions, mapGetters} from "vuex";
 import db from "../../server/database";
-import first from "../../Functions/Helpers";
-import Database from "../../server/database";
 import Groupchat from "./Groupchat/Groupchat";
+import Group from "./ContactSideBar/Group";
 
 export default {
     name: "ContactSideBar",
-    components: {Groupchat, Search, User},
+    components: {Group, Groupchat, Search, User},
 
     data() {
         return {
@@ -54,16 +59,32 @@ export default {
         await db.database().ref('chats').orderByChild('chatter_id').equalTo(this.getCurrentUser.uid).on('value', async (snapshot) => {
             this.setAllUsers(_.filter(snapshot.val(), user => !user.blocked))
         })
+
+        await db.database().ref('groups').on('value', snapshot => {
+            if(snapshot.exists()) {
+                _.forEach(snapshot.val(), chat => {
+                    if(chat.members.includes(this.getCurrentUser.uid)) {
+                        const i = this.getAllUsers.findIndex(_element => _element.chatKey === chat.chatKey);
+                        console.log(i)
+                        if (i > -1) {
+                            this.setOneUserByKey({user: chat, key: i})
+                        } else {
+                            this.setOneUser(chat)
+                        }
+                    }
+                })
+            }
+        })
     },
 
     methods: {
-        ...mapActions(['setAllUsers']),
+        ...mapActions(['setAllUsers', 'setOneUserByKey', 'setOneUser']),
 
         searchInUsers(keyword) {
             this.filterWord = keyword;
         },
 
-        startGroupChat() {
+        toggleCreateChat() {
             this.createGroupChat = !this.createGroupChat;
         }
     },

@@ -21,7 +21,6 @@ import {markMessagesAsRead, getUserData, createNewChat} from "../../../server/fi
 import {mapActions, mapGetters} from "vuex";
 import NavLink from "../../../Shared/Navbar/NavLink";
 import db from '../../../server/database';
-import first from "../../../Functions/Helpers";
 
 export default {
     name: "User",

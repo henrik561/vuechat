@@ -5,7 +5,6 @@
                 <span>Friends |</span>
             </div>
             <div class="flex gap-4">
-<!--               // TODO when toggled to a friends list type then to add friend list type still shows (all) + (add friend)-->
                 <div @click="typeClickHandler('online')" :class="{ 'bg-green-500' : getFriendsListType === 'online' }" class="cursor-pointer w-20 text-center text-white py-0.5 px-1 rounded">
                     <span>Online</span>
                 </div>

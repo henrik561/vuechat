@@ -7,7 +7,8 @@
         <form @submit.prevent="" action="" class="w-full h-16 bg-white rounded flex">
             <input id="friendEmail" v-model="friendEmail" class="pl-2 rounded w-9/12 outline-none border-none" type="text" placeholder="Enter a Email@email.example" />
             <div @click="findFriend" class="bg-white cursor-pointer w-3/12 h-full flex pr-4 justify-end items-center">
-                <button :class="canSubmitFriendRequest ? 'bg-blue-800' : 'bg-blue-300'" type="submit" class="text-white rounded px-4 p-2">Send Friend Request</button>
+                <button
+ type="submit" class="text-white rounded px-4 p-2">Send Friend Request</button>
             </div>
         </form>
         <div v-if="addFriend.error" class="w-full flex rounded justify-between items-center h-12 text-white px-4" :class="addFriend.color">

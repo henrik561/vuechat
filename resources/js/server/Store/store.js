@@ -75,6 +75,10 @@ const store = new createStore({
             state.users = users;
         },
 
+        SET_ONE_USER_BY_KEY(state, {user, key}) {
+            state.users[key] = user;
+        },
+
         SET_ONE_USER(state, user) {
             state.users.push(user)
         },
@@ -142,6 +146,10 @@ const store = new createStore({
 
         setOneUser({commit}, user) {
             commit('SET_ONE_USER', user);
+        },
+
+        setOneUserByKey({commit}, {user, key}) {
+            commit('SET_ONE_USER_BY_KEY', {user, key})
         },
 
         unsetOneUser({commit}, user) {

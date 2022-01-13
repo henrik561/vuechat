@@ -64,7 +64,7 @@ export default {
         db.database().ref('chats').orderByChild('chatKey').equalTo(this.getCurrentChatKey).on('value', snapshot => {
             _.forEach(snapshot.val(), chat => {
                 if(chat.chatter_id === this.getCurrentUser.uid && chat.receiver_id === this.getNewChatUser.uid) {
-                    this.userIsBlocked = chat.has_been_blocked
+                    this.userIsBlocked = chat.has_been_blocked || false;
                 }
             })
         })

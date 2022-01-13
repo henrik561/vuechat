@@ -11,7 +11,8 @@ const messagesRef = db.database().ref('messages');
 const chatsRef = db.database().ref('chats');
 const activeChatsRef = db.database().ref('activeChats');
 const usersVRef = db.database().ref('onlineStatus');
-const friendRequestsRef = db.database().ref('friendRequests')
+const friendRequestsRef = db.database().ref('friendRequests');
+const groupsRef = db.database().ref('groups');
 
 //Chat functions
 export async function sendMessage(chatter_id, receiver_id, chatKey, message, message_seen, received) {
@@ -387,6 +388,20 @@ export async function updateUserOnlineVisibility(user, appearance) {
 
 export function useAuth() {
     return auth;
+}
+
+export async function createGroup(creator_uid, groupName, groupDescription, profilePicture='') {
+    const groupData = groupsRef.push({
+        creator_uid,
+        members: [
+            creator_uid,
+        ],
+        profilePicture,
+        groupName,
+        groupDescription,
+    })
+
+    await groupsRef.child(groupData.key).update({ chatKey: groupData.key })
 }
 //user Logout
 
