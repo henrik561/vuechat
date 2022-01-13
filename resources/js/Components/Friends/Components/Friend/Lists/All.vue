@@ -8,7 +8,7 @@
 import db from "../../../../../server/database";
 import {mapGetters} from "vuex";
 import Friend from "../Friend";
-import first from "../../../../../Functions/Helpers";
+import {first} from "../../../../../Functions/Helpers";
 
 export default {
     name: "All",

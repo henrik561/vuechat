@@ -6,6 +6,6 @@ function last(obj) {
     return obj[Object.keys(obj).length]
 }
 
-export default { first, last }
+export { first, last }
 
 

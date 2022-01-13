@@ -16,19 +16,19 @@ export default {
     components: {CurrentChat, ContactSideBar},
 
     computed: {
-        ...mapGetters(['getCurrentUser', 'getNewChatUser', 'getCurrentChatKey']),
+        ...mapGetters(['getCurrentUser', 'getNewChatUser', 'getNewChatKey', 'getActiveChatMessageKey']),
     },
 
     methods: {
-        ...mapActions(['setAllUsers', 'setActiveChatKey']),
+        ...mapActions(['setAllUsers', 'setNewChatDBKey']),
     },
 
     watch: {
         getNewChatUser: {
             handler: async function(user) {
                 setTimeout(async () => {
-                    let activeChatKey = await getActiveChatKey(this.getCurrentChatKey, this.getCurrentUser.uid)
-                    this.setActiveChatKey(activeChatKey)
+                    let activeChatKey = await getActiveChatKey(this.getNewChatKey, this.getCurrentUser.uid)
+                    this.setNewChatDBKey(activeChatKey)
                     await db.database().ref(`activeChats/${activeChatKey}`).onDisconnect().set(null)
                 }, 10)
             }

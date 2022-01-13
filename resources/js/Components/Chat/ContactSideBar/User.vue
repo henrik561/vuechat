@@ -48,7 +48,6 @@ export default {
 
     created() {
         this.getUserData();
-
         db.database().ref('chats').orderByChild('chatKey').equalTo(this.user.chatKey).on('value', snapshot => {
             if(snapshot.exists()) {
                 _.forEach(snapshot.val(), chat => {
@@ -61,12 +60,12 @@ export default {
     },
 
     methods: {
-        ...mapActions(['setNewChat', 'setNewChatKey']),
+        ...mapActions(['setNewChatUser', 'setNewChatKey']),
         async startNewChat() {
             if(this.getNewChatUser && this.getNewChatUser.uid === this.user.receiver_id) {
                 return
             }
-            await this.setNewChat(this.userData);
+            await this.setNewChatUser(this.userData);
             await this.setNewChatKey(this.user.chatKey)
             await createNewChat(this.getCurrentUser.uid, this.userData.uid, this.user.chatKey);
             await markMessagesAsRead(this.userData.uid, this.user.chatKey, this.getCurrentUser.uid);

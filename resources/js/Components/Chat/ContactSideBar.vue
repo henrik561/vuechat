@@ -4,7 +4,7 @@
             <Search @searchInUsers="searchInUsers"></Search>
         </div>
         <perfect-scrollbar v-if="!createGroupChat" class="overflow-y-scroll w-full">
-            <template v-for="chat in getAllUsers" :key="chat.uid">
+            <template v-for="chat in getAllChats" :key="chat.uid">
                 <template v-if="chat.members">
                     <Group :group="chat"></Group>
                 </template>
@@ -12,8 +12,8 @@
                     <User :user="chat"></User>
                 </template>
             </template>
-            <div class="flex w-full min-h-full py-6 justify-center items-center" v-if="!hasUsers">
-                <span class="text-white">Geen contacten gevonden!</span>
+            <div class="flex w-full min-h-full py-6 justify-center items-center" v-if="!hasChat">
+                <span class="text-white">Geen chats gevonden!</span>
             </div>
         </perfect-scrollbar>
         <div @click="toggleCreateChat" class="w-16 h-16 rounded-full bg-white flex items-center justify-center transition-all duration-300 hover:bg-white bg-green-500 absolute bottom-4 right-4">
@@ -41,44 +41,36 @@ export default {
     data() {
         return {
             filterWord: '',
-            users: [],
+            chats: [],
             createGroupChat: false,
         }
     },
 
     computed: {
-        ...mapGetters(['getAllUsers', 'getCurrentUser']),
+        ...mapGetters(['getAllChats', 'getCurrentUser']),
 
-        hasUsers() {
-            return !_.isEmpty(this.getAllUsers);
+        hasChat() {
+            return !_.isEmpty(this.getAllChats);
         },
 
     },
 
     async created() {
-        await db.database().ref('chats').orderByChild('chatter_id').equalTo(this.getCurrentUser.uid).on('value', async (snapshot) => {
-            this.setAllUsers(_.filter(snapshot.val(), user => !user.blocked))
-        })
-
-        await db.database().ref('groups').on('value', snapshot => {
+        await db.database().ref('chats').on('value', async (snapshot) => {
             if(snapshot.exists()) {
-                _.forEach(snapshot.val(), chat => {
-                    if(chat.members.includes(this.getCurrentUser.uid)) {
-                        const i = this.getAllUsers.findIndex(_element => _element.chatKey === chat.chatKey);
-                        console.log(i)
-                        if (i > -1) {
-                            this.setOneUserByKey({user: chat, key: i})
-                        } else {
-                            this.setOneUser(chat)
-                        }
+                let chats = _.filter(snapshot.val(), chat => {
+                    if(chat.chatter_id && _.isEqual(chat.chatter_id, this.getCurrentUser.uid)) {
+                        return chat
                     }
+                    return chat.members && _.includes(chat.members, this.getCurrentUser.uid)
                 })
+                this.setAllChats(chats)
             }
         })
     },
 
     methods: {
-        ...mapActions(['setAllUsers', 'setOneUserByKey', 'setOneUser']),
+        ...mapActions(['setAllChats', 'setOneChatByKey', 'setOneChat']),
 
         searchInUsers(keyword) {
             this.filterWord = keyword;

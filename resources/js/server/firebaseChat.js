@@ -1,7 +1,6 @@
 import db from './database';
 import "firebase/compat/firestore";
 import { getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider } from "firebase/auth";
-import first from "../Functions/Helpers";
 
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
@@ -12,7 +11,6 @@ const chatsRef = db.database().ref('chats');
 const activeChatsRef = db.database().ref('activeChats');
 const usersVRef = db.database().ref('onlineStatus');
 const friendRequestsRef = db.database().ref('friendRequests');
-const groupsRef = db.database().ref('groups');
 
 //Chat functions
 export async function sendMessage(chatter_id, receiver_id, chatKey, message, message_seen, received) {
@@ -38,16 +36,6 @@ export async function sendMessage(chatter_id, receiver_id, chatKey, message, mes
             })
         }
     })
-}
-
-export async function hasChat(chatKey) {
-    let snapshotExists = false;
-    await chatsRef.orderByChild('chatKey').equalTo(chatKey).once('value', async snapshot => {
-        if(snapshot.exists()) {
-            snapshotExists = true;
-        }
-    })
-    return snapshotExists;
 }
 
 export async function hasExistingConnection(chatKey, receiver_id, chatter_id) {
@@ -391,7 +379,7 @@ export function useAuth() {
 }
 
 export async function createGroup(creator_uid, groupName, groupDescription, profilePicture='') {
-    const groupData = groupsRef.push({
+    const groupData = chatsRef.push({
         creator_uid,
         members: [
             creator_uid,
@@ -401,7 +389,7 @@ export async function createGroup(creator_uid, groupName, groupDescription, prof
         groupDescription,
     })
 
-    await groupsRef.child(groupData.key).update({ chatKey: groupData.key })
+    await chatsRef.child(groupData.key).update({ chatKey: groupData.key })
 }
 //user Logout
 

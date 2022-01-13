@@ -103,7 +103,7 @@ export default {
         changeAuthType() {
             this.setAuthType();
         },
-
+        //TODO Catch form errors
         async loginWithGoogleProvider() {
             const response = await logUserInGoogle();
             if(!response.user) {

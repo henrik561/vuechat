@@ -68,7 +68,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters(['getNewChatUser', 'getCurrentUser', 'getCurrentChatKey']),
+        ...mapGetters(['getNewChatUser', 'getCurrentUser', 'getNewChatKey']),
 
         hasNewChat() {
             setTimeout(async () => {
@@ -83,7 +83,7 @@ export default {
 
         getCurrentChatMessages() {
             return _.filter(this.messages, message => {
-                if(message.chatKey === this.getCurrentChatKey) {
+                if(message.chatKey === this.getNewChatKey) {
                     return message;
                 }
             })
@@ -96,9 +96,9 @@ export default {
         ...mapActions(['setChatStop']),
 
         async sendNewMessageEvent(message) {
-            let hasChatConnection = await hasExistingConnection(this.getCurrentChatKey, this.getCurrentUser.uid, this.getNewChatUser.uid);
+            let hasChatConnection = await hasExistingConnection(this.getNewChatKey, this.getCurrentUser.uid, this.getNewChatUser.uid);
             let isBlocked = await userIsBlocked(this.getCurrentUser.uid, this.getNewChatUser.uid)
-            await sendMessage(this.getCurrentUser.uid, this.getNewChatUser.uid, this.getCurrentChatKey, message, hasChatConnection, !isBlocked);
+            await sendMessage(this.getCurrentUser.uid, this.getNewChatUser.uid, this.getNewChatKey, message, hasChatConnection, !isBlocked);
             await this.scrollToBottom();
         },
 

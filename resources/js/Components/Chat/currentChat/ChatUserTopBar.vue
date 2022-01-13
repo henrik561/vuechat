@@ -23,7 +23,7 @@
 import {mapGetters} from "vuex";
 import moment from 'moment';
 import db from "../../../server/database";
-import first from "../../../Functions/Helpers";
+import {first} from "../../../Functions/Helpers";
 import {userIsBlocked} from "../../../server/firebaseChat";
 
 export default {
@@ -37,7 +37,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters(['getNewChatUser', 'getCurrentChatKey', 'getCurrentUser']),
+        ...mapGetters(['getNewChatUser', 'getNewChatKey', 'getCurrentUser']),
 
         formatUserOnlineVisibility() {
             if(this.userIsBlocked) {
@@ -61,7 +61,7 @@ export default {
             this.userStatus = first(snapshot.val()).online_visibility
         })
 
-        db.database().ref('chats').orderByChild('chatKey').equalTo(this.getCurrentChatKey).on('value', snapshot => {
+        db.database().ref('chats').orderByChild('chatKey').equalTo(this.getNewChatKey).on('value', snapshot => {
             _.forEach(snapshot.val(), chat => {
                 if(chat.chatter_id === this.getCurrentUser.uid && chat.receiver_id === this.getNewChatUser.uid) {
                     this.userIsBlocked = chat.has_been_blocked || false;

@@ -9,7 +9,7 @@
         >
             <div
                 class="bg-white border-blue-800 border-4 rounded-full h-6 text-center text-sm transition"
-                :style="`width: ${progressStatus}%; transition: width 2s;`"
+                :style="`width: ${progressStatus}%; transition: width 5s;`"
             >
             </div>
         </div>
@@ -31,29 +31,29 @@ export default {
     },
 
     async created() {
-        useAuth().onAuthStateChanged((user) => {
-            if(!user) {
+        new Promise((resolve, reject) => {
+            useAuth().onAuthStateChanged((user) => {
+                if(!user) {
+                    this.progressStatus = 100;
+                    this.setPageLoadingStatus();
+                    return;
+                }
+
+                this.progressStatus = 50;
+                this.setCurrentUser({
+                    "username" : user.displayName,
+                    "email" : user.email,
+                    "phoneNumber" : user.phoneNumber,
+                    "profilePicture" : user.photoURL,
+                    "uid" : user.uid,
+                })
+
+                this.progressStatus = 75
+                updateUserOnlineVisibility(user, 'online');
                 this.progressStatus = 100;
-                this.setPageLoadingStatus();
-                return;
-            }
-
-            this.setCurrentUser({
-                "username" : user.displayName,
-                "email" : user.email,
-                "phoneNumber" : user.phoneNumber,
-                "profilePicture" : user.photoURL,
-                "uid" : user.uid,
+                resolve();
             })
-
-            updateUserOnlineVisibility(user, 'online');
-
-            this.progressStatus = 100;
-
-            setTimeout(() => {
-                this.setPageLoadingStatus();
-            }, 2000)
-        });
+        }).then((() => this.setPageLoadingStatus()))
     },
 
     methods: {

@@ -64,7 +64,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters(['getCurrentUser', 'getFriendsListType', 'getCurrentChatKey', 'getFriendPopupUser']),
+        ...mapGetters(['getCurrentUser', 'getFriendsListType', 'getNewChatKey', 'getFriendPopupUser']),
 
         usersPopupIsOpen() {
           return this.getFriendPopupUser === this.friendData.uid
