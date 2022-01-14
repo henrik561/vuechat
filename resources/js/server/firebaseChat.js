@@ -14,7 +14,7 @@ const activeChatsRef = db.database().ref('activeChats');
 const usersVRef = db.database().ref('onlineStatus');
 const friendRequestsRef = db.database().ref('friendRequests');
 
-//GroupChat functions
+//GroupChat Functions
 export async function createGroupChat(creator_uid, group_name, group_description) {
     let groupData = groupRef.push({
         creator_uid,
@@ -37,50 +37,168 @@ export async function createGroupChat(creator_uid, group_name, group_description
 }
 export async function addUserToGroup(user_uid, chatKey) {
     await groupRef.orderByChild('chatKey').equalTo(chatKey).once('value', snapshot => {
-        if(snapshot.exists()) {
-            _.forEach(snapshot.val(), (group, groupKey) => {
-                groupRef.child(groupKey).child('members').push({
-                    role: 'user',
-                    user_uid,
-                })
-            })
+        if(!snapshot.exists()) {
+            return;
         }
+
+        _.forEach(snapshot.val(), (group, groupKey) => {
+            groupRef.child(groupKey).child('members').push({
+                role: 'user',
+                user_uid,
+            })
+        })
     })
 
     await addGroupToUser(user_uid, chatKey);
 }
 export async function addGroupToUser(user_uid, chatKey) {
     await usersRef.orderByChild('uid').equalTo(user_uid).once('value', snapshot => {
-        if(snapshot.exists()) {
-            _.forEach(snapshot.val(), (user, userKey) => {
-                usersRef.child(userKey).child('chats').push({chatKey})
-            })
+        if(!snapshot.exists()) {
+            return;
         }
+
+        _.forEach(snapshot.val(), (user, userKey) => {
+            usersRef.child(userKey).child('chats').push({
+                chatKey,
+                type: 'group',
+                status: {
+                    isBlocked: false,
+                    isDeleted: false,
+                }
+            })
+        })
     });
 }
 export async function removeUserFromGroup(user_uid, chatKey) {
     await groupRef.orderByChild('chatKey').equalTo(chatKey).once('value', snapshot => {
-        if(snapshot.exists()) {
-            _.forEach(snapshot.val(), (group, groupKey) => {
-                groupRef.child(groupKey).update({
-                    members: _.filter(group.members, member => !_.isEqual(member.user_uid, user_uid))
-                })
-            })
+        if(!snapshot.exists()) {
+            return;
         }
+
+        _.forEach(snapshot.val(), (group, groupKey) => {
+            groupRef.child(groupKey).update({
+                members: _.filter(group.members, member => !_.isEqual(member.user_uid, user_uid))
+            })
+        })
     })
     await removeGroupFromUser(user_uid, chatKey);
 }
 export async function removeGroupFromUser(user_uid, chatKey) {
     await usersRef.orderByChild('uid').equalTo(user_uid).once('value', snapshot => {
-        if(snapshot.exists()) {
-            _.forEach(snapshot.val(), (user, userKey) => {
-                usersRef.child(userKey).update({
-                    chats: _.filter(user.chats, chat => !_.isEqual(chat.chatKey, chatKey))
-                })
-            })
+        if(!snapshot.exists()) {
+            return;
         }
+
+        _.forEach(snapshot.val(), (user, userKey) => {
+            usersRef.child(userKey).update({
+                chats: _.filter(user.chats, chat => !_.isEqual(chat.chatKey, chatKey))
+            })
+        })
     });
 }
+
+//UserChat Functions
+export async function createUserChat(chatter_uid, receiver_uid) {
+    let userChatData = chatsRef.push({
+        chatter_uid,
+        receiver_uid,
+    });
+
+    await chatsRef.child(userChatData.key).update({chatKey:userChatData.key});
+    await addChatToUser(chatter_uid, userChatData.key);
+}
+export async function addChatToUser(user_uid, chatKey) {
+    await usersRef.orderByChild('uid').equalTo(user_uid).once('value', snapshot => {
+        if(!snapshot.exists()) {
+            return;
+        }
+
+        _.forEach(snapshot.val(), (user, userKey) => {
+            usersRef.child(userKey).child('chats').push({
+                chatKey,
+                type: 'private',
+                status: {
+                    isBlocked: false,
+                    hasBlocked: false,
+                    isDeleted: false,
+                    hasDeleted: false,
+                }
+            })
+        })
+    })
+}
+export async function setUserBlocked(user_uid, chatKey, blockStatus) {
+    await usersRef.orderByChild('uid').equalTo(user_uid).once('value', snapshot => {
+        if(!snapshot.exists()) {
+            return;
+        }
+
+        _.forEach(snapshot.val(), (user, userKey) => {
+            _.forEach(user.chats, async (chat, chatIndexKey) => {
+                if(!_.isEqual(chat.chatKey, chatKey)) {
+                    return;
+                }
+
+                await usersRef.child(userKey).child('chats').child(chatIndexKey).update({
+                    status: {
+                        ...chat.status,
+                        isBlocked: blockStatus,
+                    }
+                })
+            })
+        })
+    })
+}
+export async function setUserDeleted(user_uid, chatKey, deleteStatus) {
+    await usersRef.orderByChild('uid').equalTo(user_uid).once('value', snapshot => {
+        if(!snapshot.exists()) {
+            return;
+        }
+
+        _.forEach(snapshot.val(), (user, userKey) => {
+            _.forEach(user.chats, async (chat, chatIndexKey) => {
+                if(!_.isEqual(chat.chatKey, chatKey)) {
+                    return;
+                }
+
+                await usersRef.child(userKey).child('chats').child(chatIndexKey).update({
+                    status: {
+                        ...chat.status,
+                        isDeleted: deleteStatus,
+                    }
+                })
+            })
+        })
+    })
+}
+
+//ActiveChat Functions
+export async function startNewChat(chatter_uid, chatKey) {
+    await stopActiveChat(chatter_uid);
+    activeChatsRef.push({
+        chatter_uid,
+        chatKey,
+    });
+}
+export async function stopNewChat(chatter_uid) {
+    await activeChatsRef.orderByChild('chatter_uid').equalTo(chatter_uid).once('value', snapshot => {
+        if(!snapshot.exists()) {
+            return;
+        }
+
+        _.forEach(snapshot.val(), (activeChat, chatIndex) => {
+            if(!_.isEqual(activeChat.chatter_uid, chatter_uid)) {
+                return;
+            }
+
+            activeChatsRef.child(chatIndex).set(null);
+        })
+    })
+}
+
+// setInterval(async () => {
+//     await addChatToUser('qJNcu9F0Q5PY5VWQZFVBnyXU39s1', new Date().getTime())
+// }, 1000)
 
 export async function sendMessage(chatter_id, receiver_id,  chatKey, message, message_seen, received) {
     messagesRef.push({

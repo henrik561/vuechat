@@ -20,7 +20,7 @@
             <i class="fas fa-comment-medical text-white text-3xl transition-all duration-300 hover:text-green-500"></i>
         </div>
         <template v-if="createGroupChat">
-            <Groupchat @toggleGroupChatPopup="toggleCreateChat"></Groupchat>
+                <Groupchat @toggleGroupChatPopup="toggleCreateChat"></Groupchat>
         </template>
     </div>
 </template>
@@ -33,6 +33,8 @@ import {mapActions, mapGetters} from "vuex";
 import db from "../../server/database";
 import Groupchat from "./Groupchat/Groupchat";
 import Group from "./ContactSideBar/Group";
+import {listenForEvent} from "../../server/firebaseChat";
+import {first} from "../../Functions/Helpers";
 
 export default {
     name: "ContactSideBar",
@@ -56,16 +58,14 @@ export default {
     },
 
     async created() {
-        await db.database().ref('chats').on('value', async (snapshot) => {
-            if(snapshot.exists()) {
-                let chats = _.filter(snapshot.val(), chat => {
-                    if(chat.chatter_id && _.isEqual(chat.chatter_id, this.getCurrentUser.uid)) {
-                        return chat
-                    }
-                    return chat.members && _.includes(chat.members, this.getCurrentUser.uid)
-                })
-                this.setAllChats(chats)
+        db.database().ref('users').orderByChild('uid').equalTo(this.getCurrentUser.uid).on('value', snapshot => {
+            if(!snapshot.exists()) {
+                return;
             }
+
+            let userData = first(snapshot.val())
+            let availableChats = _.filter(userData.chats, chat => !chat.status.hasBlocked && !chat.status.hasDeleted)
+            this.setAllChats(availableChats)
         })
     },
 
