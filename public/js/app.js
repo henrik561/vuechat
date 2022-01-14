@@ -1009,7 +1009,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
- //TODO remove send request to self: henrikh2004@gmail.com -> henrikh2004@gmail.com
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "AddFriends",
@@ -1044,48 +1043,56 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 regex = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
                 if (_this.friendEmail.match(regex)) {
-                  _context.next = 3;
+                  _context.next = 5;
                   break;
                 }
 
                 return _context.abrupt("return", _this.addFriend.error = 'The email address is not valid!');
 
-              case 3:
-                _context.next = 5;
+              case 5:
+                if (!(_this.friendEmail === _this.getCurrentUser.email)) {
+                  _context.next = 7;
+                  break;
+                }
+
+                return _context.abrupt("return", _this.addFriend.error = 'U can not add yourself as friend!');
+
+              case 7:
+                _context.next = 9;
                 return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.getUserByEmail)(_this.friendEmail);
 
-              case 5:
+              case 9:
                 response = _context.sent;
                 _this.friendEmail = '';
 
                 if (!(response === 'DoesNotExists')) {
-                  _context.next = 10;
+                  _context.next = 14;
                   break;
                 }
 
                 _this.addFriend.color = 'bg-red-500';
                 return _context.abrupt("return", _this.addFriend.error = 'The user does not exists!');
 
-              case 10:
-                _context.next = 12;
+              case 14:
+                _context.next = 16;
                 return (0,_server_firebaseChat__WEBPACK_IMPORTED_MODULE_1__.addAsFriend)(_this.getCurrentUser.uid, response);
 
-              case 12:
+              case 16:
                 response = _context.sent;
 
                 if (!(response === 'AddedAsFriend')) {
-                  _context.next = 18;
+                  _context.next = 22;
                   break;
                 }
 
                 _this.addFriend.color = 'bg-green-500';
                 return _context.abrupt("return", _this.addFriend.error = 'Successfully added as friend!');
 
-              case 18:
+              case 22:
                 _this.addFriend.color = 'bg-red-500';
                 return _context.abrupt("return", _this.addFriend.error = 'U are already friends with this user!');
 
-              case 20:
+              case 24:
               case "end":
                 return _context.stop();
             }
