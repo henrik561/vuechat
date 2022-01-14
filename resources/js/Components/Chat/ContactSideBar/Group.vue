@@ -1,5 +1,5 @@
 <template>
-    <NavLink :notNavbarLink="true" :href="$page.component !== 'Chat'? '/chat' : ''" class="flex hover:bg-opacity-80 transition-all duration-350 cursor-pointer border-2 border-t-0 border-b-2 border-blue-800 justify-center items-center bg-white">
+    <NavLink :notNavbarLink="true" @click="startNewChat" :href="$page.component !== 'Chat'? '/chat' : ''" class="flex hover:bg-opacity-80 transition-all duration-350 cursor-pointer border-2 border-t-0 border-b-2 border-blue-800 justify-center items-center bg-white">
         <div class="w-11/12 h-16 flex items-center justify-center gap-2">
             <div class="w-12 relative h-12 flex justify-center items-center">
                 <img class="object-cover h-12 border border-gray-300 w-12 rounded-full" width="100" height="100" :src="group.profilePicture ? group.profilePicture : '/Uploads/Profiles/profile.jpeg'" alt="user profile picture">
@@ -19,12 +19,22 @@
 <script>
 
 import NavLink from "../../../Shared/Navbar/NavLink";
+import {mapActions} from "vuex";
 
 export default {
     name: "Group",
     props: ['group'],
     components: {NavLink},
 
+    methods: {
+        ...mapActions(['setNewChatUser', 'setNewChatKey', 'setNewChatDBKey']),
+
+        async startNewChat() {
+            await this.setNewChatUser(this.group)
+            await this.setNewChatKey(this.group.chatKey)
+            await this.setNewChatDBKey(this.group.chatKey)
+        }
+    }
 
 }
 </script>

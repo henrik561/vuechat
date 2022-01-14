@@ -16,7 +16,7 @@
 
 <script>
 import NavLink from "./NavLink";
-import {mapActions, mapGetters} from "vuex";
+import {mapGetters} from "vuex";
 
 export default {
     name: "Navbar",

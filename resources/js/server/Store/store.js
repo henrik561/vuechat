@@ -80,9 +80,12 @@ const store = new createStore({
         },
         UNSET_ONE_CHAT(state, chat) {
           let index = _.indexOf(state.chats, chat);
-          if(index > -1) {
-              state.chats.splice(index, 1);
+
+          if(_.isNil(index)) {
+              return;
           }
+
+          state.chats.splice(index, 1);
         },
 
         //ActiveChat

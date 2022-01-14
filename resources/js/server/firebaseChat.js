@@ -1,6 +1,7 @@
 import db from './database';
 import "firebase/compat/firestore";
 import { getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider } from "firebase/auth";
+import user from "../Components/Chat/ContactSideBar/User";
 
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
@@ -8,12 +9,80 @@ const provider = new GoogleAuthProvider();
 const usersRef = db.database().ref('users');
 const messagesRef = db.database().ref('messages');
 const chatsRef = db.database().ref('chats');
+const groupRef = db.database().ref('groups');
 const activeChatsRef = db.database().ref('activeChats');
 const usersVRef = db.database().ref('onlineStatus');
 const friendRequestsRef = db.database().ref('friendRequests');
 
-//Chat functions
-export async function sendMessage(chatter_id, receiver_id, chatKey, message, message_seen, received) {
+//GroupChat functions
+export async function createGroupChat(creator_uid, group_name, group_description) {
+    let groupData = groupRef.push({
+        creator_uid,
+        created_at: new Date().getTime(),
+        group_name,
+        group_description,
+        members: [
+            {
+                role: 'admin',
+                user_uid: creator_uid,
+            },
+        ],
+    });
+
+    await groupRef.child(groupData.key).update({
+        chatKey: groupData.key,
+    });
+
+    await addGroupToUser(creator_uid, groupData.key);
+}
+export async function addUserToGroup(user_uid, chatKey) {
+    await groupRef.orderByChild('chatKey').equalTo(chatKey).once('value', snapshot => {
+        if(snapshot.exists()) {
+            _.forEach(snapshot.val(), (group, groupKey) => {
+                groupRef.child(groupKey).child('members').push({
+                    role: 'user',
+                    user_uid,
+                })
+            })
+        }
+    })
+
+    await addGroupToUser(user_uid, chatKey);
+}
+export async function addGroupToUser(user_uid, chatKey) {
+    await usersRef.orderByChild('uid').equalTo(user_uid).once('value', snapshot => {
+        if(snapshot.exists()) {
+            _.forEach(snapshot.val(), (user, userKey) => {
+                usersRef.child(userKey).child('chats').push({chatKey})
+            })
+        }
+    });
+}
+export async function removeUserFromGroup(user_uid, chatKey) {
+    await groupRef.orderByChild('chatKey').equalTo(chatKey).once('value', snapshot => {
+        if(snapshot.exists()) {
+            _.forEach(snapshot.val(), (group, groupKey) => {
+                groupRef.child(groupKey).update({
+                    members: _.filter(group.members, member => !_.isEqual(member.user_uid, user_uid))
+                })
+            })
+        }
+    })
+    await removeGroupFromUser(user_uid, chatKey);
+}
+export async function removeGroupFromUser(user_uid, chatKey) {
+    await usersRef.orderByChild('uid').equalTo(user_uid).once('value', snapshot => {
+        if(snapshot.exists()) {
+            _.forEach(snapshot.val(), (user, userKey) => {
+                usersRef.child(userKey).update({
+                    chats: _.filter(user.chats, chat => !_.isEqual(chat.chatKey, chatKey))
+                })
+            })
+        }
+    });
+}
+
+export async function sendMessage(chatter_id, receiver_id,  chatKey, message, message_seen, received) {
     messagesRef.push({
         chatter_id,
         chatKey,

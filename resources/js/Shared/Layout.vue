@@ -35,7 +35,7 @@ import ChatPreRender from "../Components/base/ChatPreRender";
 import Login from "../Components/Auth/Login";
 import Register from "../Components/Auth/Register";
 import {mapActions, mapGetters} from "vuex";
-import {getUserKey, getChatKey} from "../server/firebaseChat";
+import {getUserKey} from "../server/firebaseChat";
 import db from "../server/database";
 import ContactSideBar from "../Components/Chat/ContactSideBar";
 
